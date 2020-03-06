@@ -1,14 +1,25 @@
+import pygame
+import os
 from enemy import Enemy
 
 
 class Enemy1(Enemy):
 
     def __init__(self, x, y, speed):
-        super().__init__("goomba.png", x, y)
+        super().__init__("koopa.png", x, y)
         self.speed = speed
+        self.dx = speed
+        self.health = 2
+        self.regen = 0
 
     def move(self):
-        distance = 100
+        distance = 150
+
+        if self.regen > 0:
+            self.regen -= 1
+            if self.regen == 0:
+                self.respawn()
+            return  # do not move while regenerating
 
         if 0 <= self.position <= distance:
             self.rect.x += self.speed
@@ -18,3 +29,19 @@ class Enemy1(Enemy):
             self.position = 0
 
         self.position += 1
+
+    def damage(self, group):
+        if self.health > 0:
+            self.health -= 1
+            if self.health == 0:
+                group.remove(self)
+            else:
+                self.image = pygame.image.load(os.path.join('sprites', 'koopa-shell.png'))
+                self.dx = self.speed
+                self.speed = 0
+                self.regen = 300
+
+    def respawn(self):
+        self.health = 2
+        self.image = pygame.image.load(os.path.join('sprites', 'koopa.png'))
+        self.speed = self.dx
