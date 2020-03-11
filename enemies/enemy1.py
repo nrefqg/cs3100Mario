@@ -1,6 +1,6 @@
 import pygame
 import os
-from enemy import Enemy
+from enemies.enemy import Enemy
 
 
 class Enemy1(Enemy):
@@ -36,14 +36,14 @@ class Enemy1(Enemy):
             if self.health == 0:
                 group.remove(self)
             else:
-                self.image = pygame.image.load(os.path.join('sprites', 'koopa-shell.png'))
+                self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'koopa-shell.png'))
                 self.dx = self.speed
                 self.speed = 0
                 self.regen = 300
 
     def respawn(self):
         self.health = 2
-        self.image = pygame.image.load(os.path.join('sprites', 'koopa.png'))
+        self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'koopa.png'))
         self.speed = self.dx
 
     def flip(self):

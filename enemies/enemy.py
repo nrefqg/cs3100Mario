@@ -19,7 +19,7 @@ class Enemy(pygame.sprite.Sprite):
         self.position = 0
         self.speed = 0
 
-        self.image = pygame.image.load(os.path.join('sprites', image))
+        self.image = pygame.image.load(os.path.join('enemies', 'sprites', image))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y

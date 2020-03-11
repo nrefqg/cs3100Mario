@@ -1,6 +1,6 @@
 import pygame
 import os
-from enemy import Enemy
+from enemies.enemy import Enemy
 
 
 class Enemy3(Enemy):
@@ -36,14 +36,14 @@ class Enemy3(Enemy):
             if self.health == 0:
                 group.remove(self)
             else:
-                self.image = pygame.image.load(os.path.join('sprites', 'beetle-shell.png'))
+                self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'beetle-shell.png'))
                 self.dx = self.speed
                 self.speed = 0
                 self.regen = 300
 
     def respawn(self):
         self.health = 2
-        self.image = pygame.image.load(os.path.join('sprites', 'beetle.png'))
+        self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'beetle.png'))
         self.speed = self.dx
 
     def flip(self):

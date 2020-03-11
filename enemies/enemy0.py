@@ -1,4 +1,4 @@
-from enemy import Enemy
+from enemies.enemy import Enemy
 
 
 class Enemy0(Enemy):

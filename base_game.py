@@ -1,8 +1,7 @@
 import pygame
-from enemy0 import Enemy0
-from enemy1 import Enemy1
-from enemy3 import Enemy3
-from pygame.locals import *
+from enemies.enemy0 import Enemy0
+from enemies.enemy1 import Enemy1
+from enemies.enemy3 import Enemy3
 from itertools import combinations
 
 pygame.init()
