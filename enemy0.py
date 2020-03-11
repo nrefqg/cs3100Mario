@@ -18,3 +18,6 @@ class Enemy0(Enemy):
             self.position = 0
 
         self.position += 1
+
+    def flip(self):
+        self.speed *= -1

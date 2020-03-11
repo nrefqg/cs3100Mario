@@ -45,3 +45,8 @@ class Enemy1(Enemy):
         self.health = 2
         self.image = pygame.image.load(os.path.join('sprites', 'koopa.png'))
         self.speed = self.dx
+
+    def flip(self):
+        if self.health == 2:
+            self.speed *= -1
+            self.image = pygame.transform.flip(self.image, True, False)
