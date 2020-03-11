@@ -3,8 +3,17 @@ import os
 
 
 class Enemy(pygame.sprite.Sprite):
+    """
+    Superclass for defining common functionality of different enemy types
+    """
 
     def __init__(self, image, x, y):
+        """
+        Constructor for an enemy
+        :param image: The name of the sprite for the enemy as a string
+        :param x: The horizontal position of the enemy's upper left corner (in pixels)
+        :param y: The vertical position of the enemy's upper left corner (in pixels)
+        """
         super().__init__()
         if type(image) is not str:
             raise ValueError("Argument name should be a string")
@@ -23,3 +32,11 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+    def destroy(self, sprite_group):
+        """
+        Destroys the enemy sprite from the given sprite group
+        :param sprite_group: The Group the Enemy belongs to
+        :return: None
+        """
+        sprite_group.remove(self)
