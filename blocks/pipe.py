@@ -1,5 +1,5 @@
-import pygame
-from blocks import Block
+#import pygame
+from blocks.blocks import Block
 
 class leftPipe(Block):
 	def __init__(self, x, y):
