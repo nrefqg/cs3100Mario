@@ -3,6 +3,7 @@ import os
 
 GRAVITY = 2
 
+
 class Enemy(pygame.sprite.Sprite):
     """
     Superclass for defining common functionality of different enemy types
