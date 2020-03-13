@@ -1,6 +1,7 @@
 import pygame
 import os
 
+GRAVITY = 2
 
 class Enemy(pygame.sprite.Sprite):
     """
@@ -27,6 +28,7 @@ class Enemy(pygame.sprite.Sprite):
         self.y = y
         self.position = 0
         self.speed = 0
+        self.yspeed = 0
 
         self.image = pygame.image.load(os.path.join('enemies', 'sprites', image))
         self.rect = self.image.get_rect()
@@ -40,3 +42,18 @@ class Enemy(pygame.sprite.Sprite):
         :return: None
         """
         sprite_group.remove(self)
+
+    def move(self):
+        if self.yspeed != 0:
+            self.rect.y += self.yspeed
+
+    def gravity(self, ground):
+        if self.rect.y + self.rect.height >= ground and self.yspeed >= 0:
+            self.yspeed = 0
+            self.rect.y = ground - self.rect.height
+        else:
+            self.yspeed += GRAVITY
+
+    def jump(self, speed):
+        if self.yspeed == 0:
+            self.yspeed -= speed

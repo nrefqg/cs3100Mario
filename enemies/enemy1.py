@@ -26,6 +26,7 @@ class Enemy1(Enemy):
         Move Enemy1
         :return: None
         """
+        super().move()
         distance = 150
 
         if self.regen > 0:

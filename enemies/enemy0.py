@@ -21,6 +21,7 @@ class Enemy0(Enemy):
         Move Enemy0
         :return: None
         """
+        super().move()
         distance = 100
 
         if 0 <= self.position <= distance:  # use of distance for testing purposes only
