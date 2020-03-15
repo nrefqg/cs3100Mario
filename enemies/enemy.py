@@ -18,7 +18,7 @@ class Enemy(pygame.sprite.Sprite):
         """
         super().__init__()
         if type(image) is not str:
-            raise ValueError("Argument name should be a string")
+            raise ValueError("Argument image should be a string")
         if type(x) is not int:
             raise ValueError("Argument x should be an int")
         if type(y) is not int:

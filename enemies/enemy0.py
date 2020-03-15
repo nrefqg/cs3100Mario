@@ -22,7 +22,7 @@ class Enemy0(Enemy):
         :return: None
         """
         super().move()
-        distance = 100
+        distance = 200
 
         if 0 <= self.position <= distance:  # use of distance for testing purposes only
             self.rect.x += self.speed
