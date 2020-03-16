@@ -44,10 +44,14 @@ while not game_ended:
 
     for enemy in enemy_list:
         enemy.move()
+        enemy.gravity(SCREEN_HEIGHT)
 
+    if iterations == 250:
+        e3.jump(20)
     if iterations == 500:  # test damaging Koopa
         e3.damage(enemy_list)
         e4.damage(enemy_list)
+        e1.jump(30)
     if iterations == 1500:  # test that damaging Beetle multiple times does not kill it
         e4.damage(enemy_list)
         e4.damage(enemy_list)

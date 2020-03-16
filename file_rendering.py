@@ -1,18 +1,31 @@
 import pygame
-import blocks.blocks
-import blocks.pipe
-import blocks.redBlock
-import file_loader
+from blocks.blocks import Block
+from blocks.pipe import midPipe
 
-def render(screen):
-    level = []
-    level = file_loader.file_loading()
-    levelDisplay = []
+
+def render(level):
+    """
+    Translates the level array into groups of usable game objects
+    :param level: 2D list of strings that represents the level
+    :return: a dictionary of strings that map to sprite groups
+        'block' -> block_group
+        'pipe' -> pipe_group
+    """
+
+    renders = {'block': None, 'pipe': None}
+
+    block_group = pygame.sprite.Group()
+    pipe_group = pygame.sprite.Group()
     for x in range(len(level)):
         for y in range(len(level[x])):
-            if level[x][y].lower() in 'abcdefghijklmnoqrstuvwxyz':
-                #print(level[x][y])
-                screen.blit(pygame.image.load('sprites/redBlock.png'), (y*16, x*16))
-            elif level[x][y].lower() == 'p':
-                screen.blit(pygame.image.load('sprites/midPipe.png'), (y*16, x*16))
-    return
+            symbol = level[x][y]
+            if symbol in 'abcdefghijklmnopqrstuvwxyz':
+                new_block = Block('redBlock.png', y*16, x*16)
+                block_group.add(new_block)
+                renders['block'] = block_group
+            elif symbol == 'P':
+                new_pipe = midPipe(y*16, x*16)
+                pipe_group.add(new_pipe)
+                renders['pipe'] = pipe_group
+
+    return renders
