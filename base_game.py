@@ -18,7 +18,10 @@ display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
 screen = pygame.display.set_mode(display, 0, 32)  # set the screen dimensions
 level = file_loader.file_loading()
-block_list = file_rendering.render(screen, level)  # load level from Excel file
+
+renders = file_rendering.render(level)  # load level from Excel file
+block_list = renders['block']
+pipe_list = renders['pipe']
 
 enemy_list = pygame.sprite.Group()
 e0 = Enemy0(400, 20, -1)
