@@ -5,25 +5,25 @@ from enemies.enemy import Enemy
 
 class Enemy2(Enemy):
     """
-    Enemy type 1 (lateral movement with stunned state)
+    Enemy type 2 (lateral movement, jumping, behaves like Enemy1 after one hit)
     """
 
     def __init__(self, x, y, speed):
         """
-        Constructor for Enemy1
+        Constructor for Enemy2
         :param x: The horizontal position of the enemy's upper left corner (in pixels)
         :param y: The vertical position of the enemy's upper left corner (in pixels)
         :param speed: The speed of the enemy (negative is left, positive is right)
         """
-        super().__init__("koopa.png", x, y)
+        super().__init__("flying-parakoopa.png", x, y)
         self.speed = speed
         self.dx = speed
-        self.health = 2
+        self.health = 3
         self.regen = 0
 
     def move(self):
         """
-        Move Enemy1, or wait for regen
+        Move Enemy2, or wait for regen
         :return: None
         """
         super().move()
@@ -32,9 +32,11 @@ class Enemy2(Enemy):
             self.regen -= 1
             if self.regen == 0:
                 self.respawn()
-            return  # do not move while regenerating
+            return  # do not move/jump while regenerating
 
         self.rect.x += self.speed
+        if self.health == 3:
+            self.jump(20)
 
     def damage(self, group):
         """
@@ -46,11 +48,13 @@ class Enemy2(Enemy):
             self.health -= 1  # deduct one health point
             if self.health == 0:
                 self.destroy(group)  # destroy this enemy if the health reaches 0
-            else:  # enemy is in the stunned state, so change sprite and stop moving during regen period
-                self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'koopa-shell.png'))
+            elif self.health == 1:  # enemy is in stunned state, so change sprite and stop moving during regen period
+                self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'parakoopa-shell.png'))
                 self.dx = self.speed
                 self.speed = 0
                 self.regen = 300
+            elif self.health == 2:  # enemy can no longer jump
+                self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'parakoopa.png'))
 
     def respawn(self):
         """
@@ -58,14 +62,14 @@ class Enemy2(Enemy):
         :return: None
         """
         self.health = 2
-        self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'koopa.png'))
+        self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'flying-parakoopa.png'))
         self.speed = self.dx
 
     def flip(self):
         """
-        Flip Enemy1 in the opposite direction as long as it is not in the stunned state
+        Flip Enemy2 in the opposite direction as long as it is not in the stunned state
         :return: None
         """
-        if self.health == 2:
+        if self.health > 1:
             self.speed *= -1
             self.image = pygame.transform.flip(self.image, True, False)
