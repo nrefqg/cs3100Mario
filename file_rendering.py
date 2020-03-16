@@ -15,3 +15,16 @@ def render(screen, level):
                 # screen.blit(pygame.image.load('sprites/redBlock.png'), (y*16, x*16))
 
     return block_group
+
+def render(screen):
+    level = []
+    level = file_loader.file_loading()
+    levelDisplay = []
+    for x in range(len(level)):
+        for y in range(len(level[x])):
+            if level[x][y].lower() in 'abcdefghijklmnoqrstuvwxyz':
+                #print(level[x][y])
+                screen.blit(pygame.image.load('sprites/redBlock.png'), (y*16, x*16))
+            elif level[x][y].lower() == 'p':
+                screen.blit(pygame.image.load('sprites/midPipe.png'), (y*16, x*16))
+    return
