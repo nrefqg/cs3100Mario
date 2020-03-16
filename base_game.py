@@ -38,6 +38,7 @@ while True:
 
     screen.fill((146, 244, 255))
     block_list.draw(screen)
+    pipe_list.draw(screen)
     enemy_list.draw(screen)
 
     # detect collisions between enemies
