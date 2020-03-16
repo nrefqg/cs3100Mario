@@ -28,7 +28,7 @@ player_image = pygame.image.load('character/mario.png')
 moving_right = False
 moving_left = False
 
-player_location = [50,50]
+player_location = [20,183]
 player_rect = pygame.Rect(100, 100, 5, 13)
 
 
@@ -41,9 +41,19 @@ while True:
   
     #Movement for the player is modified when specific keypresses are made
     if moving_right == True:
-        player_location[0] += 8
+        player_location[0] += 1
+        player_location[0] += 1
+        player_location[0] += 1
+        player_location[0] += 1
+        player_location[0] += 1
+        player_location[0] += 1
     if moving_left == True:
-        player_location[0] -= 8
+        player_location[0] -= 1
+        player_location[0] -= 1
+        player_location[0] -= 1
+        player_location[0] -= 1
+        player_location[0] -= 1
+        player_location[0] -= 1
 
     #Update player location on the screen
     screen.blit(player_image, player_location)
