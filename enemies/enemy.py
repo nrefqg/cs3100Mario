@@ -44,16 +44,30 @@ class Enemy(pygame.sprite.Sprite):
         sprite_group.remove(self)
 
     def move(self):
+        """
+        Abstracted method for moving enemy sprites
+        :return:
+        """
         if self.yspeed != 0:
-            self.rect.y += self.yspeed
+            self.rect.y += self.yspeed  # cause sprite to fall
 
     def gravity(self, ground):
-        if self.rect.y + self.rect.height >= ground and self.yspeed >= 0:
-            self.yspeed = 0
-            self.rect.y = ground - self.rect.height
+        """
+        Applies gravity to the enemy with respect to a specified ground
+        :param ground: the height (in pixels) that the ground is at
+        :return: None
+        """
+        if self.rect.y + self.rect.height >= ground and self.yspeed >= 0:  # check if passed the ground
+            self.yspeed = 0  # stop moving vertically
+            self.rect.y = ground - self.rect.height  # reset rect to be above ground
         else:
-            self.yspeed += GRAVITY
+            self.yspeed += GRAVITY  # accelerate due to gravity
 
     def jump(self, speed):
-        if self.yspeed == 0:
-            self.yspeed -= speed
+        """
+        Causes the enemy to jump
+        :param speed: the initial speed of the jump
+        :return: None
+        """
+        if self.yspeed == 0:  # can only jump if not falling
+            self.yspeed -= speed  # causes sprite to jump (in -y direction)

@@ -4,6 +4,13 @@ from blocks.pipe import midPipe
 
 
 def render(level):
+    """
+    Translates the level array into groups of usable game objects
+    :param level: 2D list of strings that represents the level
+    :return: a dictionary of strings that map to sprite groups
+        'block' -> block_group
+        'pipe' -> pipe_group
+    """
 
     renders = {'block': None, 'pipe': None}
 
