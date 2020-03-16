@@ -22,16 +22,7 @@ class Enemy0(Enemy):
         :return: None
         """
         super().move()
-        distance = 200
-
-        if 0 <= self.position <= distance:  # use of distance for testing purposes only
-            self.rect.x += self.speed
-        elif distance <= self.position <= 2 * distance:
-            self.rect.x -= self.speed
-        else:
-            self.position = 0
-
-        self.position += 1
+        self.rect.x += self.speed
 
     def flip(self):
         """

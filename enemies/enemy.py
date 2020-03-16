@@ -27,7 +27,6 @@ class Enemy(pygame.sprite.Sprite):
         self.image = image
         self.x = x
         self.y = y
-        self.position = 0
         self.speed = 0
         self.yspeed = 0
 

@@ -2,7 +2,10 @@ import pygame
 import sys
 import file_rendering
 import file_loader
+from itertools import combinations
 from enemies.enemy0 import Enemy0
+from enemies.enemy1 import Enemy1
+from enemies.enemy3 import Enemy3
 
 pygame.init()
 pygame.display.set_caption('Super Mario')  # Sets the window title
@@ -18,10 +21,11 @@ level = file_loader.file_loading()
 block_list = file_rendering.render(screen, level)  # load level from Excel file
 
 enemy_list = pygame.sprite.Group()
-e0 = Enemy0(400, 20, -2)
-enemy_list.add(e0)
-
-iterations = 1
+e0 = Enemy0(400, 20, -1)
+e1 = Enemy1(100, 20, 2)
+e3 = Enemy3(200, 20, 1)
+for e in [e0, e1, e3]:
+    enemy_list.add(e)
 
 while True:
     for event in pygame.event.get():
@@ -32,18 +36,25 @@ while True:
     screen.fill((146, 244, 255))
     block_list.draw(screen)
     enemy_list.draw(screen)
-    e0.move()
-    e0.gravity(500)
 
+    # detect collisions between enemies
+    for first, second in combinations(enemy_list, 2):
+        if first.rect.colliderect(second.rect):
+            first.flip()
+            second.flip()
+            pygame.display.flip()
+
+    # move all enemies and apply gravity
+    for enemy in enemy_list:
+        enemy.move()
+        enemy.gravity(SCREEN_HEIGHT)
+
+    # detect collisions between enemies and blocks
     collisions = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
     for enemy, blocks in collisions.items():
         if len(blocks) > 0:
             primary_block = blocks[0]
             enemy.gravity(primary_block.rect.y)
-
-    iterations += 1
-    if iterations % 100 == 0:
-        e0.jump(20)
 
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
