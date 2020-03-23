@@ -5,6 +5,7 @@ import file_loader
 from itertools import combinations
 from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
+from enemies.enemy2 import Enemy2
 from enemies.enemy3 import Enemy3
 
 pygame.init()
@@ -26,8 +27,9 @@ pipe_list = renders['pipe']
 enemy_list = pygame.sprite.Group()
 e0 = Enemy0(400, 20, -1)
 e1 = Enemy1(100, 20, 2)
+e2 = Enemy2(300, 20, -1)
 e3 = Enemy3(200, 20, 1)
-for e in [e0, e1, e3]:
+for e in [e0, e1, e2, e3]:
     enemy_list.add(e)
 
 while True:
@@ -49,10 +51,13 @@ while True:
             second.flip()
             pygame.display.flip()
 
+    print(pygame.sprite.spritecollide(e2, block_list, False))
+
     # move all enemies and apply gravity
     for enemy in enemy_list:
+        if len(pygame.sprite.spritecollide(enemy, block_list, False)) == 0:
+            enemy.gravity(SCREEN_HEIGHT)
         enemy.move()
-        enemy.gravity(SCREEN_HEIGHT)
 
     # detect collisions between enemies and blocks
     collisions = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
