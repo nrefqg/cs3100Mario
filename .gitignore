@@ -1,0 +1,7 @@
+# Ignore python auto-generated files
+*.pyc
+__pycache__/
+
+# Ignore other auto-generated IDE/platform specific files
+.DS_Store
+.vscode/
