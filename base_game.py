@@ -11,16 +11,16 @@ pygame.init()
 pygame.display.set_caption('Super Mario')  # Sets the window title
 clock = pygame.time.Clock()  # Pygame clock that is used to keep game updating at 60 fps
 
-SCREEN_WIDTH = 500
-SCREEN_HEIGHT = 500
-
+SCREEN_WIDTH = 512
+SCREEN_HEIGHT = 512
+animation = 0
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
 screen = pygame.display.set_mode(display, 0, 32)  # set the screen dimensions
 level = file_loader.file_loading()
 
 renders = file_rendering.render(level)  # load level from Excel file
-block_list = renders['block']
+block_list = renders['ground']
 pipe_list = renders['pipe']
 
 enemy_list = pygame.sprite.Group()
@@ -60,6 +60,13 @@ while True:
         if len(blocks) > 0:
             primary_block = blocks[0]
             enemy.gravity(primary_block.rect.y)
+    
+    animation += 1
+    if animation >= 15:
+        block_list.update()
+        block_list.draw(screen)
+        pygame.display.flip()
+        animation = 0
 
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
