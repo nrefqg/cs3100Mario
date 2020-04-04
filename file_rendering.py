@@ -79,14 +79,14 @@ def render(level):
                 block_group.add(new_block)
                 renders['flagpole'] = block_group
             if symbol == ' ': #special cases where empty spaces need to change to look better
-                if x < len(level)-1:
+                if x < len(level)-1 and y < len(level[x])-1:
                     if level[x+1][y] == 'P':
                         new_pipe = topPipe(y*32, x*32)
                         pipe_group.add(new_pipe)
                         renders['pipe'] = pipe_group
-                if level[x][y+1] == '~' and level[x-1][y+1] == ' ':
-                    new_block = flag(y*32, x*32)
-                    block_group.add(new_block)
-                    renders['flag'] = block_group
+                    if level[x][y+1] == '~' and level[x-1][y+1] == ' ':
+                        new_block = flag(y*32, x*32)
+                        block_group.add(new_block)
+                        renders['flag'] = block_group
 
     return renders
