@@ -6,7 +6,7 @@ from itertools import combinations
 from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
-
+from viewport import Viewport
 
 level = []
 
@@ -19,8 +19,7 @@ SCREEN_HEIGHT = 500
 
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
-
-screen = pygame.display.set_mode(display, 0, 32)  # set the screen dimensions
+#screen = pygame.display.set_mode(display, 0, 32)  # set the screen dimensions
 level = file_loader.file_loading()
 
 # Load in block sprites
@@ -44,21 +43,20 @@ e3 = Enemy3(200, 20, 1)
 for e in [e0, e1, e3]:
     enemy_list.add(e)
 
+# Initialize viewport
+viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
+
+# FIXME: Everything feels a bit laggy
 while True:
     #Fills the background with a light blue color
-    screen.fill((146, 244, 255))
+    viewport.reset()
 
     #A list of all rects in the level
     allRects = file_rendering.render(level)
   
     #Movement for the player is modified when specific keypresses are made
     if moving_right == True:
-        player_location[0] += 1
-        player_location[0] += 1
-        player_location[0] += 1
-        player_location[0] += 1
-        player_location[0] += 1
-        player_location[0] += 1
+        player_location[0] += 6
     if moving_left == True:
         player_location[0] -= 1
         player_location[0] -= 1
@@ -66,9 +64,6 @@ while True:
         player_location[0] -= 1
         player_location[0] -= 1
         player_location[0] -= 1
-
-    #Update player location on the screen
-    screen.blit(player_image, player_location)
 
     #Check pygame for "events" such as button presses
     for event in pygame.event.get():
@@ -88,10 +83,8 @@ while True:
             if event.key == pygame.K_LEFT:
                 moving_left = False
 
-    block_list.draw(screen)
-    if pipe_list is not None:
-        pipe_list.draw(screen)
-    enemy_list.draw(screen)
+    # Update sprites on screen
+    viewport.render_sprites(player_image, player_location, enemy_list, block_list, pipe_list)
 
     # detect collisions between enemies
     for first, second in combinations(enemy_list, 2):
