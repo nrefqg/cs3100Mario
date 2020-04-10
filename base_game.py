@@ -1,6 +1,7 @@
 import pygame
 import sys
 import file_rendering
+import time
 import file_loader
 from itertools import combinations
 from enemies.enemy0 import Enemy0
@@ -49,18 +50,24 @@ viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 #A list of all rects in the level
 allRects = file_rendering.render(level)
 
+player_x_momentum = 0
+
 while True:
     #Fills the background with a light blue color
     viewport.reset()
 
-    #A list of all rects in the level
-    #allRects = file_rendering.render(level)
+    if (moving_right or moving_left) and player_x_momentum < 3:
+        player_x_momentum += 0.1
+    elif player_x_momentum >= 0.1:
+        player_x_momentum -= 0.5
+    else:
+        player_x_momentum = 0
   
     #Movement for the player is modified when specific keypresses are made
     if moving_right == True:
-        player_location[0] += 1
+        player_location[0] += player_x_momentum
     if moving_left == True:
-        player_location[0] -= 1
+        player_location[0] -= player_x_momentum
 
     #Check pygame for "events" such as button presses
     for event in pygame.event.get():
@@ -71,6 +78,7 @@ while True:
 
         # Respond to player keys
         if event.type == pygame.KEYDOWN:
+
             if event.key == pygame.K_RIGHT:
                 moving_right = True
             if event.key == pygame.K_LEFT:
