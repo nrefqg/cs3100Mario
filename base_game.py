@@ -29,7 +29,7 @@ pipe_list = renders['pipe']
 
 # Load in image sprite
 player_image = pygame.image.load('character/mario.png')
-player_location = [20,183]
+player_location = [20,208]
 player_rect = pygame.Rect(100, 100, 5, 13)
 
 moving_right = False
@@ -46,28 +46,26 @@ for e in [e0, e1, e3]:
 # Initialize viewport
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-# FIXME: Everything feels a bit laggy
+#A list of all rects in the level
+allRects = file_rendering.render(level)
+
 while True:
     #Fills the background with a light blue color
     viewport.reset()
 
     #A list of all rects in the level
-    allRects = file_rendering.render(level)
+    #allRects = file_rendering.render(level)
   
     #Movement for the player is modified when specific keypresses are made
     if moving_right == True:
-        player_location[0] += 6
+        player_location[0] += 1
     if moving_left == True:
-        player_location[0] -= 1
-        player_location[0] -= 1
-        player_location[0] -= 1
-        player_location[0] -= 1
-        player_location[0] -= 1
         player_location[0] -= 1
 
     #Check pygame for "events" such as button presses
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            pygame.display.quit()
             pygame.quit()  # Stop pygame
             sys.exit()  # Stop script
 
