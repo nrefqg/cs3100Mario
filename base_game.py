@@ -33,6 +33,7 @@ player_image = pygame.image.load('character/mario.png')
 player_location = [20,140]
 player_rect = pygame.Rect(100, 100, 5, 13)
 
+#default movement indicators
 moving_right = False
 moving_left = False
 jumping = False
@@ -51,6 +52,7 @@ viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 #A list of all rects in the level
 allRects = file_rendering.render(level)
 
+#initial momentum value
 player_x_momentum = 0
 player_y_momentum = 0
 
@@ -58,9 +60,11 @@ while True:
     #Fills the background with a light blue color
     viewport.reset()
 
+    #if character falls below floor, resets to floor.  Will fix once collisions are implemented
     if player_location[1] > 208:
         player_location[1] = 208
 
+    #Sprinting and horizontal movement
     if (moving_right or moving_left) and player_x_momentum < 2.0:
         player_x_momentum += 0.1
     elif player_x_momentum >= 0.1:
@@ -68,6 +72,7 @@ while True:
     else:
         player_x_momentum = 0
 
+    #default gravity if mario is in air and not jumping
     if not jumping:
         if player_location[1] < 208:
             player_y_momentum += 0.3
@@ -78,7 +83,7 @@ while True:
             player_location[1] += player_y_momentum
         else:
             player_location[1] = 208
-    else:
+    else:   #handles mario jump momentum
         if player_location[1] <= 208 and player_location[1] >= 191:
             player_y_momentum += 1
         elif player_location[1] < 191 and player_location[1] >= 174:
@@ -88,6 +93,7 @@ while True:
         elif player_location[1] < 157 and player_location[1] >= 140:
             player_y_momentum -= 0.25
 
+        #handles positioning
         if player_location[1] > 140:
             player_location[1] -= player_y_momentum
         elif player_location[1] <= 147 and player_location[1] > 140:
