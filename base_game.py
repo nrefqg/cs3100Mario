@@ -30,11 +30,12 @@ pipe_list = renders['pipe']
 
 # Load in image sprite
 player_image = pygame.image.load('character/mario.png')
-player_location = [20,208]
+player_location = [20,140]
 player_rect = pygame.Rect(100, 100, 5, 13)
 
 moving_right = False
 moving_left = False
+jumping = False
 
 # Load in enemy list
 enemy_list = pygame.sprite.Group()
@@ -51,22 +52,58 @@ viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 allRects = file_rendering.render(level)
 
 player_x_momentum = 0
+player_y_momentum = 0
 
 while True:
     #Fills the background with a light blue color
     viewport.reset()
 
-    if (moving_right or moving_left) and player_x_momentum < 3:
+    if player_location[1] > 208:
+        player_location[1] = 208
+
+    if (moving_right or moving_left) and player_x_momentum < 2.0:
         player_x_momentum += 0.1
     elif player_x_momentum >= 0.1:
         player_x_momentum -= 0.5
     else:
         player_x_momentum = 0
-  
+
+    if not jumping:
+        if player_location[1] < 208:
+            player_y_momentum += 0.3
+        else:
+            player_y_momentum = 0
+
+        if player_location[1] + player_y_momentum < 208:
+            player_location[1] += player_y_momentum
+        else:
+            player_location[1] = 208
+    else:
+        if player_location[1] <= 208 and player_location[1] >= 191:
+            player_y_momentum += 1
+        elif player_location[1] < 191 and player_location[1] >= 174:
+            player_y_momentum += 0.5
+        elif player_location[1] < 174 and player_location[1] >= 157:
+            player_y_momentum -= 1
+        elif player_location[1] < 157 and player_location[1] >= 140:
+            player_y_momentum -= 0.25
+
+        if player_location[1] > 140:
+            player_location[1] -= player_y_momentum
+        elif player_location[1] <= 147 and player_location[1] > 140:
+            player_location[1] -= 0.1
+        else:
+            player_location[1] = 140
+            player_y_momentum = 0
+            jumping = False
+
     #Movement for the player is modified when specific keypresses are made
     if moving_right == True:
+        player_image = pygame.image.load('character/mario.png')
         player_location[0] += player_x_momentum
+
     if moving_left == True:
+        player_image = pygame.image.load('character/marioflip.png')
         player_location[0] -= player_x_momentum
 
     #Check pygame for "events" such as button presses
@@ -83,11 +120,16 @@ while True:
                 moving_right = True
             if event.key == pygame.K_LEFT:
                 moving_left = True
+            if event.key == pygame.K_SPACE and player_location[1] == 208:
+                jumping = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
                 moving_right = False
             if event.key == pygame.K_LEFT:
                 moving_left = False
+            if event.key == pygame.K_SPACE:
+                jumping = False
+                player_y_momentum = 0
 
     # Update sprites on screen
     viewport.render_sprites(player_image, player_location, enemy_list, block_list, pipe_list)
