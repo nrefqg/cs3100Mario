@@ -19,7 +19,6 @@ SCREEN_HEIGHT = 500
 
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
-#screen = pygame.display.set_mode(display, 0, 32)  # set the screen dimensions
 level = file_loader.file_loading()
 
 # Load in block sprites
@@ -85,6 +84,8 @@ while True:
 
     # Update sprites on screen
     viewport.render_sprites(player_image, player_location, enemy_list, block_list, pipe_list)
+    # Update level info
+    viewport.render_ui()
 
     # detect collisions between enemies
     for first, second in combinations(enemy_list, 2):

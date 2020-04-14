@@ -1,7 +1,9 @@
 import pygame
+FONT_COLOR = (255, 255, 255)
 
 class Viewport:
     """
+    TODO: Update documentation
     Represents the viewport of the game so it includes the camera
     and the GUI.
     """
@@ -13,6 +15,9 @@ class Viewport:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
+        # Intialize fonts
+        pygame.font.init()
+        self.myfont = pygame.font.SysFont('freesansbold.ttf', 24)
 
     def reset(self):
         """
@@ -42,6 +47,28 @@ class Viewport:
             # 1 is currently the player speed.
             # TODO: Player speed be a passed in parameter soon
             self.offsetX += 6
+
+    def render_ui(self):
+        '''
+        Takes in level information and renders it out
+        '''
+        test_world_number = 1
+        test_world_checkpoint = 5 
+        mario_label = self.myfont.render('MARIO', True, FONT_COLOR)
+        world_label = self.myfont.render('WORLD', True, FONT_COLOR)
+        time_label = self.myfont.render('TIME', True, FONT_COLOR)
+        score = self.myfont.render('000000', True, FONT_COLOR)
+        coin = self.myfont.render('0x00', True, FONT_COLOR)
+        level = self.myfont.render('%s - %x' % (test_world_number, test_world_checkpoint), True, FONT_COLOR)
+        time = self.myfont.render('999', True, FONT_COLOR)
+
+        self.screen.blit(mario_label, (80, 20))
+        self.screen.blit(world_label, (240, 20))
+        self.screen.blit(time_label, (380, 20))
+        self.screen.blit(score, (80, 40))
+        self.screen.blit(coin, (160, 40))
+        self.screen.blit(level, (255, 40))
+        self.screen.blit(time, (385, 40))
 
     def render_sprites(self, player_sprite, player_location, enemies, blocks, pipes):
         """
