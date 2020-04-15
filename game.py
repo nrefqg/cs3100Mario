@@ -65,10 +65,12 @@ while True:
         player_location[1] = 208
 
     #Sprinting and horizontal movement
-    if (moving_right or moving_left) and player_x_momentum < 2.0:
-        player_x_momentum += 0.1
+    if moving_right and player_x_momentum < 5.0:
+        player_x_momentum += 0.25
+    if moving_left and player_x_momentum < 5.0:
+        player_x_momentum += 0.25
     elif player_x_momentum >= 0.1:
-        player_x_momentum -= 0.5
+        player_x_momentum -= 0.1
     else:
         player_x_momentum = 0
 
@@ -108,7 +110,7 @@ while True:
         player_image = pygame.image.load('sprites/mario.png')
         player_location[0] += player_x_momentum
 
-    if moving_left == True:
+    if moving_left == True and player_location[0] > viewport.offsetX:
         player_image = pygame.image.load('sprites/marioflip.png')
         player_location[0] -= player_x_momentum
 
