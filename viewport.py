@@ -3,12 +3,14 @@ FONT_COLOR = (255, 255, 255)
 
 class Viewport:
     """
-    TODO: Update documentation
-    Represents the viewport of the game so it includes the camera
-    and the GUI.
+    Class that controls the camera and UI elements for the game.
+    Render any sprites, game information, etc here.
     """
     def __init__(self, screen_width, screen_height):
         """
+        Constructor for the viewport.
+        :param screen_width: Integer for the width of the game window
+        :param screen_height: Integer for the height of the game window
         """
         self.offsetX = 0
         self.offsetY = 0
@@ -19,17 +21,21 @@ class Viewport:
         pygame.font.init()
         self.myfont = pygame.font.SysFont('freesansbold.ttf', 24)
 
-    def reset(self):
+    def reset(self, sky_color):
         """
-        Fills the screen with blank blue to reset the frame.
+        Fills the screen with a color to reset all the elements.
+        :param sky_color: 3-element tuple representing RGB values
+        :return: None
         """
         # TODO: Make this based upon a constant
-        self.screen.fill((146, 244, 255))
+        self.screen.fill(sky_color)
 
     def in_frame(self, sprite_x, sprite_y):
         """
-        Checks to see if the sprite is in the viewport. Used to figure out if
-        we should even try blitting the sprite
+        Checks to see if the sprite is in the viewport.
+        :param sprite_x: Int representing sprite x position
+        :param sprite_y: Int representing sprite y position
+        :return: None
         """
         # Check to see if x and y position is in the viewport x range
         if sprite_x >= self.offsetX and sprite_x <= self.screen_width + self.offsetX:
@@ -41,16 +47,19 @@ class Viewport:
         """
         Checks Mario's position to determine whether or not the viewport
         camera needs to be shifted
+        :param player_location: Two-element tuple representing the x and y
+        coordinates
+        :return: None
         """
         if player_location[0] > (self.screen_width / 2) + self.offsetX:
-            #diff = (self.screen_width / 2) + self.offsetX - player_location[0]
-            # 1 is currently the player speed.
             # TODO: Player speed be a passed in parameter soon
             self.offsetX += 6
 
     def render_ui(self):
         '''
         Takes in level information and renders it out
+        TODO: Pass in level information as function parameters
+        :return: None
         '''
         test_world_number = 1
         test_world_checkpoint = 5 
@@ -75,6 +84,11 @@ class Viewport:
         Takes in sprites and locations of the player, enemy, blocks, and pipe
         blocks and renders to the viewport if the sprites are in the viewport
         position.
+        :param player_sprite: A pygame image of the main character
+        :param player_location: Two-element tuple of x and y coordinates
+        :param enemies: List of enemy objects
+        :param blocks: List of block objects
+        :param pipes: List of pipe objects
         """
         self.check_pos(player_location)
 

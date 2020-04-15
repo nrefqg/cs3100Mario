@@ -8,7 +8,7 @@ from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
 from viewport import Viewport
 
-level = []
+SKY_COLOR = (7, 155, 176)
 
 pygame.init()
 pygame.display.set_caption('Super Mario')  # Sets the window title
@@ -47,8 +47,8 @@ viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 # FIXME: Everything feels a bit laggy
 while True:
-    #Fills the background with a light blue color
-    viewport.reset()
+    #Fills the background with the sky color constant
+    viewport.reset(SKY_COLOR)
 
     #A list of all rects in the level
     allRects = file_rendering.render(level)
