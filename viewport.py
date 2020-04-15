@@ -55,28 +55,29 @@ class Viewport:
             # TODO: Player speed be a passed in parameter soon
             self.offsetX += 6
 
-    def render_ui(self):
+    def render_ui(self, level):
         '''
         Takes in level information and renders it out
-        TODO: Pass in level information as function parameters
+        :param level: This is the level object
         :return: None
         '''
-        test_world_number = 1
-        test_world_checkpoint = 5 
         mario_label = self.myfont.render('MARIO', True, FONT_COLOR)
+        coin_label = self.myfont.render('COINS', True, FONT_COLOR)
         world_label = self.myfont.render('WORLD', True, FONT_COLOR)
         time_label = self.myfont.render('TIME', True, FONT_COLOR)
-        score = self.myfont.render('000000', True, FONT_COLOR)
-        coin = self.myfont.render('0x00', True, FONT_COLOR)
-        level = self.myfont.render('%s - %x' % (test_world_number, test_world_checkpoint), True, FONT_COLOR)
-        time = self.myfont.render('999', True, FONT_COLOR)
+        score = self.myfont.render(str(level.score), True, FONT_COLOR)
+        coin = self.myfont.render(str(level.coins), True, FONT_COLOR)
+        #level = self.myfont.render('%s - %x' % (test_world_number, test_world_checkpoint), True, FONT_COLOR)
+        world_name = self.myfont.render('CS3100', True, FONT_COLOR)
+        time = self.myfont.render(str(level.timer), True, FONT_COLOR)
 
         self.screen.blit(mario_label, (80, 20))
+        self.screen.blit(coin_label, (160, 20))
         self.screen.blit(world_label, (240, 20))
         self.screen.blit(time_label, (380, 20))
         self.screen.blit(score, (80, 40))
         self.screen.blit(coin, (160, 40))
-        self.screen.blit(level, (255, 40))
+        self.screen.blit(world_name, (255, 40))
         self.screen.blit(time, (385, 40))
 
     def render_sprites(self, player_sprite, player_location, enemies, blocks, pipes):
