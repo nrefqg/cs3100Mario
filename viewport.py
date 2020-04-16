@@ -43,16 +43,16 @@ class Viewport:
             # TODO: Player speed be a passed in parameter soon
             self.offsetX += 6
 
-    def render_sprites(self, player_sprite, player_location, enemies, blocks, pipes):
+    def render_sprites(self, player, enemies, blocks, pipes):
         """
         Takes in sprites and locations of the player, enemy, blocks, and pipe
         blocks and renders to the viewport if the sprites are in the viewport
         position.
         """
-        self.check_pos(player_location)
+        # self.check_pos(player_location)
 
         # Render player sprite
-        self.screen.blit(player_sprite, [player_location[0] - self.offsetX, player_location[1]])
+        self.screen.blit(player.image, [player.rect.x - self.offsetX, player.rect.y])
 
         # Render potential enemies
         if enemies:
@@ -77,3 +77,4 @@ class Viewport:
             for pipe in pipes:
                 if self.in_frame(pipe.rect.x, pipe.rect.y):
                     self.screen.blit(pipe.image, [pipe.rect.x - self.offsetX, pipe.rect.y])
+                    
