@@ -66,6 +66,11 @@ class Character(pygame.sprite.Sprite):
                 return self.jump
         def setJumping(self, boolVal):
                 self.jump = boolVal
+        # change in y value from where jump happened
+        def getDeltaY(self):
+                return self.deltaY
+        def setDeltaY(self, delt):
+                self.deltaY = delt
         def groundContact(self, ground):
                 """
                 gives the player gravity for jumping
@@ -77,17 +82,7 @@ class Character(pygame.sprite.Sprite):
                         self.y_momentum = 0
                         self.deltaY = 0
 
-                        # reset rect to be above ground
-                        #self.rect.y = ground - self.rect.height
-
         # image update functions
         def updateImage(self, file):
                 self.image = pygame.image.load(file)
-
-        # test jumping functions using delta variables
-        # versus using hard coded pixel values
-        def getDeltaY(self):
-                return self.deltaY
-        def setDeltaY(self, delt):
-                self.deltaY = delt
 
