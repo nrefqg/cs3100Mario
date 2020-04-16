@@ -27,8 +27,8 @@ class Viewport:
         we should even try blitting the sprite
         """
         # Check to see if x and y position is in the viewport x range
-        if sprite_x >= self.offsetX and sprite_x <= self.screen_width + self.offsetX:
-            if sprite_y >= self.offsetY and sprite_y <= self.screen_height + self.offsetY:
+        if sprite_x >= self.offsetX - 32 and sprite_x <= self.screen_width + self.offsetX + 32:
+            if sprite_y >= self.offsetY - 32 and sprite_y <= self.screen_height + self.offsetY + 32:
                 return True
         return False
 
@@ -63,8 +63,14 @@ class Viewport:
         # Render potential blocks
         if blocks:
             for block in blocks:
-                if self.in_frame(block.rect.x, block.rect.y):
+                if self.in_frame(block.x, block.rect.y):
                     self.screen.blit(block.image, [block.rect.x - self.offsetX, block.rect.y])
+                    #animation += 1
+                    #if animation >= 15:
+                     #   block_list.update()
+                      #  block_list.draw(screen)
+                        # pygame.display.flip()
+                         #animation = 0
 
         # Render potential pipes
         if pipes:
