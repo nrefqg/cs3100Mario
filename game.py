@@ -15,9 +15,9 @@ pygame.init()
 pygame.display.set_caption('Super Mario')  # Sets the window title
 clock = pygame.time.Clock()  # Pygame clock that is used to keep game updating at 60 fps
 
-SCREEN_WIDTH = 500
-SCREEN_HEIGHT = 500
-
+SCREEN_WIDTH = 512
+SCREEN_HEIGHT = 512
+animation = 0
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
 #screen = pygame.display.set_mode(display, 0, 32)  # set the screen dimensions
@@ -29,7 +29,7 @@ block_list = renders['block']
 pipe_list = renders['pipe']
 
 # Load in image sprite
-player_image = pygame.image.load('character/mario.png')
+player_image = pygame.image.load('sprites/mario.png')
 player_location = [20,140]
 player_rect = pygame.Rect(100, 100, 5, 13)
 
@@ -65,10 +65,12 @@ while True:
         player_location[1] = 208
 
     #Sprinting and horizontal movement
-    if (moving_right or moving_left) and player_x_momentum < 2.0:
-        player_x_momentum += 0.1
+    if moving_right and player_x_momentum < 5.0:
+        player_x_momentum += 0.25
+    if moving_left and player_x_momentum < 5.0:
+        player_x_momentum += 0.25
     elif player_x_momentum >= 0.1:
-        player_x_momentum -= 0.5
+        player_x_momentum -= 0.1
     else:
         player_x_momentum = 0
 
@@ -105,11 +107,11 @@ while True:
 
     #Movement for the player is modified when specific keypresses are made
     if moving_right == True:
-        player_image = pygame.image.load('character/mario.png')
+        player_image = pygame.image.load('sprites/mario.png')
         player_location[0] += player_x_momentum
 
-    if moving_left == True:
-        player_image = pygame.image.load('character/marioflip.png')
+    if moving_left == True and player_location[0] > viewport.offsetX:
+        player_image = pygame.image.load('sprites/marioflip.png')
         player_location[0] -= player_x_momentum
 
     #Check pygame for "events" such as button presses
@@ -158,6 +160,12 @@ while True:
         if len(blocks) > 0:
             primary_block = blocks[0]
             enemy.gravity(primary_block.rect.y)
+
+    animation += 1
+    if animation >= 15:
+        block_list.update()
+        pygame.display.flip()
+        animation = 0
 
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
