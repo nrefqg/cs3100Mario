@@ -149,10 +149,9 @@ while True:
             primary_block = blocks[0]
             enemy.gravity(primary_block.rect.y)
 
+    # checks for standing on a block and continues gravity if not
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
-    for block in playerGround:
-        if not player.getJumping():
-            player.groundContact(block.rect.y)
+    player.groundContact(playerGround)
 
     animation += 1
     if animation >= 15:

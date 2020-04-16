@@ -31,7 +31,11 @@ class Character(pygame.sprite.Sprite):
                 self.move_left = False
                 self.jump = False
 
+                # sets initial change in y to the initial height
                 self.deltaY = self.y
+
+                # used to determine if player ran off a ledge/block into open air
+                self.standing = False
 
         # Getter and setters for location variables
         def getX_location(self):
@@ -71,16 +75,20 @@ class Character(pygame.sprite.Sprite):
                 return self.deltaY
         def setDeltaY(self, delt):
                 self.deltaY = delt
-        def groundContact(self, ground):
+        def groundContact(self, ground_blocks):
                 """
                 gives the player gravity for jumping
                 :return: None
                 """
-                # check if passed the ground
-                if self.rect.y + self.rect.height >= ground and self.y_momentum >= 0:
-                        # stop moving vertically
-                        self.y_momentum = 0
-                        self.deltaY = 0
+                if len(ground_blocks) > 0:
+                        # check if passed the ground
+                        if self.rect.y + self.rect.height >= ground_blocks[0].rect.y and self.y_momentum >= 0:
+                                # stop moving vertically
+                                self.y_momentum = 0
+                                self.deltaY = 0
+                                self.rect.y = ground_blocks[0].rect.y - self.rect.height + 6
+                else:   # initiate falling since not on a block
+                        self.deltaY = 1
 
         # image update functions
         def updateImage(self, file):
