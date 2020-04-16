@@ -31,6 +31,8 @@ class Character(pygame.sprite.Sprite):
                 self.move_left = False
                 self.jump = False
 
+                self.deltaY = self.y
+
         # Getter and setters for location variables
         def getX_location(self):
                 return self.rect.x
@@ -64,7 +66,7 @@ class Character(pygame.sprite.Sprite):
                 return self.jump
         def setJumping(self, boolVal):
                 self.jump = boolVal
-        def gravity(self, ground):
+        def groundContact(self, ground):
                 """
                 gives the player gravity for jumping
                 :return: None
@@ -73,13 +75,19 @@ class Character(pygame.sprite.Sprite):
                 if self.rect.y + self.rect.height >= ground and self.y_momentum >= 0:
                         # stop moving vertically
                         self.y_momentum = 0
+                        self.deltaY = 0
+
                         # reset rect to be above ground
-                        self.rect.y = ground - self.rect.height
-                else:
-                        self.y_momentum += 0.5
+                        #self.rect.y = ground - self.rect.height
 
         # image update functions
         def updateImage(self, file):
                 self.image = pygame.image.load(file)
 
+        # test jumping functions using delta variables
+        # versus using hard coded pixel values
+        def getDeltaY(self):
+                return self.deltaY
+        def setDeltaY(self, delt):
+                self.deltaY = delt
 

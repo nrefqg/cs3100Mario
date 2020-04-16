@@ -45,17 +45,9 @@ viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 # A list of all rects in the level
 allRects = file_rendering.render(level)
 
-# initial momentum value
-player_x_momentum = 0
-player_y_momentum = 0
-
 while True:
     # Fills the background with a light blue color
     viewport.reset()
-
-    # if character falls below floor, resets to floor.  Will fix once collisions are implemented
-    if player.getY_location() > 208:
-        player.setY_location(208)
 
     # Sprinting and horizontal movement
     if player.getMoveRight() and player.getX_momentum() < 5.0:
@@ -66,7 +58,49 @@ while True:
         player.setX_momentum(player.getX_momentum() - 0.1)
     else:
         player.setX_momentum(0)
+    #"""
+    # default gravity if mario is in air and not jumping
+    # 208 = 0
+    # 191 = 17
+    # 174 = 34
+    # 157 = 51
+    # 140 = 68
+    if not player.getJumping():
+        if player.getDeltaY() > 0:
+            player.setY_momentum(player.getY_momentum() + .3)
+        else:
+            player.setY_momentum(0)
+            player.setDeltaY(0)
+        #print(player.getY_momentum())
+        if player.getDeltaY() + player.getY_momentum() > 0:
+            temp = player.getY_location()
+            player.setY_location(player.getY_location() + player.getY_momentum())
+            player.setDeltaY(player.getDeltaY() + player.getY_momentum())
+        else:
+            player.setDeltaY(0)
+            player.setY_momentum(0)
+    else:   # handles mario jump momentum
+        if player.getDeltaY() >= 0 and player.getDeltaY() <= 17:
+            player.setY_momentum(player.getY_momentum() + 1)
+        elif player.getDeltaY() > 17 and player.getDeltaY() <= 34:
+            player.setY_momentum(player.getY_momentum() + 0.5)
+        elif player.getDeltaY() > 34 and player.getDeltaY() <= 51:
+            player.setY_momentum(player.getY_momentum() - 1)
+        elif player.getDeltaY() > 51 and player.getDeltaY() <= 68:
+            player.setY_momentum(player.getY_momentum() - 0.25)
 
+        #"""# handles positioning
+        if player.getDeltaY() < 68:
+            player.setY_location(player.getY_location() - player.getY_momentum())
+            player.setDeltaY(player.getDeltaY() + player.getY_momentum())
+        elif player.getDeltaY() >= 61 and player.getDeltaY() < 68:
+            player.setY_location(player.getY_location() - 0.1)
+            player.setDeltaY(player.getDeltaY() - 0.1)
+        else:
+            player.setY_momentum(0)
+            player.setJumping(False)
+    #"""
+    """
     # default gravity if mario is in air and not jumping
     if not player.getJumping():
         if player.getY_location() < 208:
@@ -80,13 +114,13 @@ while True:
             player.setY_location(208)
     else:   # handles mario jump momentum
         if player.getY_location() <= 208 and player.getY_location() >= 191:
-            player.setY_location(player.getY_location() + 1)
+            player.setY_momentum(player.getY_momentum() + 1)
         elif player.getY_location() < 191 and player.getY_location() >= 174:
-            player.setY_location(player.getY_location() + 0.5)
+            player.setY_momentum(player.getY_momentum() + 0.5)
         elif player.getY_location() < 174 and player.getY_location() >= 157:
-            player.setY_location(player.getY_location() - 1)
+            player.setY_momentum(player.getY_momentum() - 1)
         elif player.getY_location() < 157 and player.getY_location() >= 140:
-            player.setY_location(player.getY_location() - 0.25)
+            player.setY_momentum(player.getY_momentum() - 0.25)
 
         # handles positioning
         if player.getY_location() > 140:
@@ -97,6 +131,7 @@ while True:
             player.setY_location(140)
             player.setY_momentum(0)
             player.setJumping(False)
+    """
 
     # Movement for the player is modified when specific keypresses are made
     if player.getMoveRight() == True:
@@ -121,7 +156,7 @@ while True:
                 player.setMoveRight(True)
             if event.key == pygame.K_LEFT:
                 player.setMoveLeft(True)
-            if event.key == pygame.K_SPACE and player.getY_location() == 208:
+            if event.key == pygame.K_SPACE and player.getDeltaY() == 0:
                 player.setJumping(True)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
@@ -130,7 +165,6 @@ while True:
                 player.setMoveLeft(False)
             if event.key == pygame.K_SPACE:
                 player.setJumping(False)
-                player.setY_momentum(0)
 
     # Update sprites on screen
     viewport.render_sprites(player, enemy_list, block_list, pipe_list)
@@ -148,11 +182,16 @@ while True:
         enemy.gravity(SCREEN_HEIGHT)
 
     # detect collisions between enemies and blocks
-    collisions = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
-    for enemy, blocks in collisions.items():
+    enemyGround = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
+    for enemy, blocks in enemyGround.items():
         if len(blocks) > 0:
             primary_block = blocks[0]
             enemy.gravity(primary_block.rect.y)
+
+    playerGround = pygame.sprite.spritecollide(player, block_list, False)
+    for block in playerGround:
+        if not player.getJumping():
+            player.groundContact(block.rect.y)
 
     animation += 1
     if animation >= 15:
