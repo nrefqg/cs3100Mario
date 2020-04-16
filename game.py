@@ -25,7 +25,7 @@ level = file_loader.file_loading()
 
 # Load in block sprites
 renders = file_rendering.render(level)  # load level from Excel file
-block_list = renders['block']
+block_list = renders['ground']
 pipe_list = renders['pipe']
 
 # Load in image sprite
