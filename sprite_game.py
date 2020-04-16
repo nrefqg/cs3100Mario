@@ -60,18 +60,12 @@ while True:
         player.setX_momentum(0)
     #"""
     # default gravity if mario is in air and not jumping
-    # 208 = 0
-    # 191 = 17
-    # 174 = 34
-    # 157 = 51
-    # 140 = 68
     if not player.getJumping():
         if player.getDeltaY() > 0:
             player.setY_momentum(player.getY_momentum() + .3)
         else:
             player.setY_momentum(0)
             player.setDeltaY(0)
-        #print(player.getY_momentum())
         if player.getDeltaY() + player.getY_momentum() > 0:
             temp = player.getY_location()
             player.setY_location(player.getY_location() + player.getY_momentum())
@@ -99,39 +93,6 @@ while True:
         else:
             player.setY_momentum(0)
             player.setJumping(False)
-    #"""
-    """
-    # default gravity if mario is in air and not jumping
-    if not player.getJumping():
-        if player.getY_location() < 208:
-            player.setY_momentum(player.getY_momentum() + .3)
-        else:
-            player.setY_momentum(0)
-
-        if player.getY_location() + player.getY_momentum() < 208:
-            player.setY_location(player.getY_location() + player.getY_momentum())
-        else:
-            player.setY_location(208)
-    else:   # handles mario jump momentum
-        if player.getY_location() <= 208 and player.getY_location() >= 191:
-            player.setY_momentum(player.getY_momentum() + 1)
-        elif player.getY_location() < 191 and player.getY_location() >= 174:
-            player.setY_momentum(player.getY_momentum() + 0.5)
-        elif player.getY_location() < 174 and player.getY_location() >= 157:
-            player.setY_momentum(player.getY_momentum() - 1)
-        elif player.getY_location() < 157 and player.getY_location() >= 140:
-            player.setY_momentum(player.getY_momentum() - 0.25)
-
-        # handles positioning
-        if player.getY_location() > 140:
-            player.setY_location(player.getY_location() - player.getY_momentum())
-        elif player.getY_location() <= 147 and player.getY_location() > 140:
-            player.setY_location(player.getY_location() - 0.1)
-        else:
-            player.setY_location(140)
-            player.setY_momentum(0)
-            player.setJumping(False)
-    """
 
     # Movement for the player is modified when specific keypresses are made
     if player.getMoveRight() == True:
