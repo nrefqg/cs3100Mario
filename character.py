@@ -86,8 +86,8 @@ class Character(pygame.sprite.Sprite):
                                 # stop moving vertically
                                 self.y_momentum = 0
                                 self.deltaY = 0
-                                self.rect.y = ground_blocks[0].rect.y - self.rect.height + 6
-                else:   # initiate falling since not on a block
+                                self.rect.y = ground_blocks[0].rect.y - self.rect.height + 1
+                elif self.deltaY == 0:   # initiate falling since not on a block
                         self.deltaY = 1
 
         # image update functions

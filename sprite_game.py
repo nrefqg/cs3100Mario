@@ -74,17 +74,17 @@ while True:
             player.setDeltaY(0)
             player.setY_momentum(0)
     else:   # handles mario jump momentum
-        if player.getDeltaY() >= 0 and player.getDeltaY() <= 17:
+        if player.getDeltaY() >= 0 and player.getDeltaY() <= 48:
             player.setY_momentum(player.getY_momentum() + 1)
-        elif player.getDeltaY() > 17 and player.getDeltaY() <= 34:
+        elif player.getDeltaY() > 48 and player.getDeltaY() <= 96:
             player.setY_momentum(player.getY_momentum() + 0.5)
-        elif player.getDeltaY() > 34 and player.getDeltaY() <= 51:
+        elif player.getDeltaY() > 96 and player.getDeltaY() <= 140:
             player.setY_momentum(player.getY_momentum() - 1)
-        elif player.getDeltaY() > 51 and player.getDeltaY() <= 68:
+        elif player.getDeltaY() > 140:
             player.setY_momentum(player.getY_momentum() - 0.25)
 
-        #"""# handles positioning
-        if player.getDeltaY() < 68:
+        # handles positioning
+        if player.getDeltaY() < 140:
             player.setY_location(player.getY_location() - player.getY_momentum())
             player.setDeltaY(player.getDeltaY() + player.getY_momentum())
         elif player.getDeltaY() >= 61 and player.getDeltaY() < 68:
