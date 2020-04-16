@@ -32,12 +32,12 @@ class Viewport:
                 return True
         return False
 
-    def check_pos(self, player_location):
+    def check_pos(self, player_x):
         """
         Checks Mario's position to determine whether or not the viewport
         camera needs to be shifted
         """
-        if player_location[0] > (self.screen_width / 2) + self.offsetX:
+        if player_x > (self.screen_width / 2) + self.offsetX:
             #diff = (self.screen_width / 2) + self.offsetX - player_location[0]
             # 1 is currently the player speed.
             # TODO: Player speed be a passed in parameter soon
@@ -49,7 +49,7 @@ class Viewport:
         blocks and renders to the viewport if the sprites are in the viewport
         position.
         """
-        # self.check_pos(player_location)
+        self.check_pos(player.getX_location())
 
         # Render player sprite
         self.screen.blit(player.image, [player.rect.x - self.offsetX, player.rect.y])
