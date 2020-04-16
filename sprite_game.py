@@ -3,6 +3,7 @@ import sys
 import file_rendering
 import time
 import file_loader
+from blocks.flagpole import flagpole
 from character import Character
 from itertools import combinations
 from enemies.enemy0 import Enemy0
@@ -22,11 +23,13 @@ animation = 0
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
 level = file_loader.file_loading()
+lowestTile = 0
 
 # Load in block sprites
 renders = file_rendering.render(level)  # load level from Excel file
 block_list = renders['ground']
 pipe_list = renders['pipe']
+flagLoc = []
 
 # Load in image sprite
 player = Character(140, 20)
@@ -44,7 +47,18 @@ viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 # A list of all rects in the level
 allRects = file_rendering.render(level)
+#Was trying to get flagpole to work right
+'''for block in allRects['flagpole']:
+    if(isinstance(block, flagpole) == True):
+        flagLoc.append([block.xHitRight])'''
 
+#Get the lowest block in the level's y position
+for block in block_list:
+    if(block.rect.y > lowestTile):
+        lowestTile = block.y
+
+print(lowestTile)
+#This while loops contains the running game
 while True:
     # Fills the background with a light blue color
     viewport.reset()
@@ -158,6 +172,21 @@ while True:
         block_list.update()
         pygame.display.flip()
         animation = 0
+
+    #Check to see if character has touched the flagpole
+    '''tempCoord = []
+    tempCoord.append(player.getX_location())
+    tempCoord.append(player.getY_location())'''
+
+    #print(tempCoord)
+    '''if(tempCoord in flagLoc):
+        print('A winnder is you!')'''
+    
+    #If player is below lowest tile, kill them
+    if(player.getY_location() > lowestTile):
+        print('YOU DIED')
+        player = Character(140, 20)
+        viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
