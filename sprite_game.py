@@ -61,6 +61,7 @@ while True:
     #"""
     # default gravity if mario is in air and not jumping
     if not player.getJumping():
+        player.setVertical(False)
         if player.getDeltaY() > 0:
             player.setY_momentum(player.getY_momentum() + .3)
         else:
@@ -76,10 +77,12 @@ while True:
     else:   # handles mario jump momentum
         if player.getDeltaY() >= 0 and player.getDeltaY() <= 48:
             player.setY_momentum(player.getY_momentum() + 1)
+            player.setVertical(True)
         elif player.getDeltaY() > 48 and player.getDeltaY() <= 96:
             player.setY_momentum(player.getY_momentum() + 0.5)
         elif player.getDeltaY() > 96 and player.getDeltaY() <= 140:
             player.setY_momentum(player.getY_momentum() - 1)
+            player.setVertical(False)
         elif player.getDeltaY() > 140:
             player.setY_momentum(player.getY_momentum() - 0.25)
 
@@ -112,7 +115,6 @@ while True:
 
         # Respond to player keys
         if event.type == pygame.KEYDOWN:
-
             if event.key == pygame.K_RIGHT:
                 player.setMoveRight(True)
             if event.key == pygame.K_LEFT:
@@ -151,7 +153,7 @@ while True:
 
     # checks for standing on a block and continues gravity if not
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
-    player.groundContact(playerGround)
+    player.groundBlockContact(playerGround)
 
     animation += 1
     if animation >= 15:

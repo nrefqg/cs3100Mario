@@ -30,6 +30,7 @@ class Character(pygame.sprite.Sprite):
                 self.move_right = False
                 self.move_left = False
                 self.jump = False
+                self.vertical_move = False
 
                 # sets initial change in y to the initial height
                 self.deltaY = self.y
@@ -64,6 +65,10 @@ class Character(pygame.sprite.Sprite):
                 return self.y_momentum
         def setY_momentum(self, y):
                 self.y_momentum = y
+        def getVertical(self):
+                return self.vertical_move
+        def setVertical(self, boolVert):
+                self.vertical_move = boolVert
 
         # Jumping and gravity functions
         def getJumping(self):
@@ -75,22 +80,40 @@ class Character(pygame.sprite.Sprite):
                 return self.deltaY
         def setDeltaY(self, delt):
                 self.deltaY = delt
-        def groundContact(self, ground_blocks):
+        def groundBlockContact(self, ground_blocks):
                 """
                 gives the player gravity for jumping
                 :return: None
                 """
                 if len(ground_blocks) > 0:
-                        # check if passed the ground
-                        if self.rect.y + self.rect.height >= ground_blocks[0].rect.y and self.y_momentum >= 0:
+                        # check for horizontal block collisions
+                        if self.rect.right <= ground_blocks[0].rect.left and self.move_right == True:
+                                self.x_momentum = 0
+                                self.move_right = False
+                                self.rect.right = ground_blocks[0].rect.left - 1
+                        elif self.rect.left >= ground_blocks[0].rect.right and self.move_left == True:
+                                self.x_momentum = 0
+                                self.move_left = False
+                                self.rect.left = ground_blocks[0].rect.right + 1
+                        # check for vertical block collisions
+                        elif self.rect.bottom >= ground_blocks[0].rect.top and not self.vertical_move:
                                 # stop moving vertically
                                 self.y_momentum = 0
                                 self.deltaY = 0
-                                self.rect.y = ground_blocks[0].rect.y - self.rect.height + 1
+                                self.rect.bottom = ground_blocks[0].rect.top + 1
+                        elif self.rect.top <= ground_blocks[0].rect.bottom and self.vertical_move:
+                                self.y_momentum = 0
+                                self.deltaY = 141
+                                self.rect.y = ground_blocks[0].rect.y + ground_blocks[0].rect.height
                 elif self.deltaY == 0:   # initiate falling since not on a block
                         self.deltaY = 1
 
         # image update functions
         def updateImage(self, file):
                 self.image = pygame.image.load(file)
+
+        # specific collision functions
+        def upBlockContact(self, up_blocks):
+                for block in up_blocks:
+                        block = 1
 
