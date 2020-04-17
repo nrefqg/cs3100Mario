@@ -6,10 +6,13 @@ import file_loader
 from blocks.flagpole import flagpole
 from character import Character
 from itertools import combinations
+from level import Level
 from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
 from viewport import Viewport
+
+SKY_COLOR = (7, 155, 176)
 
 level = []
 
@@ -23,6 +26,7 @@ animation = 0
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
 level = file_loader.file_loading()
+level_info = Level([], 400) # Load in level with no sprites and 400 time
 lowestTile = 0
 
 # Load in block sprites
@@ -57,7 +61,7 @@ print(lowestTile)
 #This while loops contains the running game
 while True:
     # Fills the background with a light blue color
-    viewport.reset()
+    viewport.reset(SKY_COLOR)
 
     # Sprinting and horizontal movement
     if player.getMoveRight() and player.getX_momentum() < 5.0:
@@ -139,6 +143,8 @@ while True:
 
     # Update sprites on screen
     viewport.render_sprites(player, enemy_list, block_list, pipe_list)
+    # Update level information
+    viewport.render_ui(level_info)
 
     # detect collisions between enemies
     for first, second in combinations(enemy_list, 2):
@@ -176,5 +182,6 @@ while True:
         player = Character(140, 20)
         viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 
+    level_info.tick()
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
