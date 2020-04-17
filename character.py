@@ -111,4 +111,3 @@ class Character(pygame.sprite.Sprite):
     # image update functions
     def updateImage(self, file):
         self.image = pygame.image.load(file)
-

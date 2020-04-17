@@ -115,6 +115,7 @@ while True:
 
         # Respond to player keys
         if event.type == pygame.KEYDOWN:
+
             if event.key == pygame.K_RIGHT:
                 player.setMoveRight(True)
             if event.key == pygame.K_LEFT:
