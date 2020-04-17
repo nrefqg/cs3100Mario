@@ -87,25 +87,25 @@ class Character(pygame.sprite.Sprite):
         """
         if len(ground_blocks) > 0:
             # check for horizontal block collisions
-            for block in ground_blocks:
-                if self.rect.right < block.rect.left and self.move_right == True:
-                    self.x_momentum = 0
-                    self.move_right = False
-                    self.rect.right = block.rect.left
-                elif self.rect.left > block.rect.right and self.move_left == True:
-                    self.x_momentum = 0
-                    self.move_left = False
-                    self.rect.left = block.rect.right
-                # check for vertical block collisions
-                elif self.rect.bottom >= block.rect.top and not self.vertical_move:
-                    self.y_momentum = 0
-                    self.deltaY = 0
-                    self.rect.bottom = block.rect.top + 6  # +6 fixes photo placement
-                elif self.rect.top <= block.rect.bottom and self.vertical_move:
-                    self.y_momentum = 0
-                    self.deltaY = 141
-                    self.rect.top = block.rect.bottom
-        elif self.deltaY == 0:   # initiate falling since not on a block
+            if self.rect.right <= ground_blocks[0].rect.left and self.move_right == True:
+                self.x_momentum = 0
+                self.move_right = False
+                self.rect.right = ground_blocks[0].rect.left - 1
+            elif self.rect.left >= ground_blocks[0].rect.right and self.move_left == True:
+                self.x_momentum = 0
+                self.move_left = False
+                self.rect.left = ground_blocks[0].rect.right + 1
+            # check for vertical block collisions
+            elif self.rect.bottom >= ground_blocks[0].rect.top and not self.vertical_move:
+                # stop moving vertically
+                self.y_momentum = 0
+                self.deltaY = 0
+                self.rect.bottom = ground_blocks[0].rect.top + 1
+            elif self.rect.top <= ground_blocks[0].rect.bottom and self.vertical_move:
+                self.y_momentum = 0
+                self.deltaY = 141
+                self.rect.y = ground_blocks[0].rect.y + ground_blocks[0].rect.height
+        elif self.deltaY == 0:  # initiate falling since not on a block
             self.deltaY = 1
 
     # image update functions
