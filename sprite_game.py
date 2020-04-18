@@ -3,6 +3,7 @@ import sys
 import file_rendering
 import time
 import file_loader
+from death import playerDeath
 from blocks.flagpole import flagpole
 from character import Character
 from itertools import combinations
@@ -177,10 +178,8 @@ while True:
 
     
     #If player is below lowest tile, kill them
-    if(player.getY_location() > lowestTile):
-        print('YOU DIED')
-        player = Character(140, 20)
-        viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
+    if(player.getY_location() > lowestTile+5):
+        player, viewport = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH)
 
     level_info.tick()
     pygame.display.update()
