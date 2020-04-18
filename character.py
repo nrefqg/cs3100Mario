@@ -111,6 +111,35 @@ class Character(pygame.sprite.Sprite):
         elif self.deltaY == 0:  # initiate falling since not on a block
             self.deltaY = 1
 
+    # attempt at new collision function
+    def touch(self, tile_list):
+        if len(tile_list) > 0:
+            for tile in tile_list:
+                # tile is below player
+                if (tile.rect.bottomright[1] > self.rect.bottomright[1]) or (tile.rect.bottomright[1] + 6 == self.rect.bottomright[1]):
+                    if self.rect.bottom > tile.rect.top and not self.vertical_move:
+                        # stop moving vertically
+                        self.y_momentum = 0
+                        self.deltaY = 0
+                        self.rect.bottom = tile.rect.top + 6
+                elif tile.rect.topright[1] < self.rect.topright[1]:
+                    if self.rect.top <= tile.rect.bottom and self.vertical_move:
+                        self.y_momentum = 0
+                        self.deltaY = 141
+                        self.rect.top = tile.rect.bottom
+                # side collisions
+                if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
+                    if self.rect.right > tile.rect.left and self.move_right:
+                        self.rect.right = self.rect.right - self.x_momentum
+                        self.x_momentum = 0
+                        self.move_right = False
+                    elif self.rect.left < tile.rect.right and self.move_left:
+                        self.rect.left = self.rect.left + self.x_momentum
+                        self.x_momentum = 0
+                        self.move_left = False
+        elif self.deltaY == 0:
+            self.deltaY = 1
+
     # image update functions
     def updateImage(self, file):
         self.image = pygame.image.load(file)
