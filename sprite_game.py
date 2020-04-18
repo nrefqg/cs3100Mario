@@ -15,6 +15,12 @@ from viewport import Viewport
 
 SKY_COLOR = (7, 155, 176)
 
+
+#VARIABLES HOLDING THE SPRITE LOCATIONS FOR OUR CHARACTER
+smallMario = ['sprites/mario.png', 'sprites/marioflip.png']
+bigMario = ['character/bigmario.png', 'character/bigmarioflip.png']
+
+
 level = []
 
 pygame.init()
@@ -111,11 +117,17 @@ while True:
 
     # Movement for the player is modified when specific keypresses are made
     if player.getMoveRight() == True:
-        player.updateImage('sprites/mario.png')
+        if(player.powerLevel == 0):
+            player.updateImage(smallMario[0])
+        elif(player.powerLevel == 1):
+            player.updateImage(bigMario[0])
         player.setX_location(player.getX_location() + player.getX_momentum())
-
+    
     if player.getMoveLeft() == True and player.getX_location() > viewport.offsetX:
-        player.updateImage('sprites/marioflip.png')
+        if(player.powerLevel == 0):
+            player.updateImage(smallMario[1])
+        elif(player.powerLevel == 1):
+            player.updateImage(bigMario[1])
         player.setX_location(player.getX_location() - player.getX_momentum())
 
     # Check pygame for "events" such as button presses
