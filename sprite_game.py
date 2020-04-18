@@ -58,17 +58,12 @@ while True:
         player.setX_momentum(player.getX_momentum() - 0.1)
     else:
         player.setX_momentum(0)
-    #"""
     # default gravity if mario is in air and not jumping
     if not player.getJumping():
         player.setVertical(False)
         if player.getDeltaY() > 0:
-            player.setY_momentum(player.getY_momentum() + .3)
-        else:
-            player.setY_momentum(0)
-            player.setDeltaY(0)
+            player.setY_momentum(player.getY_momentum() + .2)
         if player.getDeltaY() + player.getY_momentum() > 0:
-            temp = player.getY_location()
             player.setY_location(player.getY_location() + player.getY_momentum())
             player.setDeltaY(player.getDeltaY() + player.getY_momentum())
         else:
