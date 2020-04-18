@@ -149,7 +149,10 @@ while True:
 
     # checks for standing on a block and continues gravity if not
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
-    player.groundBlockContact(playerGround)
+    #if len(playerGround) > 0:
+    #for block in playerGround:
+    #player.groundBlockContact(block)
+    player.touch(playerGround)
 
     animation += 1
     if animation >= 15:

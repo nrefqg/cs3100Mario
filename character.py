@@ -31,6 +31,7 @@ class Character(pygame.sprite.Sprite):
         self.move_left = False
         self.jump = False
         self.vertical_move = False
+        self.ground = False
 
         # sets initial change in y to the initial height
         self.deltaY = self.y
@@ -75,6 +76,7 @@ class Character(pygame.sprite.Sprite):
         return self.jump
     def setJumping(self, boolVal):
         self.jump = boolVal
+        self.ground = boolVal
     # change in y value from where jump happened
     def getDeltaY(self):
         return self.deltaY
@@ -96,15 +98,16 @@ class Character(pygame.sprite.Sprite):
                 self.move_left = False
                 self.rect.left = ground_blocks[0].rect.right + 1
             # check for vertical block collisions
-            elif self.rect.bottom >= ground_blocks[0].rect.top and not self.vertical_move:
+            elif self.rect.bottom >= ground_blocks[0].rect.top and not self.vertical_move and not self.ground:
                 # stop moving vertically
                 self.y_momentum = 0
                 self.deltaY = 0
                 self.rect.bottom = ground_blocks[0].rect.top + 1
+                self.ground = True
             elif self.rect.top <= ground_blocks[0].rect.bottom and self.vertical_move:
                 self.y_momentum = 0
                 self.deltaY = 141
-                self.rect.y = ground_blocks[0].rect.y + ground_blocks[0].rect.height
+                self.rect.top = ground_blocks[0].rect.bottom
         elif self.deltaY == 0:  # initiate falling since not on a block
             self.deltaY = 1
 
