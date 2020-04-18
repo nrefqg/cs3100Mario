@@ -58,7 +58,6 @@ for block in block_list:
     if(block.rect.y > lowestTile):
         lowestTile = block.y
 
-print(lowestTile)
 #This while loops contains the running game
 while True:
     # Fills the background with a light blue color
@@ -179,7 +178,7 @@ while True:
     
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
-        player, viewport = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH)
+        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
 
     level_info.tick()
     pygame.display.update()
