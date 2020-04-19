@@ -80,7 +80,7 @@ class Viewport:
         self.screen.blit(world_name, (240, 40))
         self.screen.blit(time, (385, 40))
 
-    def render_sprites(self, player, enemies, blocks, pipes):
+    def render_sprites(self, player, enemies, blocks, pipes, flags):
         """
         Takes in sprites and locations of the player, enemy, blocks, and pipe
         blocks and renders to the viewport if the sprites are in the viewport
@@ -114,6 +114,11 @@ class Viewport:
                         # pygame.display.flip()
                          #animation = 0
 
+        if flags:
+            for flagpole in flags:
+                if self.in_frame(flagpole.x, flagpole.y):
+                    self.screen.blit(flagpole.image, [flagpole.rect.x - self.offsetX, flagpole.rect.y])
+        
         # Render potential pipes
         if pipes:
             for pipe in pipes:
@@ -125,3 +130,9 @@ class Viewport:
         self.screen.fill((0, 0, 0))
         death_message = self.myfont.render('YOU DIED', True, FONT_COLOR)
         self.screen.blit(death_message, (self.screen_width/2, self.screen_height/2))
+    
+    #Renders a message if the player wins
+    def render_victory_message(self):
+        self.screen.fill((0, 0, 0))
+        victory_message = self.myfont.render('YOU WON', True, FONT_COLOR)
+        self.screen.blit(victory_message, (self.screen_width/2, self.screen_height/2))

@@ -12,6 +12,7 @@ from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
 from viewport import Viewport
+from victory import playerWin
 
 SKY_COLOR = (7, 155, 176)
 
@@ -39,6 +40,7 @@ lowestTile = 0
 # Load in block sprites
 renders = file_rendering.render(level)  # load level from Excel file
 block_list = renders['ground']
+flag_list = renders['flag']
 pipe_list = renders['pipe']
 flagLoc = []
 
@@ -63,6 +65,11 @@ allRects = file_rendering.render(level)
 for block in block_list:
     if(block.rect.y > lowestTile):
         lowestTile = block.y
+
+#Was trying to get flagpole to work right
+for block in allRects['flagpole']:
+    if(isinstance(block, flagpole) == True):
+        flagLoc.append([block.xHitRight])
 
 #This while loops contains the running game
 while True:
@@ -152,7 +159,7 @@ while True:
                 player.setJumping(False)
 
     # Update sprites on screen
-    viewport.render_sprites(player, enemy_list, block_list, pipe_list)
+    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list)
     # Update level information
     viewport.render_ui(level_info)
 
@@ -181,14 +188,18 @@ while True:
     #for block in playerGround:
     #player.groundBlockContact(block)
     player.touch(playerGround)
-
+    
     animation += 1
     if animation >= 15:
         block_list.update()
         pygame.display.flip()
         animation = 0
 
-    
+    flagTouch = pygame.sprite.spritecollide(player, renders['flagpole'], False)
+
+    if(flagTouch in renders['flagpole']):
+        player, viewport, renders, block_list, pipe_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
         player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
