@@ -23,6 +23,7 @@ class Character(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.collision = [False] * 9
 
         # initial momentum and movement values
         self.x_momentum = 0
@@ -115,6 +116,16 @@ class Character(pygame.sprite.Sprite):
     def touch(self, tile_list):
         if len(tile_list) > 0:
             for tile in tile_list:
+                self.collision[0] = tile.rect.collidepoint(self.rect.topleft)
+                self.collision[1] = tile.rect.collidepoint(self.rect.midtop)
+                self.collision[2] = tile.rect.collidepoint(self.rect.topright)
+                self.collision[3] = tile.rect.collidepoint(self.rect.midleft)
+                self.collision[4] = tile.rect.collidepoint(self.rect.center)
+                self.collision[5] = tile.rect.collidepoint(self.rect.midright)
+                self.collision[6] = tile.rect.collidepoint(self.rect.bottomleft)
+                self.collision[7] = tile.rect.collidepoint(self.rect.midbottom)
+                self.collision[8] = tile.rect.collidepoint(self.rect.bottomright)
+
                 # tile is below player
                 if (tile.rect.bottomright[1] > self.rect.bottomright[1]) or (tile.rect.bottomright[1] + 6 == self.rect.bottomright[1]):
                     if self.rect.bottom > tile.rect.top and not self.vertical_move:
@@ -128,12 +139,15 @@ class Character(pygame.sprite.Sprite):
                         self.deltaY = 141
                         self.rect.top = tile.rect.bottom
                 # side collisions
-                if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
-                    if self.rect.right > tile.rect.left and self.move_right:
+                #if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
+                if self.collision[3] or self.collision[5]:
+                    #if self.rect.right >= tile.rect.left and self.move_right:
+                    if self.collision[5]:
                         self.rect.right = self.rect.right - self.x_momentum
                         self.x_momentum = 0
                         self.move_right = False
-                    elif self.rect.left < tile.rect.right and self.move_left:
+                    #elif self.rect.left <= tile.rect.right and self.move_left:
+                    elif self.collision[3]:
                         self.rect.left = self.rect.left + self.x_momentum
                         self.x_momentum = 0
                         self.move_left = False
