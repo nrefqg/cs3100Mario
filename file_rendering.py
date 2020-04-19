@@ -27,6 +27,8 @@ def render(level):
 
     block_group = pygame.sprite.Group()
     pipe_group = pygame.sprite.Group()
+    brick_group = pygame.sprite.Group()
+    power_group = pygame.sprite.Group()
     for x in range(len(level)):
         for y in range(len(level[x])):
             symbol = level[x][y]
@@ -40,12 +42,12 @@ def render(level):
                 renders['stone'] = block_group
             elif symbol == 'c': #breakable block
                 new_block = breakableBlock(y*32, x*32)
-                block_group.add(new_block)
-                renders['breakable'] = block_group
+                brick_group.add(new_block)
+                renders['breakable'] = brick_group
             elif symbol in 'ABCDdefgmnop': #special blocks
                 new_block = powerBlock(y*32, x*32)
-                block_group.add(new_block)
-                renders['power'] = block_group
+                power_group.add(new_block)
+                renders['power'] = power_group
             elif symbol in 'FGH': #hidden blocks
                 new_block = hiddenBlock(y*32, x*32)
                 block_group.add(new_block)

@@ -26,7 +26,16 @@ level = file_loader.file_loading()
 # Load in block sprites
 renders = file_rendering.render(level)  # load level from Excel file
 block_list = renders['ground']
+power_list = renders['power']
 pipe_list = renders['pipe']
+brick_list = renders['breakable']
+coin_list = renders['coin']
+hidden_list = renders['hidden']
+
+block_list.add(power_list)
+block_list.add(brick_list)
+block_list.add(hidden_list)
+
 
 # Load in image sprite
 player = Character(140, 20)
