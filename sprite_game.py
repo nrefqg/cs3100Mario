@@ -78,16 +78,12 @@ while True:
         player.setX_momentum(player.getX_momentum() - 0.1)
     else:
         player.setX_momentum(0)
-    #"""
     # default gravity if mario is in air and not jumping
     if not player.getJumping():
+        player.setVertical(False)
         if player.getDeltaY() > 0:
-            player.setY_momentum(player.getY_momentum() + .3)
-        else:
-            player.setY_momentum(0)
-            player.setDeltaY(0)
+            player.setY_momentum(player.getY_momentum() + .2)
         if player.getDeltaY() + player.getY_momentum() > 0:
-            temp = player.getY_location()
             player.setY_location(player.getY_location() + player.getY_momentum())
             player.setDeltaY(player.getDeltaY() + player.getY_momentum())
         else:
@@ -96,10 +92,12 @@ while True:
     else:   # handles mario jump momentum
         if player.getDeltaY() >= 0 and player.getDeltaY() <= 48:
             player.setY_momentum(player.getY_momentum() + 1)
+            player.setVertical(True)
         elif player.getDeltaY() > 48 and player.getDeltaY() <= 96:
             player.setY_momentum(player.getY_momentum() + 0.5)
         elif player.getDeltaY() > 96 and player.getDeltaY() <= 140:
             player.setY_momentum(player.getY_momentum() - 1)
+            player.setVertical(False)
         elif player.getDeltaY() > 140:
             player.setY_momentum(player.getY_momentum() - 0.25)
 
@@ -179,7 +177,10 @@ while True:
 
     # checks for standing on a block and continues gravity if not
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
-    player.groundContact(playerGround)
+    #if len(playerGround) > 0:
+    #for block in playerGround:
+    #player.groundBlockContact(block)
+    player.touch(playerGround)
 
     animation += 1
     if animation >= 15:
