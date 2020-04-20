@@ -142,6 +142,11 @@ class Character(pygame.sprite.Sprite):
                         self.y_momentum = 0
                         self.deltaY = 0
                         self.rect.bottom = tile.rect.top + 6
+                    # Collect coins if landing on top of them
+                    if isinstance(tile, blocks.coin.coin):
+                        level.coins += 1
+                        level.score += 200
+                        tile.kill()
                 elif tile.rect.topright[1] < self.rect.topright[1]:
                     if self.rect.top <= tile.rect.bottom and self.vertical_move:
                         self.y_momentum = 0
@@ -198,20 +203,30 @@ class Character(pygame.sprite.Sprite):
                                 sound.play_sound("block_hit")
                                 level.add_score(20)
                             tile.disabled(tile.rect.x, tile.rect.y)
+                        elif isinstance(tile, blocks.coin.coin):
+                            level.coins += 1
+                            level.score += 200
+                            tile.kill()
                         
                 # side collisions
                 #if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
                 if self.collision[3] or self.collision[5]:
-                    #if self.rect.right >= tile.rect.left and self.move_right:
-                    if self.collision[5]:
-                        self.rect.right = self.rect.right - self.x_momentum
-                        self.x_momentum = 0
-                        self.move_right = False
-                    #elif self.rect.left <= tile.rect.right and self.move_left:
-                    elif self.collision[3]:
-                        self.rect.left = self.rect.left + self.x_momentum
-                        self.x_momentum = 0
-                        self.move_left = False
+                    # If tile is a coin don't restrict movement
+                    if not isinstance(tile, blocks.coin.coin):
+                        #if self.rect.right >= tile.rect.left and self.move_right:
+                        if self.collision[5]:
+                            self.rect.right = self.rect.right - self.x_momentum
+                            self.x_momentum = 0
+                            self.move_right = False
+                        #elif self.rect.left <= tile.rect.right and self.move_left:
+                        elif self.collision[3]:
+                            self.rect.left = self.rect.left + self.x_momentum
+                            self.x_momentum = 0
+                            self.move_left = False
+                    else:
+                        level.coins += 1
+                        level.score += 200
+                        tile.kill()
         elif self.deltaY == 0:
             self.deltaY = 1
 
