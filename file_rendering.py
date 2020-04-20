@@ -2,8 +2,13 @@ import pygame
 from blocks.blocks import Block
 from blocks.pipe import leftPipe
 from blocks.pipe import rightPipe
-from blocks.pipe import topPipe
+from blocks.pipe import topPipeLeft
+from blocks.pipe import topPipeRight
 from blocks.pipe import hiddenPipe
+from blocks.pipe import entranceLeft
+from blocks.pipe import entranceRight
+from blocks.pipe import exitLeft
+from blocks.pipe import exitRight
 from blocks.stone import stone
 from blocks.breakableBlock import breakableBlock
 from blocks.redBlock import ground
@@ -100,10 +105,26 @@ def render(level):
                     new_pipe = rightPipe(y*32, x*32)
                     pipe_group.add(new_pipe)
                 renders['pipe'] = pipe_group
-            elif symbol == 'Q' or symbol == 'R': #usable pipes
-                new_pipe = topPipe(y*32, x*32)
-                pipe_group.add(new_pipe)
-                renders['pipe'] = pipe_group
+            elif symbol == 'Q': #usable pipes
+                if level[x+1][y] == 'P':
+                    if level[x+1][y-1] != 'P':
+                        new_pipe = entranceLeft(y*32, x*32)
+                        pipe_group.add(new_pipe)
+                        renders['pipe'] = pipe_group
+                    else:
+                        new_pipe = entranceRight(y*32, x*32)
+                        pipe_group.add(new_pipe)
+                        renders['pipe'] = pipe_group
+            elif symbol == 'R':
+                if level[x+1][y] == 'P':
+                    if level[x+1][y-1] != 'P':
+                        new_pipe = exitLeft(y*32, x*32)
+                        pipe_group.add(new_pipe)
+                        renders['pipe'] = pipe_group
+                    else:
+                        new_pipe = exitRight(y*32, x*32)
+                        pipe_group.add(new_pipe)
+                        renders['pipe'] = pipe_group
             elif symbol == '|': #special pipes
                 new_pipe = hiddenPipe(y*32, x*32)
                 pipe_group.add(new_pipe)
@@ -127,9 +148,14 @@ def render(level):
             if symbol == ' ': #special cases where empty spaces need to change to look better
                 if x < len(level)-1 and y < len(level[x])-1:
                     if level[x+1][y] == 'P':
-                        new_pipe = topPipe(y*32, x*32)
-                        pipe_group.add(new_pipe)
-                        renders['pipe'] = pipe_group
+                        if level[x+1][y-1] != 'P':
+                            new_pipe = topPipeLeft(y*32, x*32)
+                            pipe_group.add(new_pipe)
+                            renders['pipe'] = pipe_group
+                        else:
+                            new_pipe = topPipeRight(y*32, x*32)
+                            pipe_group.add(new_pipe)
+                            renders['pipe'] = pipe_group
                     if level[x][y+1] == '~' and level[x-1][y+1] == ' ':
                         new_block = flag(y*32, x*32)
                         flag_group.add(new_block)

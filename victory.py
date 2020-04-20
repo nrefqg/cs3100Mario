@@ -33,6 +33,7 @@ def playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level):
         block_list.add(power_list)
     
     block_list.add(brick_list)
+    block_list.add(pipe_list)
     
     if(single_coin_group != None):
         block_list.add(single_coin_group)
@@ -58,7 +59,7 @@ def playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level):
     
     # Load in image sprite
     player = Character(140, 20)
-
+    player.powerUp(2)
     viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    return player, viewport, renders, block_list, pipe_list, enemy_list
+    return player, viewport, renders, block_list

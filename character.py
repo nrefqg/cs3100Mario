@@ -1,6 +1,8 @@
 import pygame
 import blocks
 from blocks.mushroom import mushroom
+import enemies
+
 
 class Character(pygame.sprite.Sprite):
     """
@@ -43,6 +45,9 @@ class Character(pygame.sprite.Sprite):
 
         #Determines the level of powerup the player has.  0 means the player is small, 1 is big player, 2 is the highest level. In classic mario 2 would be fireflower
         self.powerLevel = 0
+
+        #Amount of time the player is invulnerable
+        self.invincible = 0
 
     # Getter and setters for location variables
     def getX_location(self):
@@ -117,9 +122,9 @@ class Character(pygame.sprite.Sprite):
             self.deltaY = 1
 
     # attempt at new collision function
-    def touch(self, tile_list, block_list):
+    def touch(self, tile_list, block_list, powerup_list):
         if len(tile_list) > 0:
-            for tile in tile_list:
+            for tile in tile_list: 
                 self.collision[0] = tile.rect.collidepoint(self.rect.topleft)
                 self.collision[1] = tile.rect.collidepoint(self.rect.midtop)
                 self.collision[2] = tile.rect.collidepoint(self.rect.topright)
@@ -144,19 +149,28 @@ class Character(pygame.sprite.Sprite):
                         self.rect.top = tile.rect.bottom
                         if isinstance(tile, blocks.breakableBlock.breakableBlock) and self.powerLevel > 0:
                             tile.kill()
-                        if isinstance(tile, blocks.powerBlock.powerBlock):
+                        elif isinstance(tile, blocks.powerBlock.powerBlock):
                             print("power block hit")
+                            tile.disabled(tile.rect.x, tile.rect.y)
                             print(type(tile))
-                        if isinstance(tile, blocks.singleCoin.singleCoin):
+                            return "mushroom"
+                        elif isinstance(tile, blocks.singleCoin.singleCoin):
                             print("Single Coin block")
-                        if isinstance(tile, blocks.star.star):
+                            tile.disabled(tile.rect.x, tile.rect.y)
+                        elif isinstance(tile, blocks.star.star):
                             print("star block")
-                        if isinstance(tile, blocks.oneUp.oneUp):
+                            tile.disabled(tile.rect.x, tile.rect.y)
+                        elif isinstance(tile, blocks.oneUp.oneUp):
                             print("oneUp block")
-                        if isinstance(tile, blocks.multiCoin.multiCoin):
+                            tile.disabled(tile.rect.x, tile.rect.y)
+                        elif isinstance(tile, blocks.multiCoin.multiCoin):
                             print("multiCoin block")
-                        if isinstance(tile, blocks.hiddenBlock.hiddenBlock):
+                            if not tile.decrementCount():
+                                tile.disabled(tile.rect.x, tile.rect.y)
+                        elif isinstance(tile, blocks.hiddenBlock.hiddenBlock):
                             print("hidden block")
+                            tile.disabled(tile.rect.x, tile.rect.y)
+                        
                 # side collisions
                 #if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
                 if self.collision[3] or self.collision[5]:
@@ -173,26 +187,99 @@ class Character(pygame.sprite.Sprite):
         elif self.deltaY == 0:
             self.deltaY = 1
 
+
+    def touchPipe(self, tile_list):
+        if len(tile_list) > 0:
+            for tile in tile_list: 
+                self.collision[0] = tile.rect.collidepoint(self.rect.topleft)
+                self.collision[1] = tile.rect.collidepoint(self.rect.midtop)
+                self.collision[2] = tile.rect.collidepoint(self.rect.topright)
+                self.collision[3] = tile.rect.collidepoint(self.rect.midleft)
+                self.collision[4] = tile.rect.collidepoint(self.rect.center)
+                self.collision[5] = tile.rect.collidepoint(self.rect.midright)
+                self.collision[6] = tile.rect.collidepoint(self.rect.bottomleft)
+                self.collision[7] = tile.rect.collidepoint(self.rect.midbottom)
+                self.collision[8] = tile.rect.collidepoint(self.rect.bottomright)
+
+                # tile is below player
+                if (tile.rect.bottomright[1] > self.rect.bottomright[1]) or (tile.rect.bottomright[1] + 6 == self.rect.bottomright[1]):
+                    if self.rect.bottom > tile.rect.top and not self.vertical_move:
+                        # stop moving vertically
+                        self.y_momentum = 0
+                        self.deltaY = 0
+                        self.rect.bottom = tile.rect.top + 6 
+                        if isinstance(tile, blocks.pipe.entrance):
+                            for event in pygame.event.get():
+                                if event.type == pygame.KEYDOWN:
+                                    o = 0 # Move to hidden level
+
+                elif tile.rect.topright[1] < self.rect.topright[1]:
+                    if self.rect.top <= tile.rect.bottom and self.vertical_move:
+                        self.y_momentum = 0
+                        self.deltaY = 141
+                        self.rect.top = tile.rect.bottom
+                        if isinstance(tile, blocks.breakableBlock.breakableBlock):
+                            tile.kill()
+                        if isinstance(tile, blocks.powerBlock.powerBlock):
+                            print("power block hit")
+                # side collisions
+                #if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
+                if self.collision[3] or self.collision[5]:
+                    #if self.rect.right >= tile.rect.left and self.move_right:
+                    if self.collision[5]:
+                        self.rect.right = self.rect.right - self.x_momentum
+                        self.x_momentum = 0
+                        self.move_right = False
+                    #elif self.rect.left <= tile.rect.right and self.move_left:
+                    elif self.collision[3]:
+                        self.rect.left = self.rect.left + self.x_momentum
+                        self.x_momentum = 0
+                        self.move_left = False
+        elif self.deltaY == 0:
+            self.deltaY = 1
+
+    def enemyHit(self, enemy_list):
+        if len(enemy_list) > 0:
+            for enemy in enemy_list:
+                self.collision[0] = enemy.rect.collidepoint(self.rect.topleft)
+                self.collision[1] = enemy.rect.collidepoint(self.rect.midtop)
+                self.collision[2] = enemy.rect.collidepoint(self.rect.topright)
+                self.collision[3] = enemy.rect.collidepoint(self.rect.midleft)
+                self.collision[4] = enemy.rect.collidepoint(self.rect.center)
+                self.collision[5] = enemy.rect.collidepoint(self.rect.midright)
+                self.collision[6] = enemy.rect.collidepoint(self.rect.bottomleft)
+                self.collision[7] = enemy.rect.collidepoint(self.rect.midbottom)
+                self.collision[8] = enemy.rect.collidepoint(self.rect.bottomright)
+
+                if self.collision[6] or self.collision[7] or self.collision[8]:
+                    self.setJumping(True)
+                    enemy.kill()
+
+                else:
+                    return True
+                    
+
     #This code will drive upgrading the player when a powerup is collected, or will shrink the player if they are damaged.
     def powerUp(self, power):
-        if power == 0:
-            self.powerLevel = 0
-            temp = self.rect.bottomleft
-            self.image = pygame.image.load('sprites/mariosmall.png')
-            self.rect = self.image.get_rect()
-            self.rect.bottomleft = temp
-        elif power == 1:
-            temp = self.rect.bottomleft
+        if power == 1:
             self.powerLevel = 1
-            self.image = pygame.image.load('sprites/mariobig.png')
+            temp = self.rect.bottomleft
+            self.updateImage('sprites/mariosmall.png')
             self.rect = self.image.get_rect()
             self.rect.bottomleft = temp
         elif power == 2:
-            self.powerLevel = 2
             temp = self.rect.bottomleft
-            self.image = pygame.image.load('sprites/mariopower.png')
+            self.powerLevel = 2
+            self.updateImage('sprites/mariobig.png')
             self.rect = self.image.get_rect()
             self.rect.bottomleft = temp
+        elif power == 3:
+            self.powerLevel = 3
+            temp = self.rect.bottomleft
+            self.updateImage('sprites/mariopower.png')
+            self.rect = self.image.get_rect()
+            self.rect.bottomleft = temp
+
     # image update functions
     def updateImage(self, file):
         self.image = pygame.image.load(file)

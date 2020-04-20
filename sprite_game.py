@@ -58,6 +58,7 @@ if(power_list != None):
     block_list.add(power_list)
 
 block_list.add(brick_list)
+block_list.add(pipe_list)
 
 if(single_coin_group != None):
     block_list.add(single_coin_group)
@@ -78,11 +79,11 @@ if(hidden_list != None):
     block_list.add(hidden_list)
 
 flag_list = renders['flag']
-pipe_list = renders['pipe']
 flagLoc = []
 
 # Load in image sprite
 player = Character(140, 20)
+
 
 # Initialize viewport
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -136,14 +137,14 @@ while True:
             player.setVertical(True)
         elif player.getDeltaY() > 48 and player.getDeltaY() <= 96:
             player.setY_momentum(player.getY_momentum() + 0.5)
-        elif player.getDeltaY() > 96 and player.getDeltaY() <= 140:
+        elif player.getDeltaY() > 96 and player.getDeltaY() <= 160:
             player.setY_momentum(player.getY_momentum() - 1)
             player.setVertical(False)
-        elif player.getDeltaY() > 140:
-            player.setY_momentum(player.getY_momentum() - 0.25)
+        elif player.getDeltaY() > 160:
+             player.setY_momentum(player.getY_momentum() - 0.25)
 
         # handles positioning
-        if player.getDeltaY() < 140:
+        if player.getDeltaY() < 160:
             player.setY_location(player.getY_location() - player.getY_momentum())
             player.setDeltaY(player.getDeltaY() + player.getY_momentum())
         elif player.getDeltaY() >= 61 and player.getDeltaY() < 68:
@@ -155,16 +156,16 @@ while True:
 
     # Movement for the player is modified when specific keypresses are made
     if player.getMoveRight() == True:
-        if(player.powerLevel == 0):
+        if(player.powerLevel == 1):
             player.updateImage(smallMario[0])
-        elif(player.powerLevel == 1):
+        elif(player.powerLevel == 2):
             player.updateImage(bigMario[0])
         player.setX_location(player.getX_location() + player.getX_momentum())
     
     if player.getMoveLeft() == True and player.getX_location() > viewport.offsetX:
-        if(player.powerLevel == 0):
+        if(player.powerLevel == 1):
             player.updateImage(smallMario[1])
-        elif(player.powerLevel == 1):
+        elif(player.powerLevel == 2):
             player.updateImage(bigMario[1])
         player.setX_location(player.getX_location() - player.getX_momentum())
 
@@ -197,8 +198,8 @@ while True:
     viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list, powerup_list)
     # Update level information
     viewport.render_ui(level_info)
-
     # detect collisions between enemies
+
     for first, second in combinations(enemy_list, 2):
         if first.rect.colliderect(second.rect):
             first.flip()
@@ -209,6 +210,32 @@ while True:
     for enemy in enemy_list:
         enemy.move()
         enemy.gravity(SCREEN_HEIGHT)
+        if enemy.rect.y > lowestTile-5:
+            enemy.kill()
+
+        enemyTile = pygame.sprite.spritecollide(enemy, block_list, False)
+
+        if len(enemyTile) > 0:
+            for tile in enemyTile:
+                enemy.collision[0] = tile.rect.collidepoint(enemy.rect.topleft)
+                enemy.collision[1] = tile.rect.collidepoint(enemy.rect.midtop)
+                enemy.collision[2] = tile.rect.collidepoint(enemy.rect.topright)
+                enemy.collision[3] = tile.rect.collidepoint(enemy.rect.midleft)
+                enemy.collision[4] = tile.rect.collidepoint(enemy.rect.center)
+                enemy.collision[5] = tile.rect.collidepoint(enemy.rect.midright)
+                enemy.collision[6] = tile.rect.collidepoint(enemy.rect.bottomleft)
+                enemy.collision[7] = tile.rect.collidepoint(enemy.rect.midbottom)
+                enemy.collision[8] = tile.rect.collidepoint(enemy.rect.bottomright)
+
+                if enemy.speed > 0:
+                    if enemy.collision[5]:
+                        enemy.speed *= -1
+                        enemy.move()
+                
+                if enemy.speed < 0:
+                    if enemy.collision[3]:
+                        enemy.speed *= -1
+                        enemy.move()
 
     # detect collisions between enemies and blocks
     enemyGround = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
@@ -217,20 +244,21 @@ while True:
             primary_block = blocks[0]
             enemy.gravity(primary_block.rect.y)
 
-    # checks for standing on a block and continues gravity if not
+    # checks for standing on a block and continues gravity if not 
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
-    #if len(playerGround) > 0:
-    #for block in playerGround:
-    #player.groundBlockContact(block)
-    player.touch(playerGround, block_list)
-    
-    '''if(temp != None and temp[0] == True):
-        power_up = pygame.sprite.Group()
-        new_block = mushroom(temp[1] * 32, temp[2] * 32)
-        power_up.add(new_block)
-        powerup_list = power_up.add(new_block)'''
+    enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
+
+    player.touch(playerGround, block_list, powerup_list, level_info)
+
+    if player.invincible <= 0:
+        if player.enemyHit(enemyHit) and player.powerLevel == 1:
+            player.powerLevel = 0
+        elif player.enemyHit(enemyHit) and player.powerLevel > 1:
+            player.powerUp(1)
+            player.invincible = 90
 
     animation += 1
+    player.invincible -= 1
     if animation >= 15:
         block_list.update()
         pygame.display.flip()
@@ -241,14 +269,14 @@ while True:
     if(flagTouch in renders['flagpole']):
         sound_obj.stop_bg()
         sound_obj.play_sound("victory")
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        player, viewport, renders, block_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
         sound_obj.start_bg()
 
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
         sound_obj.stop_bg() # Stop background music
         sound_obj.play_sound("death")
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+        player.powerLevel = 0
         sound_obj.start_bg()
 
     level_info.tick()
@@ -261,6 +289,9 @@ while True:
         pygame.display.quit()
         pygame.quit()  # Stop pygame
         sys.exit()  # Stop script
+
+    if player.powerLevel == 0:
+        player, viewport, renders, block_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
 
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
