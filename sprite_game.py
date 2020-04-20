@@ -35,7 +35,7 @@ animation = 0
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
 level = file_loader.file_loading()
-level_info = Level([], 140) # Load in level with no sprites and 400 time
+level_info = Level([], 14000) # Load in level with no sprites and 400 time
 lowestTile = 0
 
 # Load in block sprites

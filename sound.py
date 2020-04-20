@@ -16,7 +16,7 @@ class SoundClass:
         self.jump = pygame.mixer.Sound('sounds/jump.ogg')
         self.jump.set_volume(0.25)
         self.death = pygame.mixer.Sound('sounds/death.ogg')
-        self.victory = pygame.mixer.Sound('sounds/victory.ogg')
+        self.victory = pygame.mixer.Sound('sounds/victory.wav')
         self.block_hit = pygame.mixer.Sound('sounds/block_hit.wav')
         self.block_hit.set_volume(1.5)
         self.coin = pygame.mixer.Sound('sounds/coin.wav')
