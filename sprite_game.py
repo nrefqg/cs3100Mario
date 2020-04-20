@@ -13,7 +13,7 @@ from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
 from viewport import Viewport
 
-SKY_COLOR = (7, 155, 176)
+SKY_COLOR = (146, 244, 255)
 
 level = []
 
@@ -49,6 +49,8 @@ for e in [e0, e1, e3]:
 
 # Initialize viewport
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
+# Load in main menu screen
+viewport.game_menu()
 
 # A list of all rects in the level
 allRects = file_rendering.render(level)

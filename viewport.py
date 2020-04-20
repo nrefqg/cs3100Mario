@@ -1,4 +1,5 @@
 import pygame
+import sys
 FONT_COLOR = (255, 255, 255)
 
 class Viewport:
@@ -20,6 +21,32 @@ class Viewport:
         # Intialize fonts
         pygame.font.init()
         self.myfont = pygame.font.SysFont('freesansbold.ttf', 24)
+
+    def game_menu(self):
+        """
+        Loads a main menu loop that will only end when the player decides to
+        start the game or quit
+        :return: None
+        """
+        menu_image = pygame.image.load('start_menu.png')
+        self.screen.blit(menu_image, (0, 0))
+        pygame.display.update()
+        while True:
+            # Respond to player input
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.display.quit()
+                    pygame.quit()  # Stop pygame
+                    sys.exit()  # Stop script
+
+                # Respond to player keys
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        return
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.display.quit()
+                        pygame.quit()  # Stop pygame
+                        sys.exit()  # Stop script
 
     def reset(self, sky_color):
         """
@@ -61,7 +88,7 @@ class Viewport:
         :param level: This is the level object
         :return: None
         '''
-        mario_label = self.myfont.render('MARIO', True, FONT_COLOR)
+        mario_label = self.myfont.render('SCORE', True, FONT_COLOR)
         coin_label = self.myfont.render('COINS', True, FONT_COLOR)
         world_label = self.myfont.render('WORLD', True, FONT_COLOR)
         time_label = self.myfont.render('TIME', True, FONT_COLOR)
