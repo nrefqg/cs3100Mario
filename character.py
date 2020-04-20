@@ -159,7 +159,8 @@ class Character(pygame.sprite.Sprite):
                             tile.disabled(tile.rect.x, tile.rect.y)
                         if isinstance(tile, blocks.multiCoin.multiCoin):
                             print("multiCoin block")
-                            tile.disabled(tile.rect.x, tile.rect.y)
+                            if not tile.decrementCount():
+                                tile.disabled(tile.rect.x, tile.rect.y)
                         if isinstance(tile, blocks.hiddenBlock.hiddenBlock):
                             print("hidden block")
                             tile.disabled(tile.rect.x, tile.rect.y)
