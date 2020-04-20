@@ -1,7 +1,6 @@
 import pygame
 import blocks
 
-
 class Character(pygame.sprite.Sprite):
     """
     Class that allows sprite function of the player
