@@ -21,6 +21,14 @@ class topPipe(Block):
 		self.xHitRight = x+32
 		self.xHitBottom = y+8
 
+class entrance(Block):
+	def __init__(self, x, y):
+		super().__init__("topPipe.png", x, y)
+
+class exit(Block):
+	def __init__(self, x, y):
+		super().__init__("topPipe.png", x, y)
+
 class hiddenPipe(Block):
 	def __init__(self, x, y):
 		super().__init__("hiddenPipe.png", x, y)

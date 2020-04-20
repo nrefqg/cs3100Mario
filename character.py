@@ -181,7 +181,12 @@ class Character(pygame.sprite.Sprite):
                         # stop moving vertically
                         self.y_momentum = 0
                         self.deltaY = 0
-                        self.rect.bottom = tile.rect.top + 6
+                        self.rect.bottom = tile.rect.top + 6 
+                        if isinstance(tile, blocks.pipe.entrance):
+                            for event in pygame.event.get():
+                                if event.type == pygame.KEYDOWN:
+                                    o = 0 # Move to hidden level
+
                 elif tile.rect.topright[1] < self.rect.topright[1]:
                     if self.rect.top <= tile.rect.bottom and self.vertical_move:
                         self.y_momentum = 0

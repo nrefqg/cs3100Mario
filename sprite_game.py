@@ -52,7 +52,6 @@ block_list.add(hidden_list)
 block_list.add(pipe_list)
 
 flag_list = renders['flag']
-pipe_list = renders['pipe']
 flagLoc = []
 
 # Load in image sprite
@@ -194,14 +193,10 @@ while True:
             enemy.gravity(primary_block.rect.y)
 
     # checks for standing on a block and continues gravity if not 
-    #pipeCollide = pygame.sprite.spritecollide(player, pipe_list, False)
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
     enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
-    #if len(playerGround) > 0:
-    #for block in playerGround:
-    #player.groundBlockContact(block)
+    
     player.touch(playerGround)
-    #player.touchPipe(pipeCollide)
     if player.enemyHit(enemyHit):
         player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
     
