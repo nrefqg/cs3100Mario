@@ -35,7 +35,7 @@ animation = 0
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
 level = file_loader.file_loading()
-level_info = Level([], 400) # Load in level with no sprites and 400 time
+level_info = Level([], 140) # Load in level with no sprites and 400 time
 lowestTile = 0
 
 # Load in block sprites
@@ -223,5 +223,15 @@ while True:
         sound_obj.start_bg()
 
     level_info.tick()
+
+    # Player loses if timer runs out
+    if level_info.time == 0:
+        sound_obj.stop_bg()
+        sound_obj.play_sound("death")
+        viewport.render_time_out()
+        pygame.display.quit()
+        pygame.quit()  # Stop pygame
+        sys.exit()  # Stop script
+
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
