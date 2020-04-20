@@ -5,3 +5,4 @@ __pycache__/
 # Ignore other auto-generated IDE/platform specific files
 .DS_Store
 .vscode/
+levels/~$mario2-1.xlsx

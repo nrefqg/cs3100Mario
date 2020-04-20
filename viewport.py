@@ -108,7 +108,7 @@ class Viewport:
         self.screen.blit(world_name, (240, 40))
         self.screen.blit(time, (385, 40))
 
-    def render_sprites(self, player, enemies, blocks, pipes, flags, projectiles):
+    def render_sprites(self, player, enemies, blocks, pipes, flags, powerups, projectiles):
         """
         Takes in sprites and locations of the player, enemy, blocks, and pipe
         blocks and renders to the viewport if the sprites are in the viewport
@@ -143,6 +143,10 @@ class Viewport:
                       #  block_list.draw(screen)
                         # pygame.display.flip()
                          #animation = 0
+        if powerups:
+            for powerup in powerups:
+                if self.in_frame(block.x, block.rect.y):
+                    self.screen.blit(block.image, [block.rect.x - self.offsetX, block.rect.y])
 
         if flags:
             for flagpole in flags:

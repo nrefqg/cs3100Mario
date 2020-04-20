@@ -1,6 +1,8 @@
 import pygame
 import blocks
+from blocks.mushroom import mushroom
 import enemies
+
 
 class Character(pygame.sprite.Sprite):
     """
@@ -43,6 +45,9 @@ class Character(pygame.sprite.Sprite):
 
         #Determines the level of powerup the player has.  0 means the player is small, 1 is big player, 2 is the highest level. In classic mario 2 would be fireflower
         self.powerLevel = 0
+
+        #Amount of time the player is invulnerable
+        self.invincible = 0
 
     # Getter and setters for location variables
     def getX_location(self):
@@ -117,7 +122,7 @@ class Character(pygame.sprite.Sprite):
             self.deltaY = 1
 
     # attempt at new collision function
-    def touch(self, tile_list):
+    def touch(self, tile_list, block_list, powerup_list):
         if len(tile_list) > 0:
             for tile in tile_list: 
                 self.collision[0] = tile.rect.collidepoint(self.rect.topleft)
@@ -142,10 +147,30 @@ class Character(pygame.sprite.Sprite):
                         self.y_momentum = 0
                         self.deltaY = 141
                         self.rect.top = tile.rect.bottom
-                        if isinstance(tile, blocks.breakableBlock.breakableBlock):
+                        if isinstance(tile, blocks.breakableBlock.breakableBlock) and self.powerLevel > 0:
                             tile.kill()
-                        if isinstance(tile, blocks.powerBlock.powerBlock):
+                        elif isinstance(tile, blocks.powerBlock.powerBlock):
                             print("power block hit")
+                            tile.disabled(tile.rect.x, tile.rect.y)
+                            print(type(tile))
+                            return "mushroom"
+                        elif isinstance(tile, blocks.singleCoin.singleCoin):
+                            print("Single Coin block")
+                            tile.disabled(tile.rect.x, tile.rect.y)
+                        elif isinstance(tile, blocks.star.star):
+                            print("star block")
+                            tile.disabled(tile.rect.x, tile.rect.y)
+                        elif isinstance(tile, blocks.oneUp.oneUp):
+                            print("oneUp block")
+                            tile.disabled(tile.rect.x, tile.rect.y)
+                        elif isinstance(tile, blocks.multiCoin.multiCoin):
+                            print("multiCoin block")
+                            if not tile.decrementCount():
+                                tile.disabled(tile.rect.x, tile.rect.y)
+                        elif isinstance(tile, blocks.hiddenBlock.hiddenBlock):
+                            print("hidden block")
+                            tile.disabled(tile.rect.x, tile.rect.y)
+                        
                 # side collisions
                 #if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
                 if self.collision[3] or self.collision[5]:
@@ -161,6 +186,7 @@ class Character(pygame.sprite.Sprite):
                         self.move_left = False
         elif self.deltaY == 0:
             self.deltaY = 1
+
 
     def touchPipe(self, tile_list):
         if len(tile_list) > 0:
@@ -235,21 +261,25 @@ class Character(pygame.sprite.Sprite):
 
     #This code will drive upgrading the player when a powerup is collected, or will shrink the player if they are damaged.
     def powerUp(self, power):
-        if power == 0:
+        if power == 1:
+            self.powerLevel = 1
             temp = self.rect.bottomleft
-            self.image = pygame.image.load('mariosmall.png')
-            self.rect = self.image.get_rect()
-            self.rect.bottomleft = temp
-        elif power == 1:
-            temp = self.rect.bottomleft
-            self.image = pygame.image.load('mariobig.png')
+            self.updateImage('sprites/mariosmall.png')
             self.rect = self.image.get_rect()
             self.rect.bottomleft = temp
         elif power == 2:
             temp = self.rect.bottomleft
-            self.image = pygame.image.load('mariopower.png')
+            self.powerLevel = 2
+            self.updateImage('sprites/mariobig.png')
             self.rect = self.image.get_rect()
             self.rect.bottomleft = temp
+        elif power == 3:
+            self.powerLevel = 3
+            temp = self.rect.bottomleft
+            self.updateImage('sprites/mariopower.png')
+            self.rect = self.image.get_rect()
+            self.rect.bottomleft = temp
+
     # image update functions
     def updateImage(self, file):
         self.image = pygame.image.load(file)

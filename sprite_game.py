@@ -5,6 +5,7 @@ import time
 import file_loader
 from death import playerDeath
 from blocks.flagpole import flagpole
+from blocks.mushroom import mushroom
 from character import Character
 from itertools import combinations
 from level import Level
@@ -18,7 +19,7 @@ SKY_COLOR = (146, 244, 255)
 
 #VARIABLES HOLDING THE SPRITE LOCATIONS FOR OUR CHARACTER
 smallMario = ['sprites/mariosmall.png', 'sprites/marioflipsmall.png']
-bigMario = ['character/mariobig.png', 'character/marioflipbig.png']
+bigMario = ['sprites/mariobig.png', 'sprites/marioflipbig.png']
 
 
 level = []
@@ -44,11 +45,31 @@ pipe_list = renders['pipe']
 brick_list = renders['breakable']
 coin_list = renders['coin']
 hidden_list = renders['hidden']
+single_coin_group = renders['singleCoin']
+star_group = renders['star']
+oneUp_group = renders['oneUp']
+multi_group = renders['multiCoin']
 enemy_list = renders['enemies']
-block_list.add(power_list)
+powerup_list = pygame.sprite.Group()
+
+if(power_list != None):
+    block_list.add(power_list)
+
 block_list.add(brick_list)
 block_list.add(pipe_list)
 projectile_list = pygame.sprite.Group()
+
+if(single_coin_group != None):
+    block_list.add(single_coin_group)
+
+if(star_group != None):
+    block_list.add(star_group)
+
+if(oneUp_group != None):
+    block_list.add(oneUp_group)
+
+if(multi_group != None):
+    block_list.add(multi_group)
 
 if(hidden_list != None):
     block_list.add(hidden_list)
@@ -59,13 +80,15 @@ flagLoc = []
 # Load in image sprite
 player = Character(140, 20)
 
+player.powerUp(2)
+
+
 # Initialize viewport
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 # Load in main menu screen
 viewport.game_menu()
 # Initialize Sound
 sound_obj = SoundClass()
-sound_obj.start_bg()
 
 # A list of all rects in the level
 allRects = file_rendering.render(level)
@@ -79,6 +102,8 @@ for block in block_list:
 for block in allRects['flagpole']:
     if(isinstance(block, flagpole) == True):
         flagLoc.append([block.xHitRight])
+
+sound_obj.start_bg()
 
 #This while loops contains the running game
 while True:
@@ -130,16 +155,16 @@ while True:
 
     # Movement for the player is modified when specific keypresses are made
     if player.getMoveRight() == True:
-        if(player.powerLevel == 0):
+        if(player.powerLevel == 1):
             player.updateImage(smallMario[0])
-        elif(player.powerLevel == 1):
+        elif(player.powerLevel == 2):
             player.updateImage(bigMario[0])
         player.setX_location(player.getX_location() + player.getX_momentum())
     
     if player.getMoveLeft() == True and player.getX_location() > viewport.offsetX:
-        if(player.powerLevel == 0):
+        if(player.powerLevel == 1):
             player.updateImage(smallMario[1])
-        elif(player.powerLevel == 1):
+        elif(player.powerLevel == 2):
             player.updateImage(bigMario[1])
         player.setX_location(player.getX_location() - player.getX_momentum())
 
@@ -169,7 +194,7 @@ while True:
                 player.setJumping(False)
 
     # Update sprites on screen
-    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list, projectile_list)
+    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list, powerup_list, projectile_list)
     # Update level information
     viewport.render_ui(level_info)
 
@@ -229,15 +254,24 @@ while True:
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
     enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
     projectile_hit = pygame.sprite.spritecollide(player, projectile_list, False)
-    
-    player.touch(playerGround)
-    if player.enemyHit(enemyHit):
-        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
 
-    if len(projectile_hit) > 0:
-        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+    player.touch(playerGround, block_list, powerup_list)
+
+    if player.invincible <= 0:
+        if player.enemyHit(enemyHit) and player.powerLevel == 1:
+            player.powerLevel = 0
+        elif player.enemyHit(enemyHit) and player.powerLevel > 1:
+            player.powerUp(player.powerLevel-1)
+            player.invincible = 90
+
+        if len(projectile_hit) > 0 and player.powerLevel == 1:
+            player.powerLevel = 0
+        elif len(projectile_hit) > 0 and player.powerLevel > 1:
+            player.powerUp(player.powerLevel-1)
+            player.invincible = 90
 
     animation += 1
+    player.invincible -= 1
     if animation >= 15:
         block_list.update()
         pygame.display.flip()
@@ -248,26 +282,28 @@ while True:
     if(flagTouch in renders['flagpole']):
         sound_obj.stop_bg()
         sound_obj.play_sound("victory")
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        player, viewport, renders, block_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
         sound_obj.start_bg()
 
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
-        sound_obj.stop_bg() # Stop background music
-        sound_obj.play_sound("death")
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
-        sound_obj.start_bg()
+        player.powerLevel = 0
 
     level_info.tick()
 
     # Player loses if timer runs out
     if level_info.time == 0:
-        sound_obj.stop_bg()
-        sound_obj.play_sound("death")
+        player.powerLevel = 0
         viewport.render_time_out()
         pygame.display.quit()
         pygame.quit()  # Stop pygame
         sys.exit()  # Stop script
+
+    if player.powerLevel == 0:
+        sound_obj.stop_bg()
+        sound_obj.play_sound("death")
+        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+        sound_obj.start_bg()
 
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
