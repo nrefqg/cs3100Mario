@@ -31,6 +31,7 @@ class Enemy(pygame.sprite.Sprite):
         self.yspeed = 0
         self.is_jumping = False
         self.can_jump = False
+        self.score = 0
 
         self.image = pygame.image.load(os.path.join('enemies', 'sprites', image))
         self.rect = self.image.get_rect()
@@ -38,13 +39,17 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y = y
 
         self.collision = [False] * 9
-    def destroy(self, sprite_group):
+
+    def destroy(self, sprite_group, level):
         """
         Destroys the enemy sprite from the given sprite group
         :param sprite_group: The Group the Enemy belongs to
+        :param level: The level to modify the score of
         :return: None
         """
+        level.add_score(self.get_score())
         sprite_group.remove(self)
+        self.kill()
 
     def move(self):
         """
@@ -77,3 +82,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.yspeed == 0 and self.can_jump:  # can only jump if not falling
             self.is_jumping = True
             self.yspeed -= speed  # causes sprite to jump (in -y direction)
+
+    def get_score(self):
+        """Returns the score awarded from killing this enemy"""
+        return self.score

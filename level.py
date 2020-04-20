@@ -56,3 +56,11 @@ class Level:
         self.timer = self.time
         self.score = 0
         self.coins = 0
+
+    def add_score(self, amount):
+        """Add a certain amount to the score"""
+        self.score += amount
+
+    def add_coins(self, amount):
+        """Add a certain number of coins to the coins"""
+        self.coins += amount

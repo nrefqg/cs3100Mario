@@ -25,7 +25,7 @@ bigMario = ['sprites/mariobig.png', 'sprites/marioflipbig.png']
 level = []
 
 pygame.init()
-pygame.display.set_caption('Super Mario')  # Sets the window title
+pygame.display.set_caption('Osmosis Jones')  # Sets the window title
 clock = pygame.time.Clock()  # Pygame clock that is used to keep game updating at 60 fps
 
 SCREEN_WIDTH = 512
@@ -256,12 +256,12 @@ while True:
     enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
     projectile_hit = pygame.sprite.spritecollide(player, projectile_list, False)
 
-    player.touch(playerGround, block_list, powerup_list, enemy_list, level_info)
+    player.touch(playerGround, block_list, powerup_list, enemy_list, level_info, sound_obj)
 
     if player.invincible <= 0:
-        if player.enemyHit(enemyHit) and player.powerLevel == 1:
+        if player.enemyHit(enemyHit, sound_obj, level_info) and player.powerLevel == 1:
             player.powerLevel = 0
-        elif player.enemyHit(enemyHit) and player.powerLevel > 1:
+        elif player.enemyHit(enemyHit, sound_obj, level_info) and player.powerLevel > 1:
             player.powerUp(1)
             player.invincible = 90
 
