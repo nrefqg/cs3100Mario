@@ -46,7 +46,6 @@ brick_list = renders['breakable']
 coin_list = renders['coin']
 hidden_list = renders['hidden']
 enemy_list = renders['enemies']
-
 block_list.add(power_list)
 block_list.add(brick_list)
 

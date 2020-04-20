@@ -87,15 +87,15 @@ def render(level):
                 flag_group.add(new_block)
                 renders['flagpole'] = flag_group
             elif symbol == '0' or symbol == '5':
-                new_block = Enemy0(x*32, y*32, 0)
+                new_block = Enemy0(y*32, x*32,0)
                 enemy_group.add(new_block)
                 renders['enemies'] = enemy_group
             elif symbol == '1' or symbol == '6':
-                new_block = Enemy1(x*32, y*32, 0)
+                new_block = Enemy1(y*32, x*32, 0)
                 enemy_group.add(new_block)
                 renders['enemies'] = enemy_group
             elif symbol == '3' or symbol == '8':
-                new_block = Enemy3(x*32, y*32, 0)
+                new_block = Enemy3(y*32, x*32, 0)
                 enemy_group.add(new_block)
                 renders['enemies'] = enemy_group
             if symbol == ' ': #special cases where empty spaces need to change to look better
