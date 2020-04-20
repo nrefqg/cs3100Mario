@@ -149,7 +149,6 @@ class Character(pygame.sprite.Sprite):
                         self.rect.top = tile.rect.bottom
 
                         affected_enemies = pygame.sprite.spritecollide(tile, enemy_list, False)
-                        print(affected_enemies)
                         for enemy in affected_enemies:  # kill enemies standing on top of a hit block
                             enemy.destroy(enemy_list)
 

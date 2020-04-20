@@ -1,7 +1,7 @@
 import pygame
 import sys
 import time
-FONT_COLOR = (255, 255, 255)
+FONT_COLOR = (0, 0, 0)
 
 class Viewport:
     """
@@ -94,10 +94,12 @@ class Viewport:
         coin_label = self.myfont.render('COINS', True, FONT_COLOR)
         world_label = self.myfont.render('WORLD', True, FONT_COLOR)
         time_label = self.myfont.render('TIME', True, FONT_COLOR)
+        lives_label = self.myfont.render('LIVES', True, FONT_COLOR)
         score = self.myfont.render(str(level.score), True, FONT_COLOR)
         coin = self.myfont.render(str(level.coins), True, FONT_COLOR)
         world_name = self.myfont.render('CS3100', True, FONT_COLOR)
         time = self.myfont.render(str(level.time), True, FONT_COLOR)
+        lives = self.myfont.render(str(level.lives), True, FONT_COLOR)
 
         self.screen.blit(mario_label, (80, 20))
         self.screen.blit(coin_label, (160, 20))

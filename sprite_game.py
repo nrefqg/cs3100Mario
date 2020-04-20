@@ -25,7 +25,7 @@ bigMario = ['sprites/mariobig.png', 'sprites/marioflipbig.png']
 level = []
 
 pygame.init()
-pygame.display.set_caption('Super Mario')  # Sets the window title
+pygame.display.set_caption('Osmosis Jones')  # Sets the window title
 clock = pygame.time.Clock()  # Pygame clock that is used to keep game updating at 60 fps
 
 SCREEN_WIDTH = 512
