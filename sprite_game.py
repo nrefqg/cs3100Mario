@@ -59,9 +59,6 @@ flagLoc = []
 # Load in image sprite
 player = Character(140, 20)
 
-# Load in enemy list
-enemy_list = pygame.sprite.Group()
-
 # Initialize viewport
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 # Load in main menu screen
@@ -111,14 +108,14 @@ while True:
             player.setVertical(True)
         elif player.getDeltaY() > 48 and player.getDeltaY() <= 96:
             player.setY_momentum(player.getY_momentum() + 0.5)
-        elif player.getDeltaY() > 96 and player.getDeltaY() <= 140:
+        elif player.getDeltaY() > 96 and player.getDeltaY() <= 160:
             player.setY_momentum(player.getY_momentum() - 1)
             player.setVertical(False)
-        elif player.getDeltaY() > 140:
+        elif player.getDeltaY() > 160:
              player.setY_momentum(player.getY_momentum() - 0.25)
 
         # handles positioning
-        if player.getDeltaY() < 140:
+        if player.getDeltaY() < 160:
             player.setY_location(player.getY_location() - player.getY_momentum())
             player.setDeltaY(player.getDeltaY() + player.getY_momentum())
         elif player.getDeltaY() >= 61 and player.getDeltaY() < 68:
@@ -183,6 +180,8 @@ while True:
     for enemy in enemy_list:
         enemy.move()
         enemy.gravity(SCREEN_HEIGHT)
+        if enemy.rect.y > lowestTile-5:
+            enemy.kill()
 
     # detect collisions between enemies and blocks
     enemyGround = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
@@ -197,7 +196,7 @@ while True:
     
     player.touch(playerGround)
     if player.enemyHit(enemyHit):
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
     
     animation += 1
     if animation >= 15:
@@ -208,11 +207,11 @@ while True:
     flagTouch = pygame.sprite.spritecollide(player, renders['flagpole'], False)
 
     if(flagTouch in renders['flagpole']):
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        player, viewport, renders, block_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
 
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
 
     level_info.tick()
     pygame.display.update()
