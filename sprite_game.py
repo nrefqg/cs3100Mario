@@ -254,7 +254,7 @@ while True:
 
     enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
     
-    player.touch(playerGround)
+    player.touch(playerGround, block_list)
     if player.enemyHit(enemyHit):
         player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
 

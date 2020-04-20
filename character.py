@@ -1,7 +1,7 @@
 import pygame
 import blocks
 from blocks.mushroom import mushroom
-import enemy
+import enemies
 
 
 class Character(pygame.sprite.Sprite):
