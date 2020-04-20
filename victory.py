@@ -62,4 +62,4 @@ def playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level):
     player.powerUp(2)
     viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    return player, viewport, renders, block_list
+    return player, viewport, renders, block_list, enemy_list
