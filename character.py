@@ -145,6 +145,7 @@ class Character(pygame.sprite.Sprite):
                     # Collect coins if landing on top of them
                     if isinstance(tile, blocks.coin.coin):
                         level.coins += 1
+                        level.score += 200
                         tile.kill()
                 elif tile.rect.topright[1] < self.rect.topright[1]:
                     if self.rect.top <= tile.rect.bottom and self.vertical_move:
@@ -192,6 +193,7 @@ class Character(pygame.sprite.Sprite):
                             tile.disabled(tile.rect.x, tile.rect.y)
                         elif isinstance(tile, blocks.coin.coin):
                             level.coins += 1
+                            level.score += 200
                             tile.kill()
                         
                 # side collisions
@@ -211,6 +213,7 @@ class Character(pygame.sprite.Sprite):
                             self.move_left = False
                     else:
                         level.coins += 1
+                        level.score += 200
                         tile.kill()
         elif self.deltaY == 0:
             self.deltaY = 1

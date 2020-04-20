@@ -21,6 +21,7 @@ class Level:
         self.coins = 0
         self.checkpoint = None
         self.lives = 3
+        self.lives_added = 0
 
     def tick(self):
         """
@@ -31,6 +32,9 @@ class Level:
             return False
         self.timer -= 1
         self.time = self.timer // 60
+        if self.coins // 100 > 0:
+            life_count = (self.coins // 100 - self.lives_added)
+            self.lives += life_count
         return True
 
     def lose_life(self):
