@@ -21,6 +21,7 @@ class Enemy4(Enemy):
         self.health = 1
         self.throw_delay = 0
         self.jump_delay = 0
+        self.score = 500
 
     def move(self):
         """
@@ -59,5 +60,8 @@ class Enemy4(Enemy):
         """
         self.speed *= -1
         self.image = pygame.transform.flip(self.image, True, False)
+
+    def damage(self, group, level):
+        self.destroy(group, level)
 
 

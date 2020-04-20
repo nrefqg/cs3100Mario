@@ -255,12 +255,12 @@ while True:
     enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
     projectile_hit = pygame.sprite.spritecollide(player, projectile_list, False)
 
-    player.touch(playerGround, block_list, powerup_list, enemy_list)
+    player.touch(playerGround, block_list, powerup_list, enemy_list, level_info, sound_obj)
 
     if player.invincible <= 0:
-        if player.enemyHit(enemyHit) and player.powerLevel == 1:
+        if player.enemyHit(enemyHit, sound_obj, level_info) and player.powerLevel == 1:
             player.powerLevel = 0
-        elif player.enemyHit(enemyHit) and player.powerLevel > 1:
+        elif player.enemyHit(enemyHit, sound_obj, level_info) and player.powerLevel > 1:
             player.powerUp(player.powerLevel-1)
             player.invincible = 90
 

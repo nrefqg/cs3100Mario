@@ -122,7 +122,7 @@ class Character(pygame.sprite.Sprite):
             self.deltaY = 1
 
     # attempt at new collision function
-    def touch(self, tile_list, block_list, powerup_list, enemy_list):
+    def touch(self, tile_list, block_list, powerup_list, enemy_list, level, sound):
         if len(tile_list) > 0:
             for tile in tile_list: 
                 self.collision[0] = tile.rect.collidepoint(self.rect.topleft)
@@ -150,17 +150,25 @@ class Character(pygame.sprite.Sprite):
 
                         affected_enemies = pygame.sprite.spritecollide(tile, enemy_list, False)
                         for enemy in affected_enemies:  # kill enemies standing on top of a hit block
-                            enemy.destroy(enemy_list)
+                            enemy.destroy(enemy_list, level)
 
                         if isinstance(tile, blocks.breakableBlock.breakableBlock) and self.powerLevel > 0:
                             tile.kill()
+                            sound.play_sound("block_hit")
                         elif isinstance(tile, blocks.powerBlock.powerBlock):
                             print("power block hit")
+                            if tile.enabled:
+                                sound.play_sound("powerup")
+                                level.add_score(100)
                             tile.disabled(tile.rect.x, tile.rect.y)
                             print(type(tile))
                             return "mushroom"
                         elif isinstance(tile, blocks.singleCoin.singleCoin):
                             print("Single Coin block")
+                            if tile.enabled:
+                                sound.play_sound("coin")
+                                level.add_coins(1)
+                                level.add_score(10)
                             tile.disabled(tile.rect.x, tile.rect.y)
                         elif isinstance(tile, blocks.star.star):
                             print("star block")
@@ -170,6 +178,10 @@ class Character(pygame.sprite.Sprite):
                             tile.disabled(tile.rect.x, tile.rect.y)
                         elif isinstance(tile, blocks.multiCoin.multiCoin):
                             print("multiCoin block")
+                            if tile.enabled:
+                                sound.play_sound("coin")
+                                level.add_coins(1)
+                                level.add_score(10)
                             if not tile.decrementCount():
                                 tile.disabled(tile.rect.x, tile.rect.y)
                         elif isinstance(tile, blocks.hiddenBlock.hiddenBlock):
@@ -243,7 +255,7 @@ class Character(pygame.sprite.Sprite):
         elif self.deltaY == 0:
             self.deltaY = 1
 
-    def enemyHit(self, enemy_list):
+    def enemyHit(self, enemy_list, sound, level):
         if len(enemy_list) > 0:
             for enemy in enemy_list:
                 self.collision[0] = enemy.rect.collidepoint(self.rect.topleft)
@@ -258,7 +270,9 @@ class Character(pygame.sprite.Sprite):
 
                 if self.collision[6] or self.collision[7] or self.collision[8]:
                     self.setJumping(True)
-                    enemy.kill()
+                    enemy.damage(enemy_list, level)
+                    sound.play_sound("block_hit")
+
 
                 else:
                     return True

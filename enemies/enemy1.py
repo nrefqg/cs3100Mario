@@ -20,6 +20,7 @@ class Enemy1(Enemy):
         self.dx = speed
         self.health = 2
         self.regen = 0
+        self.score = 200
 
     def move(self):
         """
@@ -45,7 +46,7 @@ class Enemy1(Enemy):
         if self.health > 0:
             self.health -= 1  # deduct one health point
             if self.health == 0:
-                self.destroy(group)  # destroy this enemy if the health reaches 0
+                self.destroy(group, level)  # destroy this enemy if the health reaches 0
             else:  # enemy is in the stunned state, so change sprite and stop moving during regen period
                 self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'koopa-shell.png'))
                 self.dx = self.speed
