@@ -7,7 +7,7 @@ class multiCoin(Block):
 		self.xHitRight = x+32
 		self.xHitBottom = y+32
 
-	def disabled(self):
+	def disabled(self, x, y):
 		super().__init__("disabledBlock.png", x, y)
 		self.xHitRight = x+32
 		self.xHitBottom = y+32
