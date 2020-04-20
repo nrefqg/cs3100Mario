@@ -91,10 +91,12 @@ def render(level):
                 new_block = hiddenBlock(y*32, x*32)
                 block_group.add(new_block)
                 renders['hidden'] = block_group
-            elif symbol == 'hq': #dead blocks
-                new_block = disabledBlock(y*32, x*32)
+            elif symbol in 'hq': #dead blocks
+                new_block = powerBlock(y*32, x*32)
+                new_block.disabled(new_block.rect.x, new_block.rect.y)
                 block_group.add(new_block)
                 renders['disabled'] = block_group
+                
             elif symbol == 'E': #coins
                 new_block = coin(y*32, x*32)
                 block_group.add(new_block)
