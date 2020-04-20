@@ -108,7 +108,7 @@ class Viewport:
         self.screen.blit(world_name, (240, 40))
         self.screen.blit(time, (385, 40))
 
-    def render_sprites(self, player, enemies, blocks, pipes, flags):
+    def render_sprites(self, player, enemies, blocks, pipes, flags, projectiles):
         """
         Takes in sprites and locations of the player, enemy, blocks, and pipe
         blocks and renders to the viewport if the sprites are in the viewport
@@ -154,6 +154,11 @@ class Viewport:
             for pipe in pipes:
                 if self.in_frame(pipe.rect.x, pipe.rect.y):
                     self.screen.blit(pipe.image, [pipe.rect.x - self.offsetX, pipe.rect.y])
+
+        if projectiles:
+            for projectile in projectiles:
+                if self.in_frame(projectile.rect.x, projectile.rect.y):
+                    self.screen.blit(projectile.image, [projectile.rect.x - self.offsetX, projectile.rect.y])
 
     def render_time_out(self):
         """

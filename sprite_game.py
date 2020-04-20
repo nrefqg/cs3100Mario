@@ -11,6 +11,7 @@ from level import Level
 from sound import SoundClass
 from viewport import Viewport
 from victory import playerWin
+from enemies.enemy4 import Enemy4
 
 SKY_COLOR = (146, 244, 255)
 
@@ -47,6 +48,10 @@ enemy_list = renders['enemies']
 block_list.add(power_list)
 block_list.add(brick_list)
 block_list.add(pipe_list)
+projectile_list = pygame.sprite.Group()
+
+e4 = Enemy4(400, 400, 0)
+enemy_list.add(e4)
 
 if(hidden_list != None):
     block_list.add(hidden_list)
@@ -167,7 +172,7 @@ while True:
                 player.setJumping(False)
 
     # Update sprites on screen
-    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list)
+    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list, projectile_list)
     # Update level information
     viewport.render_ui(level_info)
 
@@ -182,6 +187,10 @@ while True:
     for enemy in enemy_list:
         enemy.move()
         enemy.gravity(SCREEN_HEIGHT)
+
+        if isinstance(enemy, Enemy4):
+            enemy.throw(-3, -15, projectile_list)
+
         if enemy.rect.y > lowestTile-5:
             enemy.kill()
 
@@ -209,6 +218,9 @@ while True:
                         enemy.speed *= -1
                         enemy.move()
 
+    for projectile in projectile_list:
+        projectile.move(SCREEN_HEIGHT, projectile_list)
+
     # detect collisions between enemies and blocks
     enemyGround = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
     for enemy, blocks in enemyGround.items():
@@ -219,11 +231,12 @@ while True:
     # checks for standing on a block and continues gravity if not 
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
     enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
+    #projectile_hit = pygame.sprite.spritecollide(player, projectiles, False)
     
     player.touch(playerGround)
     if player.enemyHit(enemyHit):
         player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
-    
+
     animation += 1
     if animation >= 15:
         block_list.update()
