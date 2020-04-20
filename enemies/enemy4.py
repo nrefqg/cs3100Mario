@@ -25,7 +25,7 @@ class Enemy4(Enemy):
     def move(self):
         """
         Move Enemy4 and throw hammers
-        :return:
+        :return: None
         """
         super().move()
 
@@ -51,5 +51,13 @@ class Enemy4(Enemy):
             projectile_group.add(new_projectile)
         else:
             self.throw_delay -= 1  # count down to next throw
+
+    def flip(self):
+        """
+        Flip Enemy4 in the opposite direction
+        :return: None
+        """
+        self.speed *= -1
+        self.image = pygame.transform.flip(self.image, True, False)
 
 
