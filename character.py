@@ -122,7 +122,7 @@ class Character(pygame.sprite.Sprite):
             self.deltaY = 1
 
     # attempt at new collision function
-    def touch(self, tile_list, block_list):
+    def touch(self, tile_list, block_list, powerup_list):
         if len(tile_list) > 0:
             for tile in tile_list: 
                 self.collision[0] = tile.rect.collidepoint(self.rect.topleft)
@@ -149,26 +149,28 @@ class Character(pygame.sprite.Sprite):
                         self.rect.top = tile.rect.bottom
                         if isinstance(tile, blocks.breakableBlock.breakableBlock) and self.powerLevel > 0:
                             tile.kill()
-                        if isinstance(tile, blocks.powerBlock.powerBlock):
+                        elif isinstance(tile, blocks.powerBlock.powerBlock):
                             print("power block hit")
                             tile.disabled(tile.rect.x, tile.rect.y)
                             print(type(tile))
-                        if isinstance(tile, blocks.singleCoin.singleCoin):
+                            return "mushroom"
+                        elif isinstance(tile, blocks.singleCoin.singleCoin):
                             print("Single Coin block")
                             tile.disabled(tile.rect.x, tile.rect.y)
-                        if isinstance(tile, blocks.star.star):
+                        elif isinstance(tile, blocks.star.star):
                             print("star block")
                             tile.disabled(tile.rect.x, tile.rect.y)
-                        if isinstance(tile, blocks.oneUp.oneUp):
+                        elif isinstance(tile, blocks.oneUp.oneUp):
                             print("oneUp block")
                             tile.disabled(tile.rect.x, tile.rect.y)
-                        if isinstance(tile, blocks.multiCoin.multiCoin):
+                        elif isinstance(tile, blocks.multiCoin.multiCoin):
                             print("multiCoin block")
                             if not tile.decrementCount():
                                 tile.disabled(tile.rect.x, tile.rect.y)
-                        if isinstance(tile, blocks.hiddenBlock.hiddenBlock):
+                        elif isinstance(tile, blocks.hiddenBlock.hiddenBlock):
                             print("hidden block")
                             tile.disabled(tile.rect.x, tile.rect.y)
+                        
                 # side collisions
                 #if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
                 if self.collision[3] or self.collision[5]:
@@ -184,6 +186,7 @@ class Character(pygame.sprite.Sprite):
                         self.move_left = False
         elif self.deltaY == 0:
             self.deltaY = 1
+
 
     def touchPipe(self, tile_list):
         if len(tile_list) > 0:

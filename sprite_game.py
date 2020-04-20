@@ -72,7 +72,6 @@ if(oneUp_group != None):
 if(multi_group != None):
     block_list.add(multi_group)
 
-
 if(hidden_list != None):
     block_list.add(hidden_list)
 
@@ -198,8 +197,8 @@ while True:
     viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list, powerup_list)
     # Update level information
     viewport.render_ui(level_info)
-
     # detect collisions between enemies
+
     for first, second in combinations(enemy_list, 2):
         if first.rect.colliderect(second.rect):
             first.flip()
@@ -246,28 +245,16 @@ while True:
 
     # checks for standing on a block and continues gravity if not 
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
-
-    #if len(playerGround) > 0:
-    #for block in playerGround:
-    #player.groundBlockContact(block)
-    temp = player.touch(playerGround, block_list)
-
     enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
-    
-    player.touch(playerGround, block_list)
-    #hit = player.enemyHit(enemyHit)
+
+    player.touch(playerGround, block_list, powerup_list)
+
     if player.invincible <= 0:
         if player.enemyHit(enemyHit) and player.powerLevel == 1:
             player.powerLevel = 0
         elif player.enemyHit(enemyHit) and player.powerLevel > 1:
             player.powerUp(player.powerLevel-1)
             player.invincible = 90
-    
-    if(temp != None and temp[0] == True):
-        power_up = pygame.sprite.Group()
-        new_block = mushroom(temp[1] * 32, temp[2] * 32)
-        power_up.add(new_block)
-        powerup_list = power_up.add(new_block)
 
     animation += 1
     player.invincible -= 1
