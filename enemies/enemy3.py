@@ -43,7 +43,10 @@ class Enemy3(Enemy):
         :param group: The sprite group the enemy belongs to
         :return: None
         """
-        if self.health > 1:  # normal damage should not destroy enemy
+        if self.invincibility > 0:
+            self.invincibility -= 1
+
+        if self.health > 1 and self.invincibility == 0:  # normal damage should not destroy enemy
             self.health -= 1
             if self.health == 0:
                 self.destroy(group, level)
@@ -52,6 +55,7 @@ class Enemy3(Enemy):
                 self.dx = self.speed
                 self.speed = 0
                 self.regen = 300
+                self.invincibility = 20
 
     def respawn(self):
         """

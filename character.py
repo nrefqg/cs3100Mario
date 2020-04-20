@@ -298,8 +298,6 @@ class Character(pygame.sprite.Sprite):
                     self.setJumping(True)
                     enemy.damage(enemy_list, level)
                     sound.play_sound("block_hit")
-
-
                 else:
                     return True
                     

@@ -32,6 +32,7 @@ class Enemy(pygame.sprite.Sprite):
         self.is_jumping = False
         self.can_jump = False
         self.score = 0
+        self.invincibility = 0
 
         self.image = pygame.image.load(os.path.join('enemies', 'sprites', image))
         self.rect = self.image.get_rect()

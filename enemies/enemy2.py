@@ -45,7 +45,10 @@ class Enemy2(Enemy):
         :param group: The sprite group the enemy belongs to
         :return: None
         """
-        if self.health > 0:
+        if self.invincibility > 0:
+            self.invincibility -= 1
+
+        if self.health > 0 and self.invincibility == 0:
             self.health -= 1  # deduct one health point
             if self.health == 0:
                 self.destroy(group, level)  # destroy this enemy if the health reaches 0
@@ -54,8 +57,10 @@ class Enemy2(Enemy):
                 self.dx = self.speed
                 self.speed = 0
                 self.regen = 300
+                self.invincibility = 20
             elif self.health == 2:  # enemy can no longer jump
                 self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'parakoopa.png'))
+                self.invincibility = 20
 
     def respawn(self):
         """
