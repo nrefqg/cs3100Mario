@@ -11,6 +11,7 @@ from level import Level
 from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
+from sound import SoundClass
 from viewport import Viewport
 from victory import playerWin
 
@@ -64,6 +65,9 @@ player = Character(140, 20)
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 # Load in main menu screen
 viewport.game_menu()
+# Initialize Sound
+sound_obj = SoundClass()
+sound_obj.start_bg()
 
 # A list of all rects in the level
 allRects = file_rendering.render(level)
@@ -209,7 +213,9 @@ while True:
 
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
+        sound_obj.stop_bg() # Stop background music
         player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+        sound_obj.start_bg()
 
     level_info.tick()
     pygame.display.update()
