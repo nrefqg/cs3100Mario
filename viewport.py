@@ -1,7 +1,8 @@
 import pygame
 import sys
 import time
-FONT_COLOR = (255, 255, 255)
+FONT_COLOR_DARK = (0, 0, 0)
+FONT_COLOR_LIGHT = (255, 255, 255)
 
 class Viewport:
     """
@@ -90,23 +91,31 @@ class Viewport:
         :param level: This is the level object
         :return: None
         '''
-        mario_label = self.myfont.render('SCORE', True, FONT_COLOR)
-        coin_label = self.myfont.render('COINS', True, FONT_COLOR)
-        world_label = self.myfont.render('WORLD', True, FONT_COLOR)
-        time_label = self.myfont.render('TIME', True, FONT_COLOR)
-        score = self.myfont.render(str(level.score), True, FONT_COLOR)
-        coin = self.myfont.render(str(level.coins), True, FONT_COLOR)
-        world_name = self.myfont.render('CS3100', True, FONT_COLOR)
-        time = self.myfont.render(str(level.time), True, FONT_COLOR)
+        score_label = self.myfont.render('SCORE', True, FONT_COLOR_DARK)
+        coin_label = self.myfont.render('COINS', True, FONT_COLOR_DARK)
+        world_label = self.myfont.render('WORLD', True, FONT_COLOR_DARK)
+        lives_label = self.myfont.render('LIVES', True, FONT_COLOR_DARK)
+        time_label = self.myfont.render('TIME', True, FONT_COLOR_DARK)
+        score = self.myfont.render(str(level.score), True, FONT_COLOR_DARK)
+        coin = self.myfont.render(str(level.coins), True, FONT_COLOR_DARK)
+        world_name = self.myfont.render('CS3100', True, FONT_COLOR_DARK)
+        lives = self.myfont.render(str(level.lives), True, FONT_COLOR_DARK)
+        time = self.myfont.render(str(level.time), True, FONT_COLOR_DARK)
 
-        self.screen.blit(mario_label, (80, 20))
-        self.screen.blit(coin_label, (160, 20))
-        self.screen.blit(world_label, (240, 20))
-        self.screen.blit(time_label, (380, 20))
-        self.screen.blit(score, (80, 40))
-        self.screen.blit(coin, (160, 40))
-        self.screen.blit(world_name, (240, 40))
-        self.screen.blit(time, (385, 40))
+        self.screen.blit(score_label, (20, 20))
+        self.screen.blit(score, (20, 40))
+
+        self.screen.blit(coin_label, (120, 20))
+        self.screen.blit(coin, (120, 40))
+
+        self.screen.blit(world_label, (220, 20))
+        self.screen.blit(world_name, (220, 40))
+
+        self.screen.blit(lives_label, (320, 20))
+        self.screen.blit(lives, (320, 40))
+
+        self.screen.blit(time_label, (420, 20))
+        self.screen.blit(time, (420, 40))
 
     def render_sprites(self, player, enemies, blocks, pipes, flags, powerups, projectiles):
         """
@@ -169,8 +178,8 @@ class Viewport:
         Renders a time out message if the player dies  
         """
         self.screen.fill((0, 0, 0))
-        death_message = self.myfont.render('You ran out of time!', True, FONT_COLOR)
-        self.screen.blit(death_message, (self.screen_width/2, self.screen_height/2))
+        death_message = self.myfont.render('You ran out of time!', True, FONT_COLOR_LIGHT)
+        self.screen.blit(death_message, (self.screen_width/2 - death_message.get_width()/2, self.screen_height/2))
         pygame.display.update()
         time.sleep(3)
 
@@ -180,13 +189,13 @@ class Viewport:
         Renders a death message if the player dies  
         """
         self.screen.fill((0, 0, 0))
-        death_message = self.myfont.render('YOU DIED. Lives: ' + str(deaths), True, FONT_COLOR)
-        self.screen.blit(death_message, (self.screen_width/2, self.screen_height/2))
+        death_message = self.myfont.render('YOU DIED. Lives: ' + str(deaths), True, FONT_COLOR_LIGHT)
+        self.screen.blit(death_message, (self.screen_width/2 - death_message.get_width()/2, self.screen_height/2))
     
     def render_victory_message(self):
         """
         Renders a message if the player wins
         """
         self.screen.fill((0, 0, 0))
-        victory_message = self.myfont.render('YOU WON', True, FONT_COLOR)
-        self.screen.blit(victory_message, (self.screen_width/2, self.screen_height/2))
+        victory_message = self.myfont.render('YOU WON', True, FONT_COLOR_LIGHT)
+        self.screen.blit(victory_message, (self.screen_width/2 - victory_message.get_width()/2, self.screen_height/2))

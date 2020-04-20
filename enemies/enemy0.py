@@ -15,6 +15,7 @@ class Enemy0(Enemy):
         """
         super().__init__("goomba.png", x, y)
         self.speed = speed
+        self.score = 100
 
     def move(self):
         """
@@ -30,3 +31,6 @@ class Enemy0(Enemy):
         :return: None
         """
         self.speed *= -1
+
+    def damage(self, group, level):
+        self.destroy(group, level)

@@ -20,6 +20,7 @@ class Enemy2(Enemy):
         self.dx = speed
         self.health = 3
         self.regen = 0
+        self.score = 300
 
     def move(self):
         """
@@ -38,7 +39,7 @@ class Enemy2(Enemy):
         if self.health == 3:
             self.jump(15)
 
-    def damage(self, group):
+    def damage(self, group, level):
         """
         Deal one unit of damage to this enemy, and change state accordingly
         :param group: The sprite group the enemy belongs to
@@ -47,7 +48,7 @@ class Enemy2(Enemy):
         if self.health > 0:
             self.health -= 1  # deduct one health point
             if self.health == 0:
-                self.destroy(group)  # destroy this enemy if the health reaches 0
+                self.destroy(group, level)  # destroy this enemy if the health reaches 0
             elif self.health == 1:  # enemy is in stunned state, so change sprite and stop moving during regen period
                 self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'parakoopa-shell.png'))
                 self.dx = self.speed

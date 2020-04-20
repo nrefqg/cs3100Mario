@@ -20,6 +20,7 @@ class Enemy3(Enemy):
         self.dx = speed
         self.health = 2
         self.regen = 0
+        self.score = 500
 
     def move(self):
         """
@@ -36,7 +37,7 @@ class Enemy3(Enemy):
 
         self.rect.x += self.speed
 
-    def damage(self, group):
+    def damage(self, group, level):
         """
         Deal one unit of damage to this enemy, and change state accordingly
         :param group: The sprite group the enemy belongs to
@@ -45,7 +46,7 @@ class Enemy3(Enemy):
         if self.health > 1:  # normal damage should not destroy enemy
             self.health -= 1
             if self.health == 0:
-                self.destroy(group)
+                self.destroy(group, level)
             else:  # enemy is in the stunned state, so change sprite and stop moving during regen period
                 self.image = pygame.image.load(os.path.join('enemies', 'sprites', 'beetle-shell.png'))
                 self.dx = self.speed

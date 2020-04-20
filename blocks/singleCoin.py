@@ -2,6 +2,7 @@ import pygame
 from blocks.blocks import Block
 
 class singleCoin(Block):
+
 	def __init__(self, x, y):
 		super().__init__("powerBlock.png", x, y)
 		self.xHitRight = x+32
