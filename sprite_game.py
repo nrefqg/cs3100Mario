@@ -105,6 +105,8 @@ for block in allRects['flagpole']:
     if(isinstance(block, flagpole) == True):
         flagLoc.append([block.xHitRight])
 
+sound_obj.start_bg()
+
 #This while loops contains the running game
 while True:
     # Fills the background with a light blue color
@@ -273,24 +275,23 @@ while True:
 
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
-        sound_obj.stop_bg() # Stop background music
-        sound_obj.play_sound("death")
         player.powerLevel = 0
-        sound_obj.start_bg()
 
     level_info.tick()
 
     # Player loses if timer runs out
     if level_info.time == 0:
-        sound_obj.stop_bg()
-        sound_obj.play_sound("death")
+        player.powerLevel = 0
         viewport.render_time_out()
         pygame.display.quit()
         pygame.quit()  # Stop pygame
         sys.exit()  # Stop script
 
     if player.powerLevel == 0:
+        sound_obj.stop_bg()
+        sound_obj.play_sound("death")
         player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+        sound_obj.start_bg()
 
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
