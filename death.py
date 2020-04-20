@@ -35,6 +35,7 @@ def playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info
     
     block_list.add(power_list)
     block_list.add(brick_list)
+    block_list.add(pipe_list)
     
     if(hidden_list != None):
         block_list.add(hidden_list)
@@ -45,8 +46,11 @@ def playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info
     # Load in image sprite
     player = Character(140, 20)
 
+    # Load in enemy list
+    enemy_list = pygame.sprite.Group()
+
     #END RELOAD
     player = Character(140, 20)
     viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    return player, viewport, renders, block_list, pipe_list, enemy_list
+    return player, viewport, renders, block_list

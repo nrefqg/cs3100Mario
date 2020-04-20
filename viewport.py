@@ -129,7 +129,8 @@ class Viewport:
             for enemy in enemies:
                 if self.in_frame(enemy.rect.x, enemy.rect.y):
                     self.screen.blit(enemy.image, [enemy.rect.x - self.offsetX, enemy.rect.y])
-                    enemy.speed = -1
+                    if enemy.speed == 0:
+                        enemy.speed = -1
 
         # Render potential blocks
         if blocks:
