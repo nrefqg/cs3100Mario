@@ -50,9 +50,6 @@ block_list.add(brick_list)
 block_list.add(pipe_list)
 projectile_list = pygame.sprite.Group()
 
-e4 = Enemy4(400, 400, 0)
-enemy_list.add(e4)
-
 if(hidden_list != None):
     block_list.add(hidden_list)
 
