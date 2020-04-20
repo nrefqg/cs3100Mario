@@ -160,6 +160,7 @@ while True:
             if event.key == pygame.K_LEFT:
                 player.setMoveLeft(True)
             if event.key == pygame.K_SPACE and player.getDeltaY() == 0:
+                sound_obj.play_sound("jump")
                 player.setJumping(True)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
@@ -209,11 +210,15 @@ while True:
     flagTouch = pygame.sprite.spritecollide(player, renders['flagpole'], False)
 
     if(flagTouch in renders['flagpole']):
+        sound_obj.stop_bg()
+        sound_obj.play_sound("victory")
         player, viewport, renders, block_list, pipe_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        sound_obj.start_bg()
 
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
         sound_obj.stop_bg() # Stop background music
+        sound_obj.play_sound("death")
         player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
         sound_obj.start_bg()
 
