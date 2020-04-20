@@ -17,7 +17,10 @@ class SoundClass:
         self.jump.set_volume(0.25)
         self.death = pygame.mixer.Sound('sounds/death.ogg')
         self.victory = pygame.mixer.Sound('sounds/victory.ogg')
-
+        self.block_hit = pygame.mixer.Sound('sounds/block_hit.wav')
+        self.block_hit.set_volume(1.5)
+        self.coin = pygame.mixer.Sound('sounds/coin.wav')
+        self.powerup = pygame.mixer.Sound('sounds/power_up.wav')
     
     def start_bg(self):
         """
@@ -46,4 +49,10 @@ class SoundClass:
             self.channel.play(self.death)
         elif sound == "victory":
             self.channel.play(self.victory)
+        elif sound == "block_hit":
+            self.channel.play(self.block_hit)
+        elif sound == "coin":
+            self.channel.play(self.coin)
+        elif sound == "powerup":
+            self.channel.play(self.powerup)
 
