@@ -191,6 +191,9 @@ class Viewport:
         self.screen.fill((0, 0, 0))
         death_message = self.myfont.render('YOU DIED. Lives: ' + str(deaths), True, FONT_COLOR_LIGHT)
         self.screen.blit(death_message, (self.screen_width/2 - death_message.get_width()/2, self.screen_height/2))
+        if deaths == 0:
+            game_over_message = self.myfont.render('GAME OVER', True, (255, 0, 0))
+            self.screen.blit(game_over_message, (self.screen_width/2 - game_over_message.get_width()/2, self.screen_height/2 + 30))
     
     def render_victory_message(self):
         """

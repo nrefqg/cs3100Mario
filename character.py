@@ -176,11 +176,13 @@ class Character(pygame.sprite.Sprite):
                             print("star block")
                             if not tile.isdisabled:
                                 self.invincible += 600
+                                level.add_score(200)
                             tile.disabled(tile.rect.x, tile.rect.y)
                         elif isinstance(tile, blocks.oneUp.oneUp):
                             print("oneUp block")
                             if not tile.isdisabled:
                                 level.lives += 1
+                                level.add_score(100)
                             tile.disabled(tile.rect.x, tile.rect.y)
                         elif isinstance(tile, blocks.multiCoin.multiCoin):
                             print("multiCoin block")
@@ -192,6 +194,9 @@ class Character(pygame.sprite.Sprite):
                                 tile.disabled(tile.rect.x, tile.rect.y)
                         elif isinstance(tile, blocks.hiddenBlock.hiddenBlock):
                             print("hidden block")
+                            if not tile.isdisabled:
+                                sound.play_sound("block_hit")
+                                level.add_score(20)
                             tile.disabled(tile.rect.x, tile.rect.y)
                         
                 # side collisions
