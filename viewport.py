@@ -1,5 +1,6 @@
 import pygame
 import sys
+import time
 FONT_COLOR = (255, 255, 255)
 
 class Viewport:
@@ -95,9 +96,8 @@ class Viewport:
         time_label = self.myfont.render('TIME', True, FONT_COLOR)
         score = self.myfont.render(str(level.score), True, FONT_COLOR)
         coin = self.myfont.render(str(level.coins), True, FONT_COLOR)
-        #level = self.myfont.render('%s - %x' % (test_world_number, test_world_checkpoint), True, FONT_COLOR)
         world_name = self.myfont.render('CS3100', True, FONT_COLOR)
-        time = self.myfont.render(str(level.timer), True, FONT_COLOR)
+        time = self.myfont.render(str(level.time), True, FONT_COLOR)
 
         self.screen.blit(mario_label, (80, 20))
         self.screen.blit(coin_label, (160, 20))
@@ -155,14 +155,29 @@ class Viewport:
                 if self.in_frame(pipe.rect.x, pipe.rect.y):
                     self.screen.blit(pipe.image, [pipe.rect.x - self.offsetX, pipe.rect.y])
 
-    #Renders a death message if the player dies                
+    def render_time_out(self):
+        """
+        Renders a time out message if the player dies  
+        """
+        self.screen.fill((0, 0, 0))
+        death_message = self.myfont.render('You ran out of time!', True, FONT_COLOR)
+        self.screen.blit(death_message, (self.screen_width/2, self.screen_height/2))
+        pygame.display.update()
+        time.sleep(3)
+
+              
     def render_death_message(self, deaths):
+        """
+        Renders a death message if the player dies  
+        """
         self.screen.fill((0, 0, 0))
         death_message = self.myfont.render('YOU DIED. Lives: ' + str(deaths), True, FONT_COLOR)
         self.screen.blit(death_message, (self.screen_width/2, self.screen_height/2))
     
-    #Renders a message if the player wins
     def render_victory_message(self):
+        """
+        Renders a message if the player wins
+        """
         self.screen.fill((0, 0, 0))
         victory_message = self.myfont.render('YOU WON', True, FONT_COLOR)
         self.screen.blit(victory_message, (self.screen_width/2, self.screen_height/2))

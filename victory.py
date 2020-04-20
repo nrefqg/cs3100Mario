@@ -11,7 +11,7 @@ from viewport import Viewport
 def playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level):
     viewport.render_victory_message()
     pygame.display.update()
-    time.sleep(3)
+    time.sleep(5)
 
     #RELOAD LEVEL
     # Load in block sprites

@@ -11,6 +11,7 @@ from level import Level
 from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
+from sound import SoundClass
 from viewport import Viewport
 from victory import playerWin
 
@@ -34,7 +35,7 @@ animation = 0
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
 level = file_loader.file_loading()
-level_info = Level([], 400) # Load in level with no sprites and 400 time
+level_info = Level([], 14000) # Load in level with no sprites and 400 time
 lowestTile = 0
 
 # Load in block sprites
@@ -63,6 +64,9 @@ player = Character(140, 20)
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 # Load in main menu screen
 viewport.game_menu()
+# Initialize Sound
+sound_obj = SoundClass()
+sound_obj.start_bg()
 
 # A list of all rects in the level
 allRects = file_rendering.render(level)
@@ -155,6 +159,7 @@ while True:
             if event.key == pygame.K_LEFT:
                 player.setMoveLeft(True)
             if event.key == pygame.K_SPACE and player.getDeltaY() == 0:
+                sound_obj.play_sound("jump")
                 player.setJumping(True)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
@@ -231,12 +236,28 @@ while True:
     flagTouch = pygame.sprite.spritecollide(player, renders['flagpole'], False)
 
     if(flagTouch in renders['flagpole']):
-        player, viewport, renders, block_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        sound_obj.stop_bg()
+        sound_obj.play_sound("victory")
+        player, viewport, renders, block_list, pipe_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        sound_obj.start_bg()
 
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
-        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+        sound_obj.stop_bg() # Stop background music
+        sound_obj.play_sound("death")
+        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+        sound_obj.start_bg()
 
     level_info.tick()
+
+    # Player loses if timer runs out
+    if level_info.time == 0:
+        sound_obj.stop_bg()
+        sound_obj.play_sound("death")
+        viewport.render_time_out()
+        pygame.display.quit()
+        pygame.quit()  # Stop pygame
+        sys.exit()  # Stop script
+
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
