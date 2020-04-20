@@ -30,6 +30,7 @@ class Level:
         if self.timer == 0:
             return False
         self.timer -= 1
+        self.time = self.timer // 60
         return True
 
     def lose_life(self):
