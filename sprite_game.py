@@ -14,12 +14,12 @@ from enemies.enemy3 import Enemy3
 from viewport import Viewport
 from victory import playerWin
 
-SKY_COLOR = (7, 155, 176)
+SKY_COLOR = (146, 244, 255)
 
 
 #VARIABLES HOLDING THE SPRITE LOCATIONS FOR OUR CHARACTER
-smallMario = ['sprites/mario.png', 'sprites/marioflip.png']
-bigMario = ['character/bigmario.png', 'character/bigmarioflip.png']
+smallMario = ['sprites/mariosmall.png', 'sprites/marioflipsmall.png']
+bigMario = ['character/mariobig.png', 'character/marioflipbig.png']
 
 
 level = []
@@ -50,9 +50,27 @@ star_group = renders['star']
 oneUp_group = renders['1up']
 multi_group = renders['multiCoin']
 
-block_list.add(power_list)
+enemy_list = renders['enemies']
+if(power_list != None):
+    block_list.add(power_list)
+
 block_list.add(brick_list)
-block_list.add(hidden_list)
+
+if(single_coin_group != None):
+    block_list.add(single_coin_group)
+
+if(star_group != None):
+    block_list.add(star_group)
+
+if(oneUp_group != None):
+    block_list.add(oneUp_group)
+
+if(multi_group != None):
+    block_list.add(multi_group)
+
+
+if(hidden_list != None):
+    block_list.add(hidden_list)
 
 flag_list = renders['flag']
 pipe_list = renders['pipe']
@@ -61,16 +79,11 @@ flagLoc = []
 # Load in image sprite
 player = Character(140, 20)
 
-# Load in enemy list
-enemy_list = pygame.sprite.Group()
-e0 = Enemy0(400, 20, -1)
-e1 = Enemy1(100, 20, 2)
-e3 = Enemy3(200, 20, 1)
-for e in [e0, e1, e3]:
-    enemy_list.add(e)
 
 # Initialize viewport
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
+# Load in main menu screen
+viewport.game_menu()
 
 # A list of all rects in the level
 allRects = file_rendering.render(level)
@@ -216,7 +229,7 @@ while True:
 
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
 
     level_info.tick()
     pygame.display.update()

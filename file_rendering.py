@@ -12,6 +12,9 @@ from blocks.coin import coin
 from blocks.powerBlock import powerBlock
 from blocks.flagpole import flagpole
 from blocks.flagpole import flag
+from enemies.enemy0 import Enemy0
+from enemies.enemy1 import Enemy1
+from enemies.enemy3 import Enemy3
 
 
 def render(level):
@@ -73,10 +76,10 @@ def render(level):
                 multi_group.add(new_block)
                 renders['multiCoin'] = multi_group
             
-            elif symbol in 'ABCDdefgmnop': #special blocks
+            '''elif symbol in 'ABCDdefgmnop': #special blocks
                 new_block = powerBlock(y*32, x*32)
                 power_group.add(new_block)
-                renders['power'] = power_group
+                renders['power'] = power_group'''
             elif symbol in 'FGH': #hidden blocks
                 new_block = hiddenBlock(y*32, x*32)
                 block_group.add(new_block)
@@ -107,9 +110,20 @@ def render(level):
                 renders['pipe'] = pipe_group
             elif symbol == '~': #flagpole
                 new_block = flagpole(y*32, x*32)
-                
                 flag_group.add(new_block)
                 renders['flagpole'] = flag_group
+            elif symbol == '0' or symbol == '5':
+                new_block = Enemy0(y*32, x*32,0)
+                enemy_group.add(new_block)
+                renders['enemies'] = enemy_group
+            elif symbol == '1' or symbol == '6':
+                new_block = Enemy1(y*32, x*32, 0)
+                enemy_group.add(new_block)
+                renders['enemies'] = enemy_group
+            elif symbol == '3' or symbol == '8':
+                new_block = Enemy3(y*32, x*32, 0)
+                enemy_group.add(new_block)
+                renders['enemies'] = enemy_group
             if symbol == ' ': #special cases where empty spaces need to change to look better
                 if x < len(level)-1 and y < len(level[x])-1:
                     if level[x+1][y] == 'P':
