@@ -122,7 +122,7 @@ class Character(pygame.sprite.Sprite):
             self.deltaY = 1
 
     # attempt at new collision function
-    def touch(self, tile_list, block_list, powerup_list):
+    def touch(self, tile_list, block_list, powerup_list, enemy_list):
         if len(tile_list) > 0:
             for tile in tile_list: 
                 self.collision[0] = tile.rect.collidepoint(self.rect.topleft)
@@ -147,6 +147,12 @@ class Character(pygame.sprite.Sprite):
                         self.y_momentum = 0
                         self.deltaY = 141
                         self.rect.top = tile.rect.bottom
+
+                        affected_enemies = pygame.sprite.spritecollide(tile, enemy_list, False)
+                        print(affected_enemies)
+                        for enemy in affected_enemies:  # kill enemies standing on top of a hit block
+                            enemy.destroy(enemy_list)
+
                         if isinstance(tile, blocks.breakableBlock.breakableBlock) and self.powerLevel > 0:
                             tile.kill()
                         elif isinstance(tile, blocks.powerBlock.powerBlock):
