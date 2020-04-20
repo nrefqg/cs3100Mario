@@ -12,6 +12,9 @@ from blocks.coin import coin
 from blocks.powerBlock import powerBlock
 from blocks.flagpole import flagpole
 from blocks.flagpole import flag
+from enemies.enemy0 import Enemy0
+from enemies.enemy1 import Enemy1
+from enemies.enemy3 import Enemy3
 
 
 def render(level):
@@ -23,13 +26,15 @@ def render(level):
         'pipe' -> pipe_group
     """
 
-    renders = {'ground': None, 'pipe': None, 'breakable': None, 'stone': None, 'hidden': None, 'coin': None, 'power': None, 'flagpole': None, 'flag': None, 'disabled': None}
+    renders = {'ground': None, 'pipe': None, 'breakable': None, 'stone': None, 'hidden': None, 'coin': None, 'power': None, 'flagpole': None, 'flag': None, 'disabled': None, 'enemies': None}
 
     block_group = pygame.sprite.Group()
     flag_group = pygame.sprite.Group()
     pipe_group = pygame.sprite.Group()
     brick_group = pygame.sprite.Group()
     power_group = pygame.sprite.Group()
+    enemy_group = pygame.sprite.Group()
+
     for x in range(len(level)):
         for y in range(len(level[x])):
             symbol = level[x][y]
@@ -79,9 +84,20 @@ def render(level):
                 renders['pipe'] = pipe_group
             elif symbol == '~': #flagpole
                 new_block = flagpole(y*32, x*32)
-                
                 flag_group.add(new_block)
                 renders['flagpole'] = flag_group
+            elif symbol == '0' or symbol == '5':
+                new_block = Enemy0(x*32, y*32, 0)
+                enemy_group.add(new_block)
+                renders['enemies'] = enemy_group
+            elif symbol == '1' or symbol == '6':
+                new_block = Enemy1(x*32, y*32, 0)
+                enemy_group.add(new_block)
+                renders['enemies'] = enemy_group
+            elif symbol == '3' or symbol == '8':
+                new_block = Enemy3(x*32, y*32, 0)
+                enemy_group.add(new_block)
+                renders['enemies'] = enemy_group
             if symbol == ' ': #special cases where empty spaces need to change to look better
                 if x < len(level)-1 and y < len(level[x])-1:
                     if level[x+1][y] == 'P':
