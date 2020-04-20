@@ -35,6 +35,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+        self.collision = [False] * 9
     def destroy(self, sprite_group):
         """
         Destroys the enemy sprite from the given sprite group

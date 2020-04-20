@@ -183,6 +183,32 @@ while True:
         if enemy.rect.y > lowestTile-5:
             enemy.kill()
 
+        enemyTile = pygame.sprite.spritecollide(enemy, block_list, False)
+
+        if len(enemyTile) > 0:
+            for tile in enemyTile:
+                enemy.collision[0] = tile.rect.collidepoint(enemy.rect.topleft)
+                enemy.collision[1] = tile.rect.collidepoint(enemy.rect.midtop)
+                enemy.collision[2] = tile.rect.collidepoint(enemy.rect.topright)
+                enemy.collision[3] = tile.rect.collidepoint(enemy.rect.midleft)
+                enemy.collision[4] = tile.rect.collidepoint(enemy.rect.center)
+                enemy.collision[5] = tile.rect.collidepoint(enemy.rect.midright)
+                enemy.collision[6] = tile.rect.collidepoint(enemy.rect.bottomleft)
+                enemy.collision[7] = tile.rect.collidepoint(enemy.rect.midbottom)
+                enemy.collision[8] = tile.rect.collidepoint(enemy.rect.bottomright)
+
+                if enemy.speed > 0:
+                    if enemy.collision[5]:
+                        enemy.speed *= -1
+                        enemy.move()
+                
+                if enemy.speed < 0:
+                    if enemy.collision[3]:
+                        print("collide")
+                        enemy.speed *= -1
+                        enemy.move()
+                        print(enemy.speed)
+
     # detect collisions between enemies and blocks
     enemyGround = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
     for enemy, blocks in enemyGround.items():
