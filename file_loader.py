@@ -9,7 +9,7 @@ def file_loading():
     #Define basic variables: Level is where we store the strings that comprise the level; path is the default file that will be loaded; workbook/worksheet are the working xlsx
     #files that we will read from
     level = []
-    path = "mario.xlsx"
+    path = "levels/mario2-1.xlsx"
     #fout = open('testing.txt', "w") #I test to make sure the level is stored into the list appropriately by outputting the contents of level into a separate txt file
     workbook = xlrd.open_workbook(path)
     workSheet = workbook.sheet_by_index(0)

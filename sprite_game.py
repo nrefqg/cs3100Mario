@@ -71,6 +71,9 @@ if(oneUp_group != None):
 if(multi_group != None):
     block_list.add(multi_group)
 
+if(coin_list != None):
+    block_list.add(coin_list)
+
 if(hidden_list != None):
     block_list.add(hidden_list)
 
@@ -79,8 +82,6 @@ flagLoc = []
 
 # Load in image sprite
 player = Character(140, 20)
-
-player.powerUp(2)
 
 
 # Initialize viewport
@@ -261,7 +262,7 @@ while True:
         if player.enemyHit(enemyHit, sound_obj, level_info) and player.powerLevel == 1:
             player.powerLevel = 0
         elif player.enemyHit(enemyHit, sound_obj, level_info) and player.powerLevel > 1:
-            player.powerUp(player.powerLevel-1)
+            player.powerUp(1)
             player.invincible = 90
 
         if len(projectile_hit) > 0 and player.powerLevel == 1:
@@ -282,7 +283,7 @@ while True:
     if(flagTouch in renders['flagpole']):
         sound_obj.stop_bg()
         sound_obj.play_sound("victory")
-        player, viewport, renders, block_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        player, viewport, renders, block_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
         sound_obj.start_bg()
 
     #If player is below lowest tile, kill them
@@ -302,7 +303,7 @@ while True:
     if player.powerLevel == 0:
         sound_obj.stop_bg()
         sound_obj.play_sound("death")
-        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+        player, viewport, renders, block_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
         sound_obj.start_bg()
 
     pygame.display.update()

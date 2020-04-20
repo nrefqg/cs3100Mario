@@ -14,8 +14,8 @@ class multiCoin(Block):
 		super().__init__("disabledBlock.png", x, y)
 		self.xHitRight = x+32
 		self.xHitBottom = y+32
-		self.enabled = False
-		
+		self.isdisabled = True
+
 	def decrementCount(self):
 		if self.count > 0:
 			self.count = self.count - 1

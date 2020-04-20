@@ -7,10 +7,9 @@ class singleCoin(Block):
 		super().__init__("powerBlock.png", x, y)
 		self.xHitRight = x+32
 		self.xHitBottom = y+32
-		self.enabled = True
 
 	def disabled(self, x, y):
 		super().__init__("disabledBlock.png", x, y)
 		self.xHitRight = x+32
 		self.xHitBottom = y+32
-		self.enabled = False
+		self.isdisabled = True
