@@ -23,6 +23,6 @@ class coin(Block):
 			self.index = 0
 		self.image = self.animate[self.index]
 
-	def destroy(self): #Removes coin when picked up
+	def destroy(self, sprite_group): #Removes coin when picked up
 		sprite_group.remove(self)
 
