@@ -27,7 +27,7 @@ def playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level):
     # Load in enemy list
     enemy_list = pygame.sprite.Group()
     e0 = Enemy0(400, 20, -1)
-    e1 = Enemy1(100, 20, 2)
+    e1 = Enemy1(300, 20, 2)
     e3 = Enemy3(200, 20, 1)
     for e in [e0, e1, e3]:
         enemy_list.add(e)

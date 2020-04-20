@@ -49,6 +49,7 @@ hidden_list = renders['hidden']
 block_list.add(power_list)
 block_list.add(brick_list)
 block_list.add(hidden_list)
+block_list.add(pipe_list)
 
 flag_list = renders['flag']
 pipe_list = renders['pipe']
@@ -60,7 +61,7 @@ player = Character(140, 20)
 # Load in enemy list
 enemy_list = pygame.sprite.Group()
 e0 = Enemy0(400, 20, -1)
-e1 = Enemy1(100, 20, 2)
+e1 = Enemy1(300, 20, 2)
 e3 = Enemy3(200, 20, 1)
 for e in [e0, e1, e3]:
     enemy_list.add(e)
@@ -116,7 +117,7 @@ while True:
             player.setY_momentum(player.getY_momentum() - 1)
             player.setVertical(False)
         elif player.getDeltaY() > 140:
-            player.setY_momentum(player.getY_momentum() - 0.25)
+             player.setY_momentum(player.getY_momentum() - 0.25)
 
         # handles positioning
         if player.getDeltaY() < 140:
@@ -192,12 +193,17 @@ while True:
             primary_block = blocks[0]
             enemy.gravity(primary_block.rect.y)
 
-    # checks for standing on a block and continues gravity if not
+    # checks for standing on a block and continues gravity if not 
+    #pipeCollide = pygame.sprite.spritecollide(player, pipe_list, False)
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
+    enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
     #if len(playerGround) > 0:
     #for block in playerGround:
     #player.groundBlockContact(block)
     player.touch(playerGround)
+    #player.touchPipe(pipeCollide)
+    if player.enemyHit(enemyHit):
+        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
     
     animation += 1
     if animation >= 15:

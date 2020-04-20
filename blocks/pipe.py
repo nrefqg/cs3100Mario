@@ -19,7 +19,7 @@ class topPipe(Block):
 	def __init__(self, x, y):
 		super().__init__("topPipe.png", x, y)
 		self.xHitRight = x+32
-		self.xHitBottom = y+32
+		self.xHitBottom = y+8
 
 class hiddenPipe(Block):
 	def __init__(self, x, y):

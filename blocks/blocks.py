@@ -12,7 +12,3 @@ class Block(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
-		self.xHitLeft = x #left side of hitbox
-		self.yHitTop = y #upper hitbox
-		self.xHitRight = x #right side of hitbox
-		self.xHitBottom = y #bottom side of hitbox
