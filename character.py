@@ -1,6 +1,8 @@
 import pygame
 import blocks
 from blocks.mushroom import mushroom
+import enemy
+
 
 class Character(pygame.sprite.Sprite):
     """
@@ -119,7 +121,7 @@ class Character(pygame.sprite.Sprite):
     # attempt at new collision function
     def touch(self, tile_list, block_list):
         if len(tile_list) > 0:
-            for tile in tile_list:
+            for tile in tile_list: 
                 self.collision[0] = tile.rect.collidepoint(self.rect.topleft)
                 self.collision[1] = tile.rect.collidepoint(self.rect.midtop)
                 self.collision[2] = tile.rect.collidepoint(self.rect.topright)
@@ -179,6 +181,77 @@ class Character(pygame.sprite.Sprite):
                         self.move_left = False
         elif self.deltaY == 0:
             self.deltaY = 1
+
+    def touchPipe(self, tile_list):
+        if len(tile_list) > 0:
+            for tile in tile_list: 
+                self.collision[0] = tile.rect.collidepoint(self.rect.topleft)
+                self.collision[1] = tile.rect.collidepoint(self.rect.midtop)
+                self.collision[2] = tile.rect.collidepoint(self.rect.topright)
+                self.collision[3] = tile.rect.collidepoint(self.rect.midleft)
+                self.collision[4] = tile.rect.collidepoint(self.rect.center)
+                self.collision[5] = tile.rect.collidepoint(self.rect.midright)
+                self.collision[6] = tile.rect.collidepoint(self.rect.bottomleft)
+                self.collision[7] = tile.rect.collidepoint(self.rect.midbottom)
+                self.collision[8] = tile.rect.collidepoint(self.rect.bottomright)
+
+                # tile is below player
+                if (tile.rect.bottomright[1] > self.rect.bottomright[1]) or (tile.rect.bottomright[1] + 6 == self.rect.bottomright[1]):
+                    if self.rect.bottom > tile.rect.top and not self.vertical_move:
+                        # stop moving vertically
+                        self.y_momentum = 0
+                        self.deltaY = 0
+                        self.rect.bottom = tile.rect.top + 6 
+                        if isinstance(tile, blocks.pipe.entrance):
+                            for event in pygame.event.get():
+                                if event.type == pygame.KEYDOWN:
+                                    o = 0 # Move to hidden level
+
+                elif tile.rect.topright[1] < self.rect.topright[1]:
+                    if self.rect.top <= tile.rect.bottom and self.vertical_move:
+                        self.y_momentum = 0
+                        self.deltaY = 141
+                        self.rect.top = tile.rect.bottom
+                        if isinstance(tile, blocks.breakableBlock.breakableBlock):
+                            tile.kill()
+                        if isinstance(tile, blocks.powerBlock.powerBlock):
+                            print("power block hit")
+                # side collisions
+                #if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
+                if self.collision[3] or self.collision[5]:
+                    #if self.rect.right >= tile.rect.left and self.move_right:
+                    if self.collision[5]:
+                        self.rect.right = self.rect.right - self.x_momentum
+                        self.x_momentum = 0
+                        self.move_right = False
+                    #elif self.rect.left <= tile.rect.right and self.move_left:
+                    elif self.collision[3]:
+                        self.rect.left = self.rect.left + self.x_momentum
+                        self.x_momentum = 0
+                        self.move_left = False
+        elif self.deltaY == 0:
+            self.deltaY = 1
+
+    def enemyHit(self, enemy_list):
+        if len(enemy_list) > 0:
+            for enemy in enemy_list:
+                self.collision[0] = enemy.rect.collidepoint(self.rect.topleft)
+                self.collision[1] = enemy.rect.collidepoint(self.rect.midtop)
+                self.collision[2] = enemy.rect.collidepoint(self.rect.topright)
+                self.collision[3] = enemy.rect.collidepoint(self.rect.midleft)
+                self.collision[4] = enemy.rect.collidepoint(self.rect.center)
+                self.collision[5] = enemy.rect.collidepoint(self.rect.midright)
+                self.collision[6] = enemy.rect.collidepoint(self.rect.bottomleft)
+                self.collision[7] = enemy.rect.collidepoint(self.rect.midbottom)
+                self.collision[8] = enemy.rect.collidepoint(self.rect.bottomright)
+
+                if self.collision[6] or self.collision[7] or self.collision[8]:
+                    self.setJumping(True)
+                    enemy.kill()
+
+                else:
+                    return True
+                    
 
     #This code will drive upgrading the player when a powerup is collected, or will shrink the player if they are damaged.
     def powerUp(self, power):

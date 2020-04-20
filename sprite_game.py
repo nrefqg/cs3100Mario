@@ -58,6 +58,7 @@ if(power_list != None):
     block_list.add(power_list)
 
 block_list.add(brick_list)
+block_list.add(pipe_list)
 
 if(single_coin_group != None):
     block_list.add(single_coin_group)
@@ -76,12 +77,13 @@ if(hidden_list != None):
     block_list.add(hidden_list)
 
 flag_list = renders['flag']
-pipe_list = renders['pipe']
 flagLoc = []
 
 # Load in image sprite
 player = Character(140, 20)
+
 player.powerUp(1)
+
 
 # Initialize viewport
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -135,14 +137,14 @@ while True:
             player.setVertical(True)
         elif player.getDeltaY() > 48 and player.getDeltaY() <= 96:
             player.setY_momentum(player.getY_momentum() + 0.5)
-        elif player.getDeltaY() > 96 and player.getDeltaY() <= 140:
+        elif player.getDeltaY() > 96 and player.getDeltaY() <= 160:
             player.setY_momentum(player.getY_momentum() - 1)
             player.setVertical(False)
-        elif player.getDeltaY() > 140:
-            player.setY_momentum(player.getY_momentum() - 0.25)
+        elif player.getDeltaY() > 160:
+             player.setY_momentum(player.getY_momentum() - 0.25)
 
         # handles positioning
-        if player.getDeltaY() < 140:
+        if player.getDeltaY() < 160:
             player.setY_location(player.getY_location() - player.getY_momentum())
             player.setDeltaY(player.getDeltaY() + player.getY_momentum())
         elif player.getDeltaY() >= 61 and player.getDeltaY() < 68:
@@ -208,6 +210,32 @@ while True:
     for enemy in enemy_list:
         enemy.move()
         enemy.gravity(SCREEN_HEIGHT)
+        if enemy.rect.y > lowestTile-5:
+            enemy.kill()
+
+        enemyTile = pygame.sprite.spritecollide(enemy, block_list, False)
+
+        if len(enemyTile) > 0:
+            for tile in enemyTile:
+                enemy.collision[0] = tile.rect.collidepoint(enemy.rect.topleft)
+                enemy.collision[1] = tile.rect.collidepoint(enemy.rect.midtop)
+                enemy.collision[2] = tile.rect.collidepoint(enemy.rect.topright)
+                enemy.collision[3] = tile.rect.collidepoint(enemy.rect.midleft)
+                enemy.collision[4] = tile.rect.collidepoint(enemy.rect.center)
+                enemy.collision[5] = tile.rect.collidepoint(enemy.rect.midright)
+                enemy.collision[6] = tile.rect.collidepoint(enemy.rect.bottomleft)
+                enemy.collision[7] = tile.rect.collidepoint(enemy.rect.midbottom)
+                enemy.collision[8] = tile.rect.collidepoint(enemy.rect.bottomright)
+
+                if enemy.speed > 0:
+                    if enemy.collision[5]:
+                        enemy.speed *= -1
+                        enemy.move()
+                
+                if enemy.speed < 0:
+                    if enemy.collision[3]:
+                        enemy.speed *= -1
+                        enemy.move()
 
     # detect collisions between enemies and blocks
     enemyGround = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
@@ -216,12 +244,20 @@ while True:
             primary_block = blocks[0]
             enemy.gravity(primary_block.rect.y)
 
-    # checks for standing on a block and continues gravity if not
+    # checks for standing on a block and continues gravity if not 
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
+
     #if len(playerGround) > 0:
     #for block in playerGround:
     #player.groundBlockContact(block)
     temp = player.touch(playerGround, block_list)
+
+    enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
+    
+    player.touch(playerGround)
+    if player.enemyHit(enemyHit):
+        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+
     
     if(temp != None and temp[0] == True):
         power_up = pygame.sprite.Group()

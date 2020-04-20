@@ -4,6 +4,8 @@ from blocks.pipe import leftPipe
 from blocks.pipe import rightPipe
 from blocks.pipe import topPipe
 from blocks.pipe import hiddenPipe
+from blocks.pipe import entrance
+from blocks.pipe import exit
 from blocks.stone import stone
 from blocks.breakableBlock import breakableBlock
 from blocks.redBlock import ground
@@ -100,8 +102,12 @@ def render(level):
                     new_pipe = rightPipe(y*32, x*32)
                     pipe_group.add(new_pipe)
                 renders['pipe'] = pipe_group
-            elif symbol == 'Q' or symbol == 'R': #usable pipes
-                new_pipe = topPipe(y*32, x*32)
+            elif symbol == 'Q': #usable pipes
+                new_pipe = entrance(y*32, x*32)
+                pipe_group.add(new_pipe)
+                renders['pipe'] = pipe_group
+            elif symbol == 'R':
+                new_pipe = exit(y*32, x*32)
                 pipe_group.add(new_pipe)
                 renders['pipe'] = pipe_group
             elif symbol == '|': #special pipes
