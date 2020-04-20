@@ -1,5 +1,6 @@
 import pygame
 import blocks
+from blocks.mushroom import mushroom
 
 class Character(pygame.sprite.Sprite):
     """
@@ -116,7 +117,7 @@ class Character(pygame.sprite.Sprite):
             self.deltaY = 1
 
     # attempt at new collision function
-    def touch(self, tile_list):
+    def touch(self, tile_list, block_list):
         if len(tile_list) > 0:
             for tile in tile_list:
                 self.collision[0] = tile.rect.collidepoint(self.rect.topleft)
@@ -144,7 +145,12 @@ class Character(pygame.sprite.Sprite):
                         if isinstance(tile, blocks.breakableBlock.breakableBlock) and self.powerLevel > 0:
                             tile.kill()
                         if isinstance(tile, blocks.powerBlock.powerBlock):
-                            print("power block hit")
+                            return [True, tile.y - 1, tile.x - 1]
+                            power_up = pygame.sprite.Group()
+                            new_block = mushroom((tile.y-1) * 32, (tile.x-1) * 32)
+                            power_up.add(new_block)
+                            block_list = block_list.add(new_block)
+
                 # side collisions
                 #if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
                 if self.collision[3] or self.collision[5]:
