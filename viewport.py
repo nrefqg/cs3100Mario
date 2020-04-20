@@ -153,9 +153,9 @@ class Viewport:
                     self.screen.blit(pipe.image, [pipe.rect.x - self.offsetX, pipe.rect.y])
 
     #Renders a death message if the player dies                
-    def render_death_message(self):
+    def render_death_message(self, deaths):
         self.screen.fill((0, 0, 0))
-        death_message = self.myfont.render('YOU DIED', True, FONT_COLOR)
+        death_message = self.myfont.render('YOU DIED. Lives: ' + str(deaths), True, FONT_COLOR)
         self.screen.blit(death_message, (self.screen_width/2, self.screen_height/2))
     
     #Renders a message if the player wins

@@ -214,7 +214,7 @@ while True:
 
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
 
     level_info.tick()
     pygame.display.update()
