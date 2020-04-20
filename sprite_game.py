@@ -12,8 +12,15 @@ from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
 from viewport import Viewport
+from victory import playerWin
 
 SKY_COLOR = (146, 244, 255)
+
+
+#VARIABLES HOLDING THE SPRITE LOCATIONS FOR OUR CHARACTER
+smallMario = ['sprites/mario.png', 'sprites/marioflip.png']
+bigMario = ['character/bigmario.png', 'character/bigmarioflip.png']
+
 
 level = []
 
@@ -33,6 +40,17 @@ lowestTile = 0
 # Load in block sprites
 renders = file_rendering.render(level)  # load level from Excel file
 block_list = renders['ground']
+power_list = renders['power']
+pipe_list = renders['pipe']
+brick_list = renders['breakable']
+coin_list = renders['coin']
+hidden_list = renders['hidden']
+
+block_list.add(power_list)
+block_list.add(brick_list)
+block_list.add(hidden_list)
+
+flag_list = renders['flag']
 pipe_list = renders['pipe']
 flagLoc = []
 
@@ -60,6 +78,11 @@ for block in block_list:
     if(block.rect.y > lowestTile):
         lowestTile = block.y
 
+#Was trying to get flagpole to work right
+for block in allRects['flagpole']:
+    if(isinstance(block, flagpole) == True):
+        flagLoc.append([block.xHitRight])
+
 #This while loops contains the running game
 while True:
     # Fills the background with a light blue color
@@ -74,16 +97,12 @@ while True:
         player.setX_momentum(player.getX_momentum() - 0.1)
     else:
         player.setX_momentum(0)
-    #"""
     # default gravity if mario is in air and not jumping
     if not player.getJumping():
+        player.setVertical(False)
         if player.getDeltaY() > 0:
-            player.setY_momentum(player.getY_momentum() + .3)
-        else:
-            player.setY_momentum(0)
-            player.setDeltaY(0)
+            player.setY_momentum(player.getY_momentum() + .9)
         if player.getDeltaY() + player.getY_momentum() > 0:
-            temp = player.getY_location()
             player.setY_location(player.getY_location() + player.getY_momentum())
             player.setDeltaY(player.getDeltaY() + player.getY_momentum())
         else:
@@ -92,10 +111,12 @@ while True:
     else:   # handles mario jump momentum
         if player.getDeltaY() >= 0 and player.getDeltaY() <= 48:
             player.setY_momentum(player.getY_momentum() + 1)
+            player.setVertical(True)
         elif player.getDeltaY() > 48 and player.getDeltaY() <= 96:
             player.setY_momentum(player.getY_momentum() + 0.5)
         elif player.getDeltaY() > 96 and player.getDeltaY() <= 140:
             player.setY_momentum(player.getY_momentum() - 1)
+            player.setVertical(False)
         elif player.getDeltaY() > 140:
             player.setY_momentum(player.getY_momentum() - 0.25)
 
@@ -112,11 +133,17 @@ while True:
 
     # Movement for the player is modified when specific keypresses are made
     if player.getMoveRight() == True:
-        player.updateImage('sprites/mario.png')
+        if(player.powerLevel == 0):
+            player.updateImage(smallMario[0])
+        elif(player.powerLevel == 1):
+            player.updateImage(bigMario[0])
         player.setX_location(player.getX_location() + player.getX_momentum())
-
+    
     if player.getMoveLeft() == True and player.getX_location() > viewport.offsetX:
-        player.updateImage('sprites/marioflip.png')
+        if(player.powerLevel == 0):
+            player.updateImage(smallMario[1])
+        elif(player.powerLevel == 1):
+            player.updateImage(bigMario[1])
         player.setX_location(player.getX_location() - player.getX_momentum())
 
     # Check pygame for "events" such as button presses
@@ -144,7 +171,7 @@ while True:
                 player.setJumping(False)
 
     # Update sprites on screen
-    viewport.render_sprites(player, enemy_list, block_list, pipe_list)
+    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list)
     # Update level information
     viewport.render_ui(level_info)
 
@@ -169,15 +196,22 @@ while True:
 
     # checks for standing on a block and continues gravity if not
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
-    player.groundContact(playerGround)
-
+    #if len(playerGround) > 0:
+    #for block in playerGround:
+    #player.groundBlockContact(block)
+    player.touch(playerGround)
+    
     animation += 1
     if animation >= 15:
         block_list.update()
         pygame.display.flip()
         animation = 0
 
-    
+    flagTouch = pygame.sprite.spritecollide(player, renders['flagpole'], False)
+
+    if(flagTouch in renders['flagpole']):
+        player, viewport, renders, block_list, pipe_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
         player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)

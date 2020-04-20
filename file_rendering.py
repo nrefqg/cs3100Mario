@@ -26,7 +26,10 @@ def render(level):
     renders = {'ground': None, 'pipe': None, 'breakable': None, 'stone': None, 'hidden': None, 'coin': None, 'power': None, 'flagpole': None, 'flag': None, 'disabled': None}
 
     block_group = pygame.sprite.Group()
+    flag_group = pygame.sprite.Group()
     pipe_group = pygame.sprite.Group()
+    brick_group = pygame.sprite.Group()
+    power_group = pygame.sprite.Group()
     for x in range(len(level)):
         for y in range(len(level[x])):
             symbol = level[x][y]
@@ -40,12 +43,12 @@ def render(level):
                 renders['stone'] = block_group
             elif symbol == 'c': #breakable block
                 new_block = breakableBlock(y*32, x*32)
-                block_group.add(new_block)
-                renders['breakable'] = block_group
+                brick_group.add(new_block)
+                renders['breakable'] = brick_group
             elif symbol in 'ABCDdefgmnop': #special blocks
                 new_block = powerBlock(y*32, x*32)
-                block_group.add(new_block)
-                renders['power'] = block_group
+                power_group.add(new_block)
+                renders['power'] = power_group
             elif symbol in 'FGH': #hidden blocks
                 new_block = hiddenBlock(y*32, x*32)
                 block_group.add(new_block)
@@ -76,8 +79,9 @@ def render(level):
                 renders['pipe'] = pipe_group
             elif symbol == '~': #flagpole
                 new_block = flagpole(y*32, x*32)
-                block_group.add(new_block)
-                renders['flagpole'] = block_group
+                
+                flag_group.add(new_block)
+                renders['flagpole'] = flag_group
             if symbol == ' ': #special cases where empty spaces need to change to look better
                 if x < len(level)-1 and y < len(level[x])-1:
                     if level[x+1][y] == 'P':
@@ -86,7 +90,7 @@ def render(level):
                         renders['pipe'] = pipe_group
                     if level[x][y+1] == '~' and level[x-1][y+1] == ' ':
                         new_block = flag(y*32, x*32)
-                        block_group.add(new_block)
-                        renders['flag'] = block_group
+                        flag_group.add(new_block)
+                        renders['flag'] = flag_group
 
     return renders
