@@ -12,9 +12,10 @@ class SoundClass:
         """
         # Initialize sound effect channel
         self.channel = pygame.mixer.Channel(0)
+        self.channel.set_volume(0.5)
         # Load audio files
         self.jump = pygame.mixer.Sound('sounds/jump.ogg')
-        self.jump.set_volume(0.25)
+        self.jump.set_volume(0.15)
         self.death = pygame.mixer.Sound('sounds/death.ogg')
         self.victory = pygame.mixer.Sound('sounds/victory.wav')
         self.block_hit = pygame.mixer.Sound('sounds/block_hit.wav')
@@ -28,6 +29,7 @@ class SoundClass:
         :return: None
         """
         pygame.mixer.music.load('sounds/background.ogg')
+        pygame.mixer.music.set_volume(0.25)
         pygame.mixer.music.play(-1)
 
     def stop_bg(self):
