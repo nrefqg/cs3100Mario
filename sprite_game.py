@@ -71,7 +71,7 @@ while True:
     if not player.getJumping():
         player.setVertical(False)
         if player.getDeltaY() > 0:
-            player.setY_momentum(player.getY_momentum() + .2)
+            player.setY_momentum(player.getY_momentum() + .9)
         if player.getDeltaY() + player.getY_momentum() > 0:
             player.setY_location(player.getY_location() + player.getY_momentum())
             player.setDeltaY(player.getDeltaY() + player.getY_momentum())
