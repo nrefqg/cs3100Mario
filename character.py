@@ -141,7 +141,7 @@ class Character(pygame.sprite.Sprite):
                         self.y_momentum = 0
                         self.deltaY = 141
                         self.rect.top = tile.rect.bottom
-                        if isinstance(tile, blocks.breakableBlock.breakableBlock):
+                        if isinstance(tile, blocks.breakableBlock.breakableBlock) and self.powerLevel > 0:
                             tile.kill()
                         if isinstance(tile, blocks.powerBlock.powerBlock):
                             print("power block hit")
@@ -164,18 +164,21 @@ class Character(pygame.sprite.Sprite):
     #This code will drive upgrading the player when a powerup is collected, or will shrink the player if they are damaged.
     def powerUp(self, power):
         if power == 0:
+            self.powerLevel = 0
             temp = self.rect.bottomleft
-            self.image = pygame.image.load('mariosmall.png')
+            self.image = pygame.image.load('sprites/mariosmall.png')
             self.rect = self.image.get_rect()
             self.rect.bottomleft = temp
         elif power == 1:
             temp = self.rect.bottomleft
-            self.image = pygame.image.load('mariobig.png')
+            self.powerLevel = 1
+            self.image = pygame.image.load('sprites/mariobig.png')
             self.rect = self.image.get_rect()
             self.rect.bottomleft = temp
         elif power == 2:
+            self.powerLevel = 2
             temp = self.rect.bottomleft
-            self.image = pygame.image.load('mariopower.png')
+            self.image = pygame.image.load('sprites/mariopower.png')
             self.rect = self.image.get_rect()
             self.rect.bottomleft = temp
     # image update functions

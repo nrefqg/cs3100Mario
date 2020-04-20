@@ -20,7 +20,7 @@ SKY_COLOR = (146, 244, 255)
 
 #VARIABLES HOLDING THE SPRITE LOCATIONS FOR OUR CHARACTER
 smallMario = ['sprites/mariosmall.png', 'sprites/marioflipsmall.png']
-bigMario = ['character/mariobig.png', 'character/marioflipbig.png']
+bigMario = ['sprites/mariobig.png', 'sprites/marioflipbig.png']
 
 
 level = []
@@ -79,7 +79,7 @@ flagLoc = []
 
 # Load in image sprite
 player = Character(140, 20)
-
+player.powerUp(1)
 
 # Initialize viewport
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
