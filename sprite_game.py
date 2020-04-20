@@ -45,6 +45,10 @@ pipe_list = renders['pipe']
 brick_list = renders['breakable']
 coin_list = renders['coin']
 hidden_list = renders['hidden']
+single_coin_group = renders['singleCoin']
+star_group = renders['star']
+oneUp_group = renders['1up']
+multi_group = renders['multiCoin']
 
 block_list.add(power_list)
 block_list.add(brick_list)

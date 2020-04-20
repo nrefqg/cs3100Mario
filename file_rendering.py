@@ -23,13 +23,20 @@ def render(level):
         'pipe' -> pipe_group
     """
 
-    renders = {'ground': None, 'pipe': None, 'breakable': None, 'stone': None, 'hidden': None, 'coin': None, 'power': None, 'flagpole': None, 'flag': None, 'disabled': None}
+    renders = {'ground': None, 'pipe': None, 'breakable': None, 'stone': None, 'hidden': None, 'coin': None, 'power': None, 'flagpole': None, 'flag': None, 
+    'disabled': None, 'enemies': None, 'singleCoin': None, 'multiCoin': None, 'star': None, '1up': None}
 
     block_group = pygame.sprite.Group()
     flag_group = pygame.sprite.Group()
     pipe_group = pygame.sprite.Group()
     brick_group = pygame.sprite.Group()
     power_group = pygame.sprite.Group()
+    enemy_group = pygame.sprite.Group()
+    single_coin_group = pygame.sprite.Group()
+    star_group = pygame.sprite.Group()
+    oneUp_group = pygame.sprite.Group()
+    multi_group = pygame.sprite.Group()
+
     for x in range(len(level)):
         for y in range(len(level[x])):
             symbol = level[x][y]
@@ -45,6 +52,27 @@ def render(level):
                 new_block = breakableBlock(y*32, x*32)
                 brick_group.add(new_block)
                 renders['breakable'] = brick_group
+            elif symbol == 'A': #Single coin block
+                new_block = powerBlock(y*32, x*32)
+                single_coin_group.add(new_block)
+                renders['singleCoin'] = new_block
+            elif symbol == 'B' or symbol == 'e':
+                new_block = powerBlock(y*32, x*32)
+                power_group.add(new_block)
+                renders['power'] = power_group
+            elif symbol == 'C' or symbol == 'f':
+                new_block = powerBlock(y*32, x*32)
+                star_group.add(new_block)
+                renders['star'] = star_group
+            elif symbol == 'D' or symbol == 'g':
+                new_block = powerBlock(y*32, x*32)
+                oneUp_group.add(new_block)
+                renders['1up'] = oneUp_group
+            elif symbol == 'd':
+                new_block = breakableBlock(y*32, x*32)
+                multi_group.add(new_block)
+                renders['multiCoin'] = multi_group
+            
             elif symbol in 'ABCDdefgmnop': #special blocks
                 new_block = powerBlock(y*32, x*32)
                 power_group.add(new_block)
