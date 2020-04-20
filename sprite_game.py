@@ -9,12 +9,10 @@ from blocks.mushroom import mushroom
 from character import Character
 from itertools import combinations
 from level import Level
-from enemies.enemy0 import Enemy0
-from enemies.enemy1 import Enemy1
-from enemies.enemy3 import Enemy3
 from sound import SoundClass
 from viewport import Viewport
 from victory import playerWin
+from enemies.enemy4 import Enemy4
 
 SKY_COLOR = (146, 244, 255)
 
@@ -59,6 +57,7 @@ if(power_list != None):
 
 block_list.add(brick_list)
 block_list.add(pipe_list)
+projectile_list = pygame.sprite.Group()
 
 if(single_coin_group != None):
     block_list.add(single_coin_group)
@@ -90,7 +89,6 @@ viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 viewport.game_menu()
 # Initialize Sound
 sound_obj = SoundClass()
-#sound_obj.start_bg()
 
 # A list of all rects in the level
 allRects = file_rendering.render(level)
@@ -196,11 +194,11 @@ while True:
                 player.setJumping(False)
 
     # Update sprites on screen
-    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list, powerup_list)
+    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list, powerup_list, projectile_list)
     # Update level information
     viewport.render_ui(level_info)
-    # detect collisions between enemies
 
+    # detect collisions between enemies
     for first, second in combinations(enemy_list, 2):
         if first.rect.colliderect(second.rect):
             first.flip()
@@ -211,6 +209,10 @@ while True:
     for enemy in enemy_list:
         enemy.move()
         enemy.gravity(SCREEN_HEIGHT)
+
+        if isinstance(enemy, Enemy4):
+            enemy.throw(-3, -15, projectile_list)
+
         if enemy.rect.y > lowestTile-5:
             enemy.kill()
 
@@ -238,6 +240,9 @@ while True:
                         enemy.speed *= -1
                         enemy.move()
 
+    for projectile in projectile_list:
+        projectile.move(SCREEN_HEIGHT, projectile_list)
+
     # detect collisions between enemies and blocks
     enemyGround = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
     for enemy, blocks in enemyGround.items():
@@ -248,6 +253,7 @@ while True:
     # checks for standing on a block and continues gravity if not 
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
     enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
+    projectile_hit = pygame.sprite.spritecollide(player, projectile_list, False)
 
     player.touch(playerGround, block_list, powerup_list)
 
@@ -255,6 +261,12 @@ while True:
         if player.enemyHit(enemyHit) and player.powerLevel == 1:
             player.powerLevel = 0
         elif player.enemyHit(enemyHit) and player.powerLevel > 1:
+            player.powerUp(player.powerLevel-1)
+            player.invincible = 90
+
+        if len(projectile_hit) > 0 and player.powerLevel == 1:
+            player.powerLevel = 0
+        elif len(projectile_hit) > 0 and player.powerLevel > 1:
             player.powerUp(player.powerLevel-1)
             player.invincible = 90
 
