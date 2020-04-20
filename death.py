@@ -2,6 +2,7 @@
 
 import time
 import pygame
+import sys
 import file_rendering
 from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
@@ -9,10 +10,16 @@ from enemies.enemy3 import Enemy3
 from character import Character
 from viewport import Viewport
 
-def playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level):
-    viewport.render_death_message()
+def playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info):
+    # If lose_life() returns true, we end the game
+    end_game = level_info.lose_life()
+    viewport.render_death_message(level_info.lives)
     pygame.display.update()
     time.sleep(3)
+    if end_game:
+        pygame.display.quit()
+        pygame.quit()  # Stop pygame
+        sys.exit()  # Stop script
 
     #RELOAD LEVEL
     # Load in block sprites
