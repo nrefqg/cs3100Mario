@@ -37,7 +37,7 @@ class Enemy1(Enemy):
 
         self.rect.x += self.speed
 
-    def damage(self, group):
+    def damage(self, group, level):
         """
         Deal one unit of damage to this enemy, and change state accordingly
         :param group: The sprite group the enemy belongs to
