@@ -16,7 +16,9 @@ from blocks.flagpole import flagpole
 from blocks.flagpole import flag
 from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
+from enemies.enemy2 import Enemy2
 from enemies.enemy3 import Enemy3
+from enemies.enemy4 import Enemy4
 
 
 def render(level):
@@ -100,10 +102,19 @@ def render(level):
                 new_block = Enemy1(y*32, x*32, 0)
                 enemy_group.add(new_block)
                 renders['enemies'] = enemy_group
+            elif symbol == '2' or symbol == '7':
+                new_block = Enemy2(y*32, x*32, 0)
+                enemy_group.add(new_block)
+                renders['enemies'] = enemy_group
             elif symbol == '3' or symbol == '8':
                 new_block = Enemy3(y*32, x*32, 0)
                 enemy_group.add(new_block)
                 renders['enemies'] = enemy_group
+            elif symbol == '4' or symbol == '9':
+                new_block = Enemy4(y*32, x*32, 0)
+                enemy_group.add(new_block)
+                renders['enemies'] = enemy_group
+
             if symbol == ' ': #special cases where empty spaces need to change to look better
                 if x < len(level)-1 and y < len(level[x])-1:
                     if level[x+1][y] == 'P':
