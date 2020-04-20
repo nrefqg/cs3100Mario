@@ -19,8 +19,8 @@ SKY_COLOR = (146, 244, 255)
 
 
 #VARIABLES HOLDING THE SPRITE LOCATIONS FOR OUR CHARACTER
-smallMario = ['sprites/mario.png', 'sprites/marioflip.png']
-bigMario = ['character/bigmario.png', 'character/bigmarioflip.png']
+smallMario = ['sprites/mariosmall.png', 'sprites/marioflipsmall.png']
+bigMario = ['character/mariobig.png', 'character/marioflipbig.png']
 
 
 level = []
