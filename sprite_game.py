@@ -204,10 +204,8 @@ while True:
                 
                 if enemy.speed < 0:
                     if enemy.collision[3]:
-                        print("collide")
                         enemy.speed *= -1
                         enemy.move()
-                        print(enemy.speed)
 
     # detect collisions between enemies and blocks
     enemyGround = pygame.sprite.groupcollide(enemy_list, block_list, False, False)
