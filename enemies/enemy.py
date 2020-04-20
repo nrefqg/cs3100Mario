@@ -1,7 +1,7 @@
 import pygame
 import os
 
-GRAVITY = 2
+GRAVITY = 0.5
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -30,6 +30,7 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = 0
         self.yspeed = 0
         self.is_jumping = False
+        self.can_jump = False
 
         self.image = pygame.image.load(os.path.join('enemies', 'sprites', image))
         self.rect = self.image.get_rect()
@@ -59,9 +60,11 @@ class Enemy(pygame.sprite.Sprite):
         :return: None
         """
         if self.rect.y + self.rect.height >= ground and self.yspeed >= 0:  # check if passed the ground
+            self.can_jump = True
             self.yspeed = 0  # stop moving vertically
             self.rect.y = ground - self.rect.height + 1  # reset rect to be above ground
         else:
+            self.can_jump = False
             self.yspeed += GRAVITY  # accelerate due to gravity
 
     def jump(self, speed):
@@ -70,6 +73,6 @@ class Enemy(pygame.sprite.Sprite):
         :param speed: the initial speed of the jump
         :return: None
         """
-        print("jump!", self.yspeed)
-        if self.yspeed == 0:  # can only jump if not falling
+        if self.yspeed == 0 and self.can_jump:  # can only jump if not falling
+            self.is_jumping = True
             self.yspeed -= speed  # causes sprite to jump (in -y direction)

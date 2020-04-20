@@ -11,6 +11,7 @@ from level import Level
 from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
+from enemies.enemy2 import Enemy2
 from sound import SoundClass
 from viewport import Viewport
 from victory import playerWin
@@ -49,6 +50,9 @@ hidden_list = renders['hidden']
 enemy_list = renders['enemies']
 block_list.add(power_list)
 block_list.add(brick_list)
+
+e2 = Enemy2(400, 200, -1)
+enemy_list.add(e2)
 
 if(hidden_list != None):
     block_list.add(hidden_list)

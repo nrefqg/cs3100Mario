@@ -36,7 +36,7 @@ class Enemy2(Enemy):
 
         self.rect.x += self.speed
         if self.health == 3:
-            self.jump(4)
+            self.jump(15)
 
     def damage(self, group):
         """

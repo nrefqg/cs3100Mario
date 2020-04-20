@@ -9,6 +9,7 @@ from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
 from viewport import Viewport
+from character import Character
 
 SKY_COLOR = (7, 155, 176)
 TIME = 400
@@ -29,11 +30,13 @@ level_info = Level([], TIME)
 renders = file_rendering.render(level)  # load level from Excel file
 block_list = renders['ground']
 pipe_list = renders['pipe']
+flag_list = renders['flag']
 
 # Load in image sprite
 player_image = pygame.image.load('sprites/mario.png')
 player_location = [20,140]
 player_rect = pygame.Rect(100, 100, 5, 13)
+character = Character(player_location[0], player_location[1])
 
 #default movement indicators
 moving_right = False
@@ -142,7 +145,7 @@ while True:
                 player_y_momentum = 0
 
     # Update sprites on screen
-    viewport.render_sprites([player_image, player_location], enemy_list, block_list, pipe_list)
+    viewport.render_sprites(character, enemy_list, block_list, pipe_list, flag_list)
     # Update level info
     viewport.render_ui(level_info)
 
