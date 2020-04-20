@@ -58,28 +58,24 @@ def render(level):
             elif symbol == 'A': #Single coin block
                 new_block = powerBlock(y*32, x*32)
                 single_coin_group.add(new_block)
-                renders['singleCoin'] = new_block
-            elif symbol == 'B' or symbol == 'e':
+                renders['singleCoin'] = single_coin_group
+            elif symbol == 'B' or symbol == 'e' or symbol == 'n':
                 new_block = powerBlock(y*32, x*32)
                 power_group.add(new_block)
                 renders['power'] = power_group
-            elif symbol == 'C' or symbol == 'f':
+            elif symbol == 'C' or symbol == 'f' or symbol == 'o':
                 new_block = powerBlock(y*32, x*32)
                 star_group.add(new_block)
                 renders['star'] = star_group
-            elif symbol == 'D' or symbol == 'g':
+            elif symbol == 'D' or symbol == 'g' or symbol == 'p':
                 new_block = powerBlock(y*32, x*32)
                 oneUp_group.add(new_block)
                 renders['1up'] = oneUp_group
-            elif symbol == 'd':
-                new_block = breakableBlock(y*32, x*32)
+            elif symbol == 'd' or symbol == 'm':
+                new_block = powerBlock(y*32, x*32)
                 multi_group.add(new_block)
                 renders['multiCoin'] = multi_group
-            
-            '''elif symbol in 'ABCDdefgmnop': #special blocks
-                new_block = powerBlock(y*32, x*32)
-                power_group.add(new_block)
-                renders['power'] = power_group'''
+
             elif symbol in 'FGH': #hidden blocks
                 new_block = hiddenBlock(y*32, x*32)
                 block_group.add(new_block)
