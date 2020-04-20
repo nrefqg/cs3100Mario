@@ -20,6 +20,7 @@ class Level:
         self.score = 0
         self.coins = 0
         self.checkpoint = None
+        self.lives = 3
 
     def tick(self):
         """
@@ -30,6 +31,17 @@ class Level:
             return False
         self.timer -= 1
         return True
+
+    def lose_life(self):
+        """
+        Decrements a life
+        :return: False if lives are remaining, true if no lives left
+        """
+        self.lives -= 1
+        if not self.lives:
+            return True
+        else:
+            return False
 
     def reset(self):
         """

@@ -20,19 +20,27 @@ def playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level):
     pipe_list = renders['pipe']
     flagLoc = []
 
+    renders = file_rendering.render(level)  # load level from Excel file
+    block_list = renders['ground']
+    power_list = renders['power']
+    pipe_list = renders['pipe']
+    brick_list = renders['breakable']
+    coin_list = renders['coin']
+    hidden_list = renders['hidden']
+    enemy_list = renders['enemies']
+    
+    block_list.add(power_list)
+    block_list.add(brick_list)
+    
+    if(hidden_list != None):
+        block_list.add(hidden_list)
+    
+    flag_list = renders['flag']
+    pipe_list = renders['pipe']
+    
     # Load in image sprite
     player = Character(140, 20)
 
-    # Load in enemy list
-    enemy_list = pygame.sprite.Group()
-    e0 = Enemy0(400, 20, -1)
-    e1 = Enemy1(100, 20, 2)
-    e3 = Enemy3(200, 20, 1)
-    for e in [e0, e1, e3]:
-        enemy_list.add(e)
-
-    #END RELOAD
-    player = Character(140, 20)
     viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     return player, viewport, renders, block_list, pipe_list, enemy_list
