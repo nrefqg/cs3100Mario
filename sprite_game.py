@@ -82,7 +82,7 @@ flagLoc = []
 # Load in image sprite
 player = Character(140, 20)
 
-player.powerUp(1)
+player.powerUp(2)
 
 
 # Initialize viewport
@@ -156,16 +156,16 @@ while True:
 
     # Movement for the player is modified when specific keypresses are made
     if player.getMoveRight() == True:
-        if(player.powerLevel == 0):
+        if(player.powerLevel == 1):
             player.updateImage(smallMario[0])
-        elif(player.powerLevel == 1):
+        elif(player.powerLevel == 2):
             player.updateImage(bigMario[0])
         player.setX_location(player.getX_location() + player.getX_momentum())
     
     if player.getMoveLeft() == True and player.getX_location() > viewport.offsetX:
-        if(player.powerLevel == 0):
+        if(player.powerLevel == 1):
             player.updateImage(smallMario[1])
-        elif(player.powerLevel == 1):
+        elif(player.powerLevel == 2):
             player.updateImage(bigMario[1])
         player.setX_location(player.getX_location() - player.getX_momentum())
 
@@ -255,9 +255,13 @@ while True:
     enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
     
     player.touch(playerGround, block_list)
-    if player.enemyHit(enemyHit):
-        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
-
+    #hit = player.enemyHit(enemyHit)
+    if player.invincible <= 0:
+        if player.enemyHit(enemyHit) and player.powerLevel == 1:
+            player.powerLevel = 0
+        elif player.enemyHit(enemyHit) and player.powerLevel > 1:
+            player.powerUp(player.powerLevel-1)
+            player.invincible = 90
     
     if(temp != None and temp[0] == True):
         power_up = pygame.sprite.Group()
@@ -266,6 +270,7 @@ while True:
         powerup_list = power_up.add(new_block)
 
     animation += 1
+    player.invincible -= 1
     if animation >= 15:
         block_list.update()
         pygame.display.flip()
@@ -276,14 +281,14 @@ while True:
     if(flagTouch in renders['flagpole']):
         sound_obj.stop_bg()
         sound_obj.play_sound("victory")
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+        player, viewport, renders, block_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
         sound_obj.start_bg()
 
     #If player is below lowest tile, kill them
     if(player.getY_location() > lowestTile+5):
         sound_obj.stop_bg() # Stop background music
         sound_obj.play_sound("death")
-        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+        player.powerLevel = 0
         sound_obj.start_bg()
 
     level_info.tick()
@@ -296,6 +301,9 @@ while True:
         pygame.display.quit()
         pygame.quit()  # Stop pygame
         sys.exit()  # Stop script
+
+    if player.powerLevel == 0:
+        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
 
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps

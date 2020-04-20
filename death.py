@@ -51,6 +51,7 @@ def playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info
 
     #END RELOAD
     player = Character(140, 20)
+    player.powerUp(1)
     viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     return player, viewport, renders, block_list
