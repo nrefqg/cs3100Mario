@@ -20,7 +20,7 @@ class Character(pygame.sprite.Sprite):
                 raise ValueError("Argument y should be an int")
         self.x = x
         self.y = y
-        self.image = pygame.image.load('sprites/mario.png')
+        self.image = pygame.image.load('sprites/mariosmall.png')
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
