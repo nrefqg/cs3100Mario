@@ -71,6 +71,8 @@ if(oneUp_group != None):
 if(multi_group != None):
     block_list.add(multi_group)
 
+if(coin_list != None):
+    block_list.add(coin_list)
 
 if(hidden_list != None):
     block_list.add(hidden_list)
@@ -81,7 +83,6 @@ flagLoc = []
 
 # Load in image sprite
 player = Character(140, 20)
-player.powerUp(1)
 
 # Initialize viewport
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -221,13 +222,13 @@ while True:
     #if len(playerGround) > 0:
     #for block in playerGround:
     #player.groundBlockContact(block)
-    temp = player.touch(playerGround, block_list)
+    player.touch(playerGround, block_list)
     
-    if(temp != None and temp[0] == True):
+    '''if(temp != None and temp[0] == True):
         power_up = pygame.sprite.Group()
         new_block = mushroom(temp[1] * 32, temp[2] * 32)
         power_up.add(new_block)
-        powerup_list = power_up.add(new_block)
+        powerup_list = power_up.add(new_block)'''
 
     animation += 1
     if animation >= 15:

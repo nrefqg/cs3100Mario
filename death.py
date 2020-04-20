@@ -31,16 +31,39 @@ def playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info
     brick_list = renders['breakable']
     coin_list = renders['coin']
     hidden_list = renders['hidden']
+    single_coin_group = renders['singleCoin']
+    star_group = renders['star']
+    oneUp_group = renders['oneUp']
+    multi_group = renders['multiCoin']
     enemy_list = renders['enemies']
+    powerup_list = pygame.sprite.Group()
     
-    block_list.add(power_list)
+    if(power_list != None):
+        block_list.add(power_list)
+    
     block_list.add(brick_list)
+    
+    if(single_coin_group != None):
+        block_list.add(single_coin_group)
+    
+    if(star_group != None):
+        block_list.add(star_group)
+    
+    if(oneUp_group != None):
+        block_list.add(oneUp_group)
+    
+    if(multi_group != None):
+        block_list.add(multi_group)
+    
+    if(coin_list != None):
+        block_list.add(coin_list)
     
     if(hidden_list != None):
         block_list.add(hidden_list)
     
     flag_list = renders['flag']
     pipe_list = renders['pipe']
+    flagLoc = []
 
     # Load in image sprite
     player = Character(140, 20)
