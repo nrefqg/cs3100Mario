@@ -231,10 +231,13 @@ while True:
     # checks for standing on a block and continues gravity if not 
     playerGround = pygame.sprite.spritecollide(player, block_list, False)
     enemyHit = pygame.sprite.spritecollide(player, enemy_list, False)
-    #projectile_hit = pygame.sprite.spritecollide(player, projectiles, False)
+    projectile_hit = pygame.sprite.spritecollide(player, projectile_list, False)
     
     player.touch(playerGround)
     if player.enemyHit(enemyHit):
+        player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
+
+    if len(projectile_hit) > 0:
         player, viewport, renders, block_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level, level_info)
 
     animation += 1
