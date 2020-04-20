@@ -146,6 +146,17 @@ class Character(pygame.sprite.Sprite):
                             tile.kill()
                         if isinstance(tile, blocks.powerBlock.powerBlock):
                             print("power block hit")
+                            print(type(tile))
+                        if isinstance(tile, blocks.singleCoin.singleCoin):
+                            print("Single Coin block")
+                        if isinstance(tile, blocks.star.star):
+                            print("star block")
+                        if isinstance(tile, blocks.oneUp.oneUp):
+                            print("oneUp block")
+                        if isinstance(tile, blocks.multiCoin.multiCoin):
+                            print("multiCoin block")
+                        if isinstance(tile, blocks.hiddenBlock.hiddenBlock):
+                            print("hidden block")
                 # side collisions
                 #if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
                 if self.collision[3] or self.collision[5]:
