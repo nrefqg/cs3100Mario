@@ -41,15 +41,18 @@ class Character(pygame.sprite.Sprite):
         # used to determine if player ran off a ledge/block into open air
         self.standing = False
 
+        #Determines the level of powerup the player has.  0 means the player is small, 1 is big player, 2 is the highest level. In classic mario 2 would be fireflower
+        self.powerLevel = 0
+
     # Getter and setters for location variables
     def getX_location(self):
-        return self.rect.x
+            return self.rect.x
     def setX_location(self, newX):
-        self.rect.x = newX
+            self.rect.x = newX
     def getY_location(self):
-        return self.rect.y
+            return self.rect.y
     def setY_location(self, newY):
-        self.rect.y = newY
+            self.rect.y = newY
 
     # Getter and setters for movement variables
     def getMoveRight(self):
@@ -159,6 +162,9 @@ class Character(pygame.sprite.Sprite):
         elif self.deltaY == 0:
             self.deltaY = 1
 
+    #This code will drive upgrading the player when a powerup is collected, or will shrink the player if they are damaged.
+    def powerUp(self, power):
+            print('temp powerup code')
     # image update functions
     def updateImage(self, file):
         self.image = pygame.image.load(file)

@@ -26,6 +26,7 @@ def render(level):
     renders = {'ground': None, 'pipe': None, 'breakable': None, 'stone': None, 'hidden': None, 'coin': None, 'power': None, 'flagpole': None, 'flag': None, 'disabled': None}
 
     block_group = pygame.sprite.Group()
+    flag_group = pygame.sprite.Group()
     pipe_group = pygame.sprite.Group()
     brick_group = pygame.sprite.Group()
     power_group = pygame.sprite.Group()
@@ -78,8 +79,9 @@ def render(level):
                 renders['pipe'] = pipe_group
             elif symbol == '~': #flagpole
                 new_block = flagpole(y*32, x*32)
-                block_group.add(new_block)
-                renders['flagpole'] = block_group
+                
+                flag_group.add(new_block)
+                renders['flagpole'] = flag_group
             if symbol == ' ': #special cases where empty spaces need to change to look better
                 if x < len(level)-1 and y < len(level[x])-1:
                     if level[x+1][y] == 'P':
@@ -88,7 +90,7 @@ def render(level):
                         renders['pipe'] = pipe_group
                     if level[x][y+1] == '~' and level[x-1][y+1] == ' ':
                         new_block = flag(y*32, x*32)
-                        block_group.add(new_block)
-                        renders['flag'] = block_group
+                        flag_group.add(new_block)
+                        renders['flag'] = flag_group
 
     return renders

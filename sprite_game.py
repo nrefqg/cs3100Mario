@@ -3,12 +3,24 @@ import sys
 import file_rendering
 import time
 import file_loader
+from death import playerDeath
+from blocks.flagpole import flagpole
 from character import Character
 from itertools import combinations
+from level import Level
 from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
 from viewport import Viewport
+from victory import playerWin
+
+SKY_COLOR = (7, 155, 176)
+
+
+#VARIABLES HOLDING THE SPRITE LOCATIONS FOR OUR CHARACTER
+smallMario = ['sprites/mario.png', 'sprites/marioflip.png']
+bigMario = ['character/bigmario.png', 'character/bigmarioflip.png']
+
 
 level = []
 
@@ -22,6 +34,8 @@ animation = 0
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
 level = file_loader.file_loading()
+level_info = Level([], 400) # Load in level with no sprites and 400 time
+lowestTile = 0
 
 # Load in block sprites
 renders = file_rendering.render(level)  # load level from Excel file
@@ -36,6 +50,9 @@ block_list.add(power_list)
 block_list.add(brick_list)
 block_list.add(hidden_list)
 
+flag_list = renders['flag']
+pipe_list = renders['pipe']
+flagLoc = []
 
 # Load in image sprite
 player = Character(140, 20)
@@ -54,9 +71,20 @@ viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 # A list of all rects in the level
 allRects = file_rendering.render(level)
 
+#Get the lowest block in the level's y position
+for block in block_list:
+    if(block.rect.y > lowestTile):
+        lowestTile = block.y
+
+#Was trying to get flagpole to work right
+for block in allRects['flagpole']:
+    if(isinstance(block, flagpole) == True):
+        flagLoc.append([block.xHitRight])
+
+#This while loops contains the running game
 while True:
     # Fills the background with a light blue color
-    viewport.reset()
+    viewport.reset(SKY_COLOR)
 
     # Sprinting and horizontal movement
     if player.getMoveRight() and player.getX_momentum() < 5.0:
@@ -103,11 +131,17 @@ while True:
 
     # Movement for the player is modified when specific keypresses are made
     if player.getMoveRight() == True:
-        player.updateImage('sprites/mario.png')
+        if(player.powerLevel == 0):
+            player.updateImage(smallMario[0])
+        elif(player.powerLevel == 1):
+            player.updateImage(bigMario[0])
         player.setX_location(player.getX_location() + player.getX_momentum())
-
+    
     if player.getMoveLeft() == True and player.getX_location() > viewport.offsetX:
-        player.updateImage('sprites/marioflip.png')
+        if(player.powerLevel == 0):
+            player.updateImage(smallMario[1])
+        elif(player.powerLevel == 1):
+            player.updateImage(bigMario[1])
         player.setX_location(player.getX_location() - player.getX_momentum())
 
     # Check pygame for "events" such as button presses
@@ -135,7 +169,9 @@ while True:
                 player.setJumping(False)
 
     # Update sprites on screen
-    viewport.render_sprites(player, enemy_list, block_list, pipe_list)
+    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list)
+    # Update level information
+    viewport.render_ui(level_info)
 
     # detect collisions between enemies
     for first, second in combinations(enemy_list, 2):
@@ -162,12 +198,22 @@ while True:
     #for block in playerGround:
     #player.groundBlockContact(block)
     player.touch(playerGround)
-
+    
     animation += 1
     if animation >= 15:
         block_list.update()
         pygame.display.flip()
         animation = 0
 
+    flagTouch = pygame.sprite.spritecollide(player, renders['flagpole'], False)
+
+    if(flagTouch in renders['flagpole']):
+        player, viewport, renders, block_list, pipe_list, enemy_list = playerWin(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+
+    #If player is below lowest tile, kill them
+    if(player.getY_location() > lowestTile+5):
+        player, viewport, renders, block_list, pipe_list, enemy_list = playerDeath(player, viewport, SCREEN_HEIGHT, SCREEN_WIDTH, level)
+
+    level_info.tick()
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps

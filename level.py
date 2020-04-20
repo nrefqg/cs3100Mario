@@ -9,7 +9,7 @@ class Level:
         :param time: The allotted to complete the level in seconds
         """
 
-        if time is not int:
+        if not isinstance(time, int):
             raise ValueError("Argument time should be an integer")
         elif time <= 0:
             raise ValueError("Argument time should be greater than 0")

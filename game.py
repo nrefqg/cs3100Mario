@@ -3,13 +3,15 @@ import sys
 import file_rendering
 import time
 import file_loader
+from level import Level
 from itertools import combinations
 from enemies.enemy0 import Enemy0
 from enemies.enemy1 import Enemy1
 from enemies.enemy3 import Enemy3
 from viewport import Viewport
 
-level = []
+SKY_COLOR = (7, 155, 176)
+TIME = 400
 
 pygame.init()
 pygame.display.set_caption('Super Mario')  # Sets the window title
@@ -20,8 +22,8 @@ SCREEN_HEIGHT = 512
 animation = 0
 display = (SCREEN_WIDTH, SCREEN_HEIGHT)
 scale = pygame.Surface((300, 200))
-#screen = pygame.display.set_mode(display, 0, 32)  # set the screen dimensions
 level = file_loader.file_loading()
+level_info = Level([], TIME)
 
 # Load in block sprites
 renders = file_rendering.render(level)  # load level from Excel file
@@ -57,8 +59,8 @@ player_x_momentum = 0
 player_y_momentum = 0
 
 while True:
-    #Fills the background with a light blue color
-    viewport.reset()
+    #Fills the background with the sky color constant
+    viewport.reset(SKY_COLOR)
 
     #if character falls below floor, resets to floor.  Will fix once collisions are implemented
     if player_location[1] > 208:
@@ -140,7 +142,9 @@ while True:
                 player_y_momentum = 0
 
     # Update sprites on screen
-    viewport.render_sprites(player_image, player_location, enemy_list, block_list, pipe_list)
+    viewport.render_sprites([player_image, player_location], enemy_list, block_list, pipe_list)
+    # Update level info
+    viewport.render_ui(level_info)
 
     # detect collisions between enemies
     for first, second in combinations(enemy_list, 2):
@@ -166,6 +170,9 @@ while True:
         block_list.update()
         pygame.display.flip()
         animation = 0
+
+    # Update level information
+    level_info.tick()
 
     pygame.display.update()
     clock.tick(60)  # Keeps game at 60fps
