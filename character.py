@@ -164,7 +164,21 @@ class Character(pygame.sprite.Sprite):
 
     #This code will drive upgrading the player when a powerup is collected, or will shrink the player if they are damaged.
     def powerUp(self, power):
-            print('temp powerup code')
+        if power == 0:
+            temp = self.rect.bottomleft
+            self.image = pygame.image.load('mariosmall.png')
+            self.rect = self.image.get_rect()
+            self.rect.bottomleft = temp
+        elif power == 1:
+            temp = self.rect.bottomleft
+            self.image = pygame.image.load('mariobig.png')
+            self.rect = self.image.get_rect()
+            self.rect.bottomleft = temp
+        elif power == 2:
+            temp = self.rect.bottomleft
+            self.image = pygame.image.load('mariopower.png')
+            self.rect = self.image.get_rect()
+            self.rect.bottomleft = temp
     # image update functions
     def updateImage(self, file):
         self.image = pygame.image.load(file)
