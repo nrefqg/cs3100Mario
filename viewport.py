@@ -41,6 +41,7 @@ class Viewport:
         if sprite_x >= self.offsetX - 32 and sprite_x <= self.screen_width + self.offsetX + 32:
             if sprite_y >= self.offsetY - 32 and sprite_y <= self.screen_height + self.offsetY + 32:
                 return True
+
         return False
 
     def check_pos(self, player_x):
@@ -101,6 +102,7 @@ class Viewport:
             for enemy in enemies:
                 if self.in_frame(enemy.rect.x, enemy.rect.y):
                     self.screen.blit(enemy.image, [enemy.rect.x - self.offsetX, enemy.rect.y])
+                    enemy.speed = -1
 
         # Render potential blocks
         if blocks:
