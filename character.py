@@ -1,4 +1,5 @@
 import pygame
+import blocks
 
 
 class Character(pygame.sprite.Sprite):
@@ -141,6 +142,10 @@ class Character(pygame.sprite.Sprite):
                         self.y_momentum = 0
                         self.deltaY = 141
                         self.rect.top = tile.rect.bottom
+                        if isinstance(tile, blocks.breakableBlock.breakableBlock):
+                            tile.kill()
+                        if isinstance(tile, blocks.powerBlock.powerBlock):
+                            print("power block hit")
                 # side collisions
                 #if tile.rect.top > self.rect.bottom or tile.rect.bottom < self.rect.top:
                 if self.collision[3] or self.collision[5]:

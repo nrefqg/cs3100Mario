@@ -40,6 +40,16 @@ lowestTile = 0
 # Load in block sprites
 renders = file_rendering.render(level)  # load level from Excel file
 block_list = renders['ground']
+power_list = renders['power']
+pipe_list = renders['pipe']
+brick_list = renders['breakable']
+coin_list = renders['coin']
+hidden_list = renders['hidden']
+
+block_list.add(power_list)
+block_list.add(brick_list)
+block_list.add(hidden_list)
+
 flag_list = renders['flag']
 pipe_list = renders['pipe']
 flagLoc = []
@@ -89,7 +99,7 @@ while True:
     if not player.getJumping():
         player.setVertical(False)
         if player.getDeltaY() > 0:
-            player.setY_momentum(player.getY_momentum() + .2)
+            player.setY_momentum(player.getY_momentum() + .9)
         if player.getDeltaY() + player.getY_momentum() > 0:
             player.setY_location(player.getY_location() + player.getY_momentum())
             player.setDeltaY(player.getDeltaY() + player.getY_momentum())
