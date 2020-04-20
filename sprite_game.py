@@ -5,6 +5,7 @@ import time
 import file_loader
 from death import playerDeath
 from blocks.flagpole import flagpole
+from blocks.mushroom import mushroom
 from character import Character
 from itertools import combinations
 from level import Level
@@ -20,7 +21,7 @@ SKY_COLOR = (146, 244, 255)
 
 #VARIABLES HOLDING THE SPRITE LOCATIONS FOR OUR CHARACTER
 smallMario = ['sprites/mariosmall.png', 'sprites/marioflipsmall.png']
-bigMario = ['character/mariobig.png', 'character/marioflipbig.png']
+bigMario = ['sprites/mariobig.png', 'sprites/marioflipbig.png']
 
 
 level = []
@@ -50,8 +51,9 @@ single_coin_group = renders['singleCoin']
 star_group = renders['star']
 oneUp_group = renders['oneUp']
 multi_group = renders['multiCoin']
-
 enemy_list = renders['enemies']
+powerup_list = pygame.sprite.Group()
+
 if(power_list != None):
     block_list.add(power_list)
 
@@ -79,7 +81,7 @@ flagLoc = []
 
 # Load in image sprite
 player = Character(140, 20)
-
+player.powerUp(1)
 
 # Initialize viewport
 viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -87,7 +89,7 @@ viewport = Viewport(SCREEN_WIDTH, SCREEN_HEIGHT)
 viewport.game_menu()
 # Initialize Sound
 sound_obj = SoundClass()
-sound_obj.start_bg()
+#sound_obj.start_bg()
 
 # A list of all rects in the level
 allRects = file_rendering.render(level)
@@ -191,7 +193,7 @@ while True:
                 player.setJumping(False)
 
     # Update sprites on screen
-    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list)
+    viewport.render_sprites(player, enemy_list, block_list, pipe_list, flag_list, powerup_list)
     # Update level information
     viewport.render_ui(level_info)
 
@@ -219,8 +221,14 @@ while True:
     #if len(playerGround) > 0:
     #for block in playerGround:
     #player.groundBlockContact(block)
-    player.touch(playerGround)
+    temp = player.touch(playerGround, block_list)
     
+    if(temp != None and temp[0] == True):
+        power_up = pygame.sprite.Group()
+        new_block = mushroom(temp[1] * 32, temp[2] * 32)
+        power_up.add(new_block)
+        powerup_list = power_up.add(new_block)
+
     animation += 1
     if animation >= 15:
         block_list.update()
